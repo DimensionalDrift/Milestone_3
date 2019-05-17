@@ -2,8 +2,21 @@
 
 <!--
 
-https://www.sitesell.com/blog/2017/02/recipe-schema.html
+User Stories
+As a user I would like:
 
-mongoimport --host Cluster-Test-shard-0/cluster-test-shard-00-00-5dnch.mongodb.net:27017,cluster-test-shard-00-01-5dnch.mongodb.net:27017,cluster-test-shard-00-02-5dnch.mongodb.net:27017 --ssl --username admin --password admin6065 --authenticationDatabase admin --db cookbook_test --collection users --type json --file
+to add my recipes to my collection
+to add other users recipes to my collection
+to view other users recipes
+to comment on other users recipes
+to vote on other users recipes
+to sort recipes by different users
+to sort recipes by different cuisine
+to sort recipes by different ingredient
+to sort recipes by different meal type
+to view recipes step by step while cooking
+
+
+https://www.sitesell.com/blog/2017/02/recipe-schema.html
 
 -->
