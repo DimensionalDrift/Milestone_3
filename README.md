@@ -15,8 +15,21 @@ to sort recipes by different cuisine
 to sort recipes by different ingredient
 to sort recipes by different meal type
 to view recipes step by step while cooking
+to give feedback to the website to help improve the experience
 
+https://github.com/select2/select2-bootstrap-theme
 
-https://www.sitesell.com/blog/2017/02/recipe-schema.html
+http://jsfiddle.net/omugbdm1/3/
+https://www.w3schools.com/css/css_tooltip.asp
+
+https://www.sitesell.com/blog/2017/02/recipe-schema.htmlkno
+
+https://www.codeproject.com/Questions/1185082/How-to-create-input-field-with-a-button-click
+
+https://www.furtherfood.com/submitrecipe/
+https://www.bbcgoodfood.com/
+https://tastesbetterfromscratch.com
+https://www.allrecipes.com
+https://www.facebook.com/
 
 -->
