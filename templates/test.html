@@ -1,13 +1,15 @@
-<html>
-    <head>
-
-    </head>
-    <body>
-        <h1>It should be here</h1>
-        {% for task in tasks %}
-            {{task.email}}
-            {{task.name}}
-            {{task.username}}
-        {% endfor %}
-    </body>
-</html>
+{% extends 'base.html' %} {% block content %}
+<div id="test">
+    <div id="tooltest0" class="tooltest0">
+        <label>Tool Name :</label>
+        <select class="toollist" name="FSR_tool_id[]" id="FSR_tool_id0" style="width: 350px" />
+            <option></option>
+            <option value="1">bla 1</option>
+        </select>
+    </div>
+    <div id="tool-placeholder"></div>
+    <div>
+        <input type="button" value="Add another" />
+    </div>
+</div>
+{% endblock %}

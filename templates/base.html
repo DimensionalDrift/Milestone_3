@@ -8,26 +8,39 @@
       <!-- Adding Bootstrap 4 styling, Font Awesome fonts -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" type="text/css" />
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+      <!-- select2 styling -->
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/select2-bootstrap4.css') }}">
+
+      <!-- Tempus Dominus styling -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+
+
+      <!-- GIJGO styling -->
+      <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css" /> -->
+
       <!-- Favicon -->
-      <link rel="shortcut icon" type="image/png" href="../assets/icons/cookbook.png" />
+      <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='icons/cookbook.png') }}" />
+
       <!-- My styles -->
-      <link rel="stylesheet" href="../assets/css/style.css" />
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
       <title>Cookbook</title>
   </head>
 <body>
     <!-- Header -->
     <section>
       <nav class="navbar navbar-expand-lg ">
-        <a class="navbar-brand" href="#">
-          <img src="../assets/icons/cookbook_text.png" alt="Logo" class="d-none d-lg-block">
-          <img src="../assets/icons/cookbook_invert.png" alt="Logo" class="d-lg-none" style='height: 38px'>
+        <a class="navbar-brand" href="/">
+          <img src="{{ url_for('static', filename='icons/cookbook_text.png') }}" alt="Logo" class="d-none d-lg-block">
+          <img src="{{ url_for('static', filename='icons/cookbook_invert.png') }}" alt="Logo" class="d-lg-none" style='height: 38px'>
         </a>
 
         <form class="form-inline mr-auto">
           <div class="input-group">
             <input class="form-control" type="search" placeholder=" Search by Ingredient, Meal...">
             <div class="input-group-append">
-              <button class="btn btn-cookbook2 btn" type="submit"><i class="fas fa-search fa-lg"></i></button>
+              <button class="btn btn-cookbook2 btn-search" type="submit"><i class="fas fa-search fa-lg"></i></button>
             </div>
           </div>
         </form>
@@ -39,19 +52,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link btn btn-navbar" href="#">Login</a>
+              <a class="nav-link btn btn-cookbook1" href="/login">Login</a>
             </li>
             <li>
               <div class="vline"></div>
             </li>
             <li class="nav-item">
-              <a class="nav-link btn btn-navbar" href="#">Home</a>
+              <a class="nav-link btn btn-cookbook1" href="/">Home</a>
             </li>
             <li>
               <div class="vline"></div>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle btn btn-navbar" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+              <a class="nav-link dropdown-toggle btn btn-cookbook1" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                 Browse
               </a>
               <div class="dropdown-menu">
@@ -81,9 +94,26 @@
           </div>
       </div>
     </section>
+
+    <!-- jQuery Javascript -->
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+
     <!-- Bootstrap JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- select2 Javascript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+    <!-- Tempus Dominus Javascript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- GIJGO Javascript -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js"></script> -->
+
+    <!-- My Javascript -->
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/form.js') }}"></script>
+
 </body>
 </html>

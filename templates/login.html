@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Log into Cookbook</h5>
+            <form>
+              <div class="form-label-group">
+                <input type="email" id="loginEmail" class="form-control" placeholder="Email address" required autofocus>
+                <label for="loginEmail"></label>
+              </div>
+
+              <div class="form-label-group">
+                <input type="password" id="loginPassword" class="form-control" placeholder="Password" required>
+                <label for="loginPassword"></label>
+              </div>
+              <button class="btn btn-lg btn-cookbook1 btn-block" type="submit">Log in</button>
+            </form>
+            <div class="center text-center py-3">
+                <a href="#" title="">Forgot your password?</a>
+                <span>&#183;</span>
+                <a href="#" title="">Sign up for Cookbook</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

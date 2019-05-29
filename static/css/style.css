@@ -1,0 +1,64 @@
+.my-body{
+    background-color: #EDF0F5;
+}
+
+.navbar{
+    background-color: #4267B2;
+}
+
+.btn-cookbook1{
+  background-color: #4267B2;
+  border-color: #4267B2;
+  color: #fff;
+}
+
+.btn-cookbook2{
+    background-color: #F5F6F7;
+    border: 1px solid #4865a0;
+    color: #727885;
+}
+
+.btn-cookbook1:hover {
+  background-color: #3B5DA0;
+  color: #fff;
+}
+
+/*Remove the focus shadow*/
+.btn-cookbook1:focus, .btn-cookbook1.focus {
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0);
+}
+
+.btn-search{
+    border-width: 1px 1px 1px 0;
+}
+
+.form-control{
+    border: 1px solid #4865a0;
+}
+
+.form-control:focus {
+  background-color: #fff;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0);
+  color: #495057;
+  outline: 0;
+}
+
+.vline {
+    border-right: #3B5C9F 1px solid;
+    display:block;
+    height: 1.5rem;
+    margin-top:0.66rem;
+}
+
+.my-footer{
+    background-color: #FFFFFF;
+}
+
+label{
+  padding-left: 0.25rem;
+}
+
+.select2{
+    max-width: 100%;
+}
