@@ -1,3 +1,4 @@
+// Function used to initialize select2 on all the inputs
 function initSelect2s() {
     $(".rform-ingredient").each(function() {
         $(this).select2({ placeholder: "Select an Ingredient" });
@@ -20,6 +21,7 @@ function initSelect2s() {
     });
 }
 
+// Function used to remove select2 from the inputs
 function destroySelect2s() {
     $(".rform-ingredient").select2("destroy");
     $(".rform-unit").select2("destroy");
@@ -32,6 +34,7 @@ var ingredientnum = 0;
 var stepnum = 0;
 var winwidth = $(window).width();
 
+// If the widow was resized or a phone was rotated the select2 inputs would not dynamically change size so this is used to remove and then reinitialize them so they would respond to the new screen size
 $(window).resize(function() {
     // Had to put this condition in because when using the keyboard on Android it causes the viewport to change which kills the select2 while you're trying to use them *rolling eyes emoji*
     if ($(window).width() != winwidth) {
@@ -41,10 +44,12 @@ $(window).resize(function() {
     }
 });
 
+// Adds tooltips when hovering over certain elements
 $(function() {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
+// When the document loads the select2s are initialized
 $(document).ready(function() {
     // Set select2 defaults
     $.fn.select2.defaults.set("theme", "bootstrap4");
@@ -53,6 +58,7 @@ $(document).ready(function() {
     initSelect2s();
 });
 
+// Function runs through all child elements within an element that have a certain classname and give them numerically unique attributes. After some testing it was found that this was not needed for what I was doing but I'm leaving this here just in case, it might be handy in the future.
 function numberer(parent, classname) {
     console.log(classname);
     $(parent).each(function(index, el) {
@@ -63,6 +69,7 @@ function numberer(parent, classname) {
     });
 }
 
+// When the 'Add Ingredient' button is pressed, the first row of inputs are cloned and the clone cleared of any excising inputs. In order to clone the select2 inputs they must first be removed then reinitialized.
 $("#ingredient-button").click(function() {
     destroySelect2s();
 
@@ -77,6 +84,7 @@ $("#ingredient-button").click(function() {
     initSelect2s();
 });
 
+// When the remove ingredient button is pressed, the row that contains the button is removed. Should the last remaining button be pressed then the row is instead cleared of its values.
 $("#remove-ingredient").click(function() {
     var noOfDivs = $(".ingredientrow").length;
     if (noOfDivs > 1) {
@@ -94,23 +102,24 @@ $("#remove-ingredient").click(function() {
     }
 });
 
+// The step buttons work in the same way as the ingredient buttons above
 $("#step-button").click(function() {
     var cloneStep = $("#steprow").clone();
     cloneStep.find("input").val("");
     cloneStep.appendTo("#stepdiv");
 });
 
-$("#step-button").click(function() {
-    var noOfDivs = $(".steprow").length;
-    var clonedDiv = $(".steprow")
-        .first()
-        .clone(true);
-    clonedDiv.find("input").val("");
-    clonedDiv.appendTo("#stepdiv");
-    clonedDiv.attr("id", "steprow" + noOfDivs);
+// $("#step-button").click(function() {
+//     var noOfDivs = $(".steprow").length;
+//     var clonedDiv = $(".steprow")
+//         .first()
+//         .clone(true);
+//     clonedDiv.find("input").val("");
+//     clonedDiv.appendTo("#stepdiv");
+//     clonedDiv.attr("id", "steprow" + noOfDivs);
 
-    initSelect2s();
-});
+//     initSelect2s();
+// });
 
 $("#remove-step").click(function() {
     var noOfDivs = $(".steprow").length;
@@ -123,6 +132,7 @@ $("#remove-step").click(function() {
     }
 });
 
+// To have an input that uses a time picker the Tempus Dominus library is kinda tricked into only submitting a time. The defaultDate is set to midnight and so when the user uses the time picker it acts as thought you are entering a time period rather than an actual time and date. While this works pretty much how I want this does have the limit that the user can only enter times of less than 24hrs. I presume there aren't very many recipes that require that much time so I should be good but I'm sure someone out there will push the limit!
 $(function() {
     $("#rform-tprep").datetimepicker({
         format: "HH:mm",
@@ -139,7 +149,7 @@ $(function() {
     });
 });
 
-// Alternate time picker using GIJGO
+// Alternate time picker using GIJGO, it didn't really work how I wanted but I'm leaving it here for the moment just in case I have to reconsider
 // $('#rform-tprep').timepicker({
 //     mode: '24hr',
 //     value: '00:00',

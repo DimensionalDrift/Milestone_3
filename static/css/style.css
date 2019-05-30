@@ -1,3 +1,4 @@
+/*-------------------- Base Styles --------------------*/
 .my-body{
     background-color: #EDF0F5;
 }
@@ -6,6 +7,19 @@
     background-color: #4267B2;
 }
 
+.vline {
+    border-right: #3B5C9F 1px solid;
+    display:block;
+    height: 1.5rem;
+    margin-top:0.66rem;
+}
+
+.my-footer{
+    background-color: #FFFFFF;
+}
+
+/*-------------------- Button Styles --------------------*/
+/* The button styles have been taken from or override the Bootstrap css files*/
 .btn-cookbook1{
   background-color: #4267B2;
   border-color: #4267B2;
@@ -32,6 +46,7 @@
     border-width: 1px 1px 1px 0;
 }
 
+/*-------------------- Recipe Form Styles --------------------*/
 .form-control{
     border: 1px solid #4865a0;
 }
@@ -42,17 +57,6 @@
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0);
   color: #495057;
   outline: 0;
-}
-
-.vline {
-    border-right: #3B5C9F 1px solid;
-    display:block;
-    height: 1.5rem;
-    margin-top:0.66rem;
-}
-
-.my-footer{
-    background-color: #FFFFFF;
 }
 
 label{
