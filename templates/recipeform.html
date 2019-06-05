@@ -1,189 +1,240 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 <section>
     <div class='container'>
         <!-- Page Title -->
-        <div class='row justify-content-center py-3'>
+        <div class='row justify-content-center pt-3 pb-2'>
             <h1>Submit Your Recipe</h1>
         </div>
         <!-- Recipe Form -->
-        <form action="{{ url_for('postrecipe') }}"method="POST">
+        <form action="{{ url_for('postrecipe') }}" method="POST" id="rform">
             <!-- Section 1 - Basic Details -->
-            <div class='form-row'>
-                <div class='col'>
-                    <div class="form-group">
-                        <label for="rform-title">Recipe Title</label>
-                        <input type="text" class="form-control" name="rform-title" placeholder="Recipe Title" required>
+            <div class='card'>
+                <h4 class="card-header">General Information</h4>
+                <div class='card-body'>
+                    <div class='row'>
+                        <div class='col-12 col-md-8'>
+                            <div class="form-group">
+                                <label for="rform-title">Recipe Title</label>
+                                <input type="text" class="form-control" name="rform-title" placeholder="Recipe Title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rformDescription">Recipe Description</label>
+                                <textarea class="form-control" id="rformDescription" rows="3" placeholder="Give a little description of your recipe, where did you find it? What makes it unique?" name="rformDescription"></textarea>
+                            </div>
+                        </div>
+                        <div class='col-12 col-md-4'>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="m-0 text-center thumbnail">
+                                    <div class="img-frame">
+                                        <div class="img-view iv-rform">
+                                            <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" alt="placeholder+image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
+                                        </div>
+                                    </div>
+                                    <div class="caption">
+                                        Click here to add an image
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control d-none" name="rformImageurl" id="rformImageurl" placeholder="Recipe Title">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="rform-description">Recipe Description</label>
-                        <textarea class="form-control" id="rform-description" rows="3" placeholder="Give a little description of your recipe, where did you find it? What makes it unique?" name="rform-description"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="rform-type" data-toggle="tooltip" data-placement="right" title="Add as many catagories as you like.">
-                            Meal Type
-                            <i class="far fa-question-circle"></i>
-                        </label>
-                        <select class="form-control rform-type" multiple="multiple" name="rform-type" required>
-                            <option></option>
-                            <option>Breakfast</option>
-                            <option>Lunch</option>
-                            <option>Dinner</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="rform-cuisine" data-toggle="tooltip" data-placement="right" title="Add as many catagories as you like.">
-                            Cuisine Type
-                            <i class="far fa-question-circle"></i>
-                        </label>
-                        <select class="form-control rform-cuisine" multiple="multiple" name="rform-cuisine" required>
-                            <option></option>
-                            <option>American</option>
-                            <option>French</option>
-                            <option>Korean</option>
-                        </select>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="rform-type" data-toggle="tooltip" data-placement="top" title="What type of meal is your recipe is about? Eg: dinner, entree, dessert, snack...">
+                                    Meal Type
+                                    <i class="far fa-question-circle"></i>
+                                </label>
+                                <select class="form-control rform-type" multiple="multiple" name="rform-type" required>
+                                    <option></option>
+                                    <option>Breakfast</option>
+                                    <option>Lunch</option>
+                                    <option>Dinner</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="rform-cuisine" data-toggle="tooltip" data-placement="top" title="What type of cuisine is it? Eg: French, Mediterranean, American...">
+                                    Cuisine Type
+                                    <i class="far fa-question-circle"></i>
+                                </label>
+                                <select class="form-control rform-cuisine" multiple="multiple" name="rform-cuisine" required>
+                                    <option></option>
+                                    <option>American</option>
+                                    <option>French</option>
+                                    <option>Korean</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <hr>
             <!-- Section 2 - Ingredients -->
-            <h4>Ingredients</h4>
-            <p>Add as many ingredients as needed for your recipe</p>
-            <div id='ingredientdiv'>
-                <!-- Ingredient Labels -->
-                <!-- X This is not the correct way to label inputs, each input should have it's own label, may need to experiment with hidden labels  -->
-                <div class='form-row'>
-                    <div class='col-4 col-md-7 d-flex justify-content-center justify-content-md-start'>
-                        <label for="rform-ingredient">Ingredient</label>
-                    </div>
-                    <div class='col-3 col-md-2 d-flex justify-content-center justify-content-md-start'>
-                        <label for="rform-quantity">Quantity</label>
-                    </div>
-                    <div class='col-3 col-md-2 d-flex justify-content-center justify-content-md-start'>
-                        <label for="rform-unit">Unit</label>
-                    </div>
-                    <div class='col-2 col-md-1 d-flex justify-content-center'>
-                        <label class="d-none d-md-block" for="rform-delete">Delete</label>
-                        <label class="d-md-none" for="rform-delete">Del.</label>
+            <div class='card'>
+                <div class='card-header'>
+                    <h4>Ingredients</h4>
+                    <span>Add as many ingredients as needed for your recipe</span>
+                </div>
+                <div class='card-body'>
+                    <div id='ingredientdiv'>
+                        <!-- Ingredient Labels -->
+                        <!-- X This is not the correct way to label inputs, each input should have it's own label, may need to experiment with hidden labels  -->
+                        <div class='form-row'>
+                            <div class='col-4 col-md-7 d-flex justify-content-center justify-content-md-start'>
+                                <label for="rform-ingredient">Ingredient</label>
+                            </div>
+                            <div class='col-3 col-md-2 d-flex justify-content-center justify-content-md-start'>
+                                <label for="rform-quantity">Quantity</label>
+                            </div>
+                            <div class='col-3 col-md-2 d-flex justify-content-center justify-content-md-start'>
+                                <label for="rform-unit">Unit</label>
+                            </div>
+                            <div class='col-2 col-md-1 d-flex justify-content-center'>
+                                <label class="d-none d-md-block" for="rform-delete">Delete</label>
+                                <label class="d-md-none" for="rform-delete">Del.</label>
+                            </div>
+                        </div>
+                        <!-- Ingredient Inputs -->
+                        <!-- When the Add Ingredient button is clicked this div is cloned and appended to the parent div above -->
+                        <div class='form-row mb-2 ingredientrow' id='ingredientrow0'>
+                            <div class='col-4 col-md-7 d-flex justify-content-center'>
+                                <select class="form-control rform-ingredient" name='rform-ingredient' required>
+                                    <option></option>
+                                    <option>test1</option>
+                                    <option>test2</option>
+                                    <option>test3</option>
+                                </select>
+                            </div>
+                            <div class='col-3 col-md-2 d-flex justify-content-center'>
+                                <input type="number" class="form-control rform-quantity" name="rform-quantity" placeholder="Enter Quantity" min="0" max="999" step="0.01" required>
+                            </div>
+                            <div class='col-3 col-md-2 d-flex justify-content-center'>
+                                <select class="form-control rform-unit" name="rform-unit" required>
+                                    <option></option>
+                                    <option>grams1</option>
+                                    <option>grams2</option>
+                                    <option>grams3</option>
+                                </select>
+                            </div>
+                            <div class='col-2 col-md-1 d-flex justify-content-center'>
+                                <button type="button" class="btn btn-cookbook2" id="removeIngredient"><i class="fas fa-minus fa-lg"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Ingredient Inputs -->
-                <!-- When the Add Ingredient button is clicked this div is cloned and appended to the parent div above -->
-                <div class='form-row mb-2 ingredientrow' id='ingredientrow0'>
-                    <div class='col-4 col-md-7 d-flex justify-content-center'>
-                        <select class="form-control rform-ingredient" name='rform-ingredient' required>
-                            <option></option>
-                            <option>test1</option>
-                            <option>test2</option>
-                            <option>test3</option>
-                        </select>
-                    </div>
-                    <div class='col-3 col-md-2 d-flex justify-content-center'>
-                        <input type="number" class="form-control rform-quantity" name="rform-quantity" placeholder="Enter Quantity" min="0" max="999" step="0.01" required>
-                    </div>
-                    <div class='col-3 col-md-2 d-flex justify-content-center'>
-                        <select class="form-control rform-unit" name="rform-unit" required>
-                            <option></option>
-                            <option>grams1</option>
-                            <option>grams2</option>
-                            <option>grams3</option>
-                        </select>
-                    </div>
-                    <div class='col-2 col-md-1 d-flex justify-content-center'>
-                        <button type="button" class="btn btn-cookbook2" id="remove-ingredient"><i class="fas fa-minus fa-lg"></i></button>
-                    </div>
+                <div class="card-footer text-center" id="ingredientButton">
+                    <span>Add Ingredient</span>
                 </div>
             </div>
-            <div class="row justify-content-center py-3">
-                <button type="button" class="btn btn-cookbook1" id="ingredient-button">Add Ingredient</button>
-            </div>
-            <hr>
             <!-- Section 3 - Steps -->
-            <h4>Instructions</h4>
-            <p>Enter each step one by one using a new box for each step</p>
-            <div id='stepdiv'>
-                <!-- Step Labels -->
-                <div class='form-row'>
-                    <div class='col-10 col-md-11 d-flex justify-content-start'>
-                        <label for="rform-step">Step</label>
-                    </div>
-                    <div class='col-2 col-md-1 d-flex justify-content-center'>
-                        <label class="d-none d-md-block" for="rform-delete">Delete</label>
-                        <label class="d-md-none" for="rform-delete">Del.</label>
+            <div class='card'>
+                <div class='card-header'>
+                    <h4>Instructions</h4>
+                    <span>Enter each step one by one using a new box for each step</span>
+                </div>
+                <div class='card-body'>
+                    <div id='stepdiv'>
+                        <!-- Step Labels -->
+                        <div class='form-row'>
+                            <div class='col-10 col-md-11 d-flex justify-content-start'>
+                                <label for="rform-step">Step</label>
+                            </div>
+                            <div class='col-2 col-md-1 d-flex justify-content-center'>
+                                <label class="d-none d-md-block" for="rform-delete">Delete</label>
+                                <label class="d-md-none" for="rform-delete">Del.</label>
+                            </div>
+                        </div>
+                        <!-- Step Inputs -->
+                        <!-- Same as above, Add Step clones this div and appends it -->
+                        <div class='form-row mb-2 steprow' id='steprow0'>
+                            <div class='col-10 col-md-11 d-flex justify-content-center'>
+                                <input type="text" class="form-control s-step" name='rform-step' required>
+                            </div>
+                            <div class='col-2 col-md-1 d-flex justify-content-center'>
+                                <button type="button" class="btn btn-cookbook2" id="removeStep"><i class="fas fa-minus fa-lg"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Step Inputs -->
-                <!-- Same as above, Add Step clones this div and appends it -->
-                <div class='form-row mb-2 steprow' id='steprow0'>
-                    <div class='col-10 col-md-11 d-flex justify-content-center'>
-                        <input type="text" class="form-control s-step" name='rform-step' required>
-                    </div>
-                    <div class='col-2 col-md-1 d-flex justify-content-center'>
-                        <button type="button" class="btn btn-cookbook2" id="remove-step"><i class="fas fa-minus fa-lg"></i></button>
-                    </div>
+                <div class="card-footer text-center" id="stepButton">
+                    <span>Add Step</span>
                 </div>
             </div>
-            <div class="row justify-content-center py-3" >
-                <button type="button" class="btn btn-cookbook1" id="step-button">Add Step</button>
-            </div>
-            <hr>
             <!-- Section 4 - Extra Information-->
-            <h4>Additional Information</h4>
-            <div>
-                <div class='form-row'>
-                    <div class='col-12 col-md-3'>
-                        <div class="form-group">
-                            <!-- There's an annoying bug here when you click on the label the time dialog pops up meaning you can't see the tooltip on mobile without activating the time dialog.I tried using other time picker libraries just don't do what I want so I'm not sure what to do about it... -->
-                            <label for="rform-tprep" data-toggle="tooltip" data-placement="right" title="How long did you spend chopping, peeling etc.">
-                                Prep Time
-                                <i class="far fa-question-circle"></i>
-                            </label>
-                            <input type="text" class="form-control datetimepicker-input" id="rform-tprep" data-toggle="datetimepicker" data-target="#rform-tprep" placeholder="hh:mm" name='rform-tprep'/>
+            <div class="card">
+                <h4 class="card-header">Additional Information</h4>
+                <div class="card-body">
+                    <div class='form-row'>
+                        <div class='col-12 col-md-3'>
+                            <div class="form-group">
+                                <!-- There's an annoying bug here when you click on the label the time dialog pops up meaning you can't see the tooltip on mobile without activating the time dialog.I tried using other time picker libraries just don't do what I want so I'm not sure what to do about it... -->
+                                <label for="rformTprep" data-toggle="tooltip" data-placement="top" title="How long did you spend chopping, peeling etc.">
+                                    Prep Time
+                                    <i class="far fa-question-circle"></i>
+                                </label>
+                                <input type="text" class="form-control datetimepicker-input" id="rformTprep" data-toggle="datetimepicker" data-target="#rformTprep" placeholder="hh:mm" name='rformTprep'/>
+                            </div>
                         </div>
-                    </div>
-                    <div class='col-12 col-md-3'>
-                        <div class="form-group">
-                            <label for="rform-tcook" data-toggle="tooltip" data-placement="right" title="How long were things cooking, baking etc.">
-                                Cook Time
-                                <i class="far fa-question-circle"></i>
-                            </label>
-                            <input type="text" class="form-control datetimepicker-input" id="rform-tcook" data-toggle="datetimepicker" data-target="#rform-tcook" placeholder="hh:mm" name='rform-tcook'/>
+                        <div class='col-12 col-md-3'>
+                            <div class="form-group">
+                                <label for="rformTcook" data-toggle="tooltip" data-placement="top" title="How long were things cooking, baking etc.">
+                                    Cook Time
+                                    <i class="far fa-question-circle"></i>
+                                </label>
+                                <input type="text" class="form-control datetimepicker-input" id="rformTcook" data-toggle="datetimepicker" data-target="#rformTcook" placeholder="hh:mm" name='rformTcook'/>
+                            </div>
                         </div>
-                    </div>
-                    <div class='col-12 col-md-3'>
-                        <div class="form-group">
-                            <label for="rform-serving" data-toggle="tooltip" data-placement="right" title="How many portions does this make?">
-                                Servings
-                                <i class="far fa-question-circle"></i>
-                            </label>
-                            <input type="number" class="form-control rform-serving" placeholder="Enter Quantity" min="0" max="99" step="1" name='rform-serving'>
+                        <div class='col-12 col-md-3'>
+                            <div class="form-group">
+                                <label for="rform-serving" data-toggle="tooltip" data-placement="top" title="How many portions does this make?">
+                                    Servings
+                                    <i class="far fa-question-circle"></i>
+                                </label>
+                                <input type="number" class="form-control rform-serving" placeholder="Enter Quantity" min="0" max="99" step="1" name='rform-serving'>
+                            </div>
                         </div>
-                    </div>
-                    <div class='col-12 col-md-3'>
-                        <div class="form-group">
-                            <label for="rform-utensils" data-toggle="tooltip" data-placement="right" title="Are any specifc utensils needed?">
-                                Utensils
-                                <i class="far fa-question-circle"></i>
-                            </label>
-                            <select class="form-control rform-utensils" name="rform-utensils" multiple="multiple">
-                                <option></option>
-                                <option>Knife</option>
-                                <option>Fork</option>
-                                <option>Spoon</option>
-                            </select>
+                        <div class='col-12 col-md-3'>
+                            <div class="form-group">
+                                <label for="rform-utensils" data-toggle="tooltip" data-placement="top" title="Are any specifc utensils needed?">
+                                    Utensils
+                                    <i class="far fa-question-circle"></i>
+                                </label>
+                                <select class="form-control rform-utensils" name="rform-utensils" multiple="multiple">
+                                    <option></option>
+                                    <option>Knife</option>
+                                    <option>Fork</option>
+                                    <option>Spoon</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class='col-12'>
-                        <div class="form-group">
-                            <label for="rform-notes">Additional Notes</label>
-                            <textarea class="form-control" id="rform-notes" rows="2" placeholder="Are there any tips or things to look out for in this recipe that you would like to add?" name='rform-notes'></textarea>
+                        <div class='col-12'>
+                            <div class="form-group">
+                                <label for="rformNotes">Additional Notes</label>
+                                <textarea class="form-control" id="rformNotes" rows="2" placeholder="Are there any tips or things to look out for in this recipe that you would like to add?" name='rformNotes'></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center py-3" >
-                <button type="submit" class="btn btn-cookbook1 btn-lg" id="submit-button">Submit</button>
+            <div class="row justify-content-center" >
+                <button type="submit" class="btn btn-cookbook1 btn-lg" id="rformSubmit" form="rform">Submit</button>
             </div>
         </form>
+        <!-- Image picker modal
+        This had to be included outside the above form because nested forms were causing problems, like, 2 days of problems...
+         -->
+        <div id="rmodalDiv">
+            {% include 'imagemodal.html' %}
+        </div>
     </div>
 </section>
+<!-- Script to pass python environment variable to javascript  -->
+<script type="text/javascript">
+    var key = "{{ key }}";
+    var cx = "{{ cx }}";
+</script>
+<!-- My Javascript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/form.js') }}"></script>
 {% endblock %}

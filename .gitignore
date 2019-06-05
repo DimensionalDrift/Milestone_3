@@ -51,10 +51,26 @@ GitHub.sublime-settings
 
 # Project specific and personal stuff
 # Files
-passwords.txt
-MONGO_URI.txt
+config.cfg
 
 # Folders
 old/
+ignore/
+
+# Flask related stuff
+venv/
+
+*.pyc
+__pycache__/
+
+instance/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+dist/
+build/
+*.egg-info/
 
 # End of https://www.gitignore.io/api/linux,sublimetext

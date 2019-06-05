@@ -26,6 +26,30 @@
       <!-- My styles -->
       <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
       <title>Cookbook</title>
+
+      <!-- I know normally this should be loaded at the bottom of the page but since I need to keep page specific code in the flask templates the JavaScript needs to be loaded before the template so those scripts work -->
+      <!-- jQuery Javascript -->
+      <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+
+      <!-- Bootstrap JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+      <!-- select2 Javascript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+      <!-- Tempus Dominus Javascript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+
+      <!-- GIJGO Javascript -->
+      <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js"></script> -->
+
+      <!-- fitImage Javascript -->
+      <script type="text/javascript" src="{{ url_for('static', filename = 'js/fitImage.js') }}"></script>
+
+      <!-- tooltip Javascript -->
+      <script type="text/javascript" src="{{ url_for('static', filename = 'js/tooltip.js') }}"></script>
   </head>
 <body>
     <!-- Header -->
@@ -52,13 +76,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link btn btn-cookbook1" href="/login">Login</a>
+              {%if session["logged_in"] == True%}
+                <a class="nav-link btn btn-cookbook1" href="/logout">Logout</a>
+              {% else %}
+                <a class="nav-link btn btn-cookbook1" href="/login">Login</a>
+              {% endif %}
             </li>
             <li>
               <div class="vline"></div>
             </li>
             <li class="nav-item">
               <a class="nav-link btn btn-cookbook1" href="/">Home</a>
+            </li>
+            <li>
+              <div class="vline"></div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-cookbook1" href="/submitrecipe">Submit</a>
             </li>
             <li>
               <div class="vline"></div>
@@ -80,7 +114,8 @@
 
     <!-- Body -->
     <section class='my-body'>
-      {% block content %} {% endblock %}
+      {% block content %}
+      {% endblock %}
     </section>
 
     <!-- Footer -->
@@ -94,26 +129,6 @@
           </div>
       </div>
     </section>
-
-    <!-- jQuery Javascript -->
-    <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
-
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    <!-- select2 Javascript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-
-    <!-- Tempus Dominus Javascript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
-
-    <!-- GIJGO Javascript -->
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js"></script> -->
-
-    <!-- My Javascript -->
-    <script type="text/javascript" src="{{ url_for('static', filename = 'js/form.js') }}"></script>
 
 </body>
 </html>

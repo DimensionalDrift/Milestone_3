@@ -44,11 +44,6 @@ $(window).resize(function() {
     }
 });
 
-// Adds tooltips when hovering over certain elements
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
-
 // When the document loads the select2s are initialized
 $(document).ready(function() {
     // Set select2 defaults
@@ -70,7 +65,7 @@ function numberer(parent, classname) {
 }
 
 // When the 'Add Ingredient' button is pressed, the first row of inputs are cloned and the clone cleared of any excising inputs. In order to clone the select2 inputs they must first be removed then reinitialized.
-$("#ingredient-button").click(function() {
+$("#ingredientButton").click(function() {
     destroySelect2s();
 
     var noOfDivs = $(".ingredientrow").length;
@@ -85,7 +80,7 @@ $("#ingredient-button").click(function() {
 });
 
 // When the remove ingredient button is pressed, the row that contains the button is removed. Should the last remaining button be pressed then the row is instead cleared of its values.
-$("#remove-ingredient").click(function() {
+$("#removeIngredient").click(function() {
     var noOfDivs = $(".ingredientrow").length;
     if (noOfDivs > 1) {
         $(this)
@@ -103,25 +98,19 @@ $("#remove-ingredient").click(function() {
 });
 
 // The step buttons work in the same way as the ingredient buttons above
-$("#step-button").click(function() {
-    var cloneStep = $("#steprow").clone();
-    cloneStep.find("input").val("");
-    cloneStep.appendTo("#stepdiv");
+$("#stepButton").click(function() {
+    var noOfDivs = $(".steprow").length;
+    var clonedDiv = $(".steprow")
+        .first()
+        .clone(true);
+    clonedDiv.find("input").val("");
+    clonedDiv.appendTo("#stepdiv");
+    clonedDiv.attr("id", "steprow" + noOfDivs);
+
+    initSelect2s();
 });
 
-// $("#step-button").click(function() {
-//     var noOfDivs = $(".steprow").length;
-//     var clonedDiv = $(".steprow")
-//         .first()
-//         .clone(true);
-//     clonedDiv.find("input").val("");
-//     clonedDiv.appendTo("#stepdiv");
-//     clonedDiv.attr("id", "steprow" + noOfDivs);
-
-//     initSelect2s();
-// });
-
-$("#remove-step").click(function() {
+$("#removeStep").click(function() {
     var noOfDivs = $(".steprow").length;
     if (noOfDivs > 1) {
         $(this)
@@ -134,7 +123,7 @@ $("#remove-step").click(function() {
 
 // To have an input that uses a time picker the Tempus Dominus library is kinda tricked into only submitting a time. The defaultDate is set to midnight and so when the user uses the time picker it acts as thought you are entering a time period rather than an actual time and date. While this works pretty much how I want this does have the limit that the user can only enter times of less than 24hrs. I presume there aren't very many recipes that require that much time so I should be good but I'm sure someone out there will push the limit!
 $(function() {
-    $("#rform-tprep").datetimepicker({
+    $("#rformTprep").datetimepicker({
         format: "HH:mm",
         defaultDate: Date.parse("2000-01-01T00:00"),
         stepping: 5
@@ -142,21 +131,77 @@ $(function() {
 });
 
 $(function() {
-    $("#rform-tcook").datetimepicker({
+    $("#rformTcook").datetimepicker({
         format: "HH:mm",
         defaultDate: Date.parse("2000-01-01T00:00"),
         stepping: 5
     });
 });
 
+// Function to handle the image picker modal, when a search term is entered a google image search is done and the first 10 images are loaded into a grid in the modal
+$("#rmodalSubmit").click(function() {
+
+    var url =
+        "https://www.googleapis.com/customsearch/v1?key=" + key + "&cx=" + cx + "&searchType=image&q=";
+    var input = $("#rmodalSearch").val();
+
+    $(".rmodal-gridcol")
+        .not(":first")
+        .remove();
+
+    // get the results from the Google search
+    $.get(
+        url + input,
+        function(data, status) {
+            // The image grid is hidden at first to hide the default image which is the first choice, this default image both allows the user to clear their result and also allows a sample image div be cloned and filled with the result images
+            $(".rmodal-gridcol").show();
+            fitImage($(".rmodal-gridimg").last());
+            // For each image in the search, clone the default image and substitute the result
+            for (var i = data.items.length - 1; i >= 0; i--) {
+                var imglink = data.items[i].link;
+                $(".rmodal-gridcol")
+                    .first()
+                    .clone()
+                    .appendTo("#rmodalGrid");
+                $(".rmodal-gridcol")
+                    .last()
+                    .find("img")
+                    .attr("src", imglink);
+                $(".rmodal-gridcol")
+                    .last()
+                    .show();
+                // Once the image loads it is resized
+                $(".rmodal-gridimg").last().on('load', function(){
+                    fitImage($(this));
+                });
+            }
+        },
+        "json"
+    );
+    // Prevents the page from reloading
+    return false;
+});
+
+// When an image is chosen the url for that image is added to a hidden input on the form page so that it can be read by flask
+$("#rmodalGrid").on("click", ".rmodal-gridimg", function() {
+    var imglink = $(this).attr("src");
+    $("#rformImage").attr("src", imglink);
+    $("#imageModal").modal("hide");
+    $("#rformImageurl").val(imglink);
+
+    // Also the image is refitted to the frame on the form page
+    fitImage($("#rformImage"));
+
+});
+
 // Alternate time picker using GIJGO, it didn't really work how I wanted but I'm leaving it here for the moment just in case I have to reconsider
-// $('#rform-tprep').timepicker({
+// $('#rformTprep').timepicker({
 //     mode: '24hr',
 //     value: '00:00',
 //     uiLibrary: 'bootstrap4',
 //     modal: false
 // });
-// $('#rform-tcook').timepicker({
+// $('#rformTcook').timepicker({
 //     mode: '24hr',
 //     value: '00:00',
 //     uiLibrary: 'bootstrap4',

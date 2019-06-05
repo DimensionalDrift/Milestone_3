@@ -76,12 +76,12 @@
   border-bottom-left-radius: 0; }
 
 .select2-container--bootstrap4 .select2-selection {
-  border: 1px solid #4865a0;
+  border: 1px solid #e0e1e4;
   border-radius: 0.25rem;
   width: 100%; }
 
 .select2-container--bootstrap4.select2-container--focus .select2-selection {
-  border-color: #80bdff;
+  border-color: #4267B2;
   /*-webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
           box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);*/
           }

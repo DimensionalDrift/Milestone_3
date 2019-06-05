@@ -1,68 +1,152 @@
-/*-------------------- Base Styles --------------------*/
-.my-body{
-    background-color: #EDF0F5;
+/*-------------------- General Styles --------------------*/
+
+/*Image frame, this is used to prevent images overflowing the frame*/
+.img-frame {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
 }
 
-.navbar{
-    background-color: #4267B2;
+/* Base image view, the specific height and width should be declared separately*/
+.img-view{
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Using the fitImage function, each of these styles are applied dynamically to each image depending on its orientation*/
+.square {
+  width: 100%;
+}
+
+.portrait {
+  height: auto;
+  width: 100%;
+}
+
+.landscape {
+  height: 100%;
+  width: auto;
+}
+
+/*-------------------- Base Styles --------------------*/
+.my-body {
+  background-color: #edf0f5;
+  padding-bottom: 1rem;
+}
+
+.navbar {
+  background-color: #4267b2;
 }
 
 .vline {
-    border-right: #3B5C9F 1px solid;
-    display:block;
-    height: 1.5rem;
-    margin-top:0.66rem;
+  border-right: #3b5c9f 1px solid;
+  display: block;
+  height: 1.5rem;
+  margin-top: 0.66rem;
 }
 
-.my-footer{
-    background-color: #FFFFFF;
+.my-footer {
+  background-color: #ffffff;
 }
 
 /*-------------------- Button Styles --------------------*/
 /* The button styles have been taken from or override the Bootstrap css files*/
-.btn-cookbook1{
-  background-color: #4267B2;
-  border-color: #4267B2;
+.btn-cookbook1 {
+  background-color: #4267b2;
+  border-color: #4267b2;
   color: #fff;
 }
 
-.btn-cookbook2{
-    background-color: #F5F6F7;
-    border: 1px solid #4865a0;
-    color: #727885;
+.btn-cookbook2 {
+  background-color: #f5f6f7;
+  border: 1px solid #e0e1e4;
+  color: #727885;
 }
 
 .btn-cookbook1:hover {
-  background-color: #3B5DA0;
+  background-color: #3b5da0;
   color: #fff;
 }
 
 /*Remove the focus shadow*/
-.btn-cookbook1:focus, .btn-cookbook1.focus {
+.btn-cookbook1:focus,
+.btn-cookbook1.focus {
   box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0);
 }
 
-.btn-search{
-    border-width: 1px 1px 1px 0;
+.btn-search {
+  border-width: 1px 1px 1px 0;
 }
 
 /*-------------------- Recipe Form Styles --------------------*/
-.form-control{
-    border: 1px solid #4865a0;
+.form-control {
+  border: 1px solid #e0e1e4;
 }
 
 .form-control:focus {
   background-color: #fff;
-  border-color: #80bdff;
+  border-color: #4267b2;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0);
   color: #495057;
   outline: 0;
 }
 
-label{
+label {
   padding-left: 0.25rem;
 }
 
-.select2{
-    max-width: 100%;
+.select2 {
+  max-width: 100%;
 }
+
+.card {
+  margin: 1rem;
+}
+
+.card-header {
+  background-color: #f5f6f7;
+}
+
+.card-footer:hover > span {
+  text-decoration: underline !important;
+}
+
+.iv-rform {
+  height: 200px;
+  width: 200px;
+}
+
+/*-------------------- Recipe Modal Styles --------------------*/
+
+#rmodalGrid{
+  list-style-type:none;
+  padding:0;
+}
+
+.iv-rmodal {
+  height: 200px;
+  width: 200px;
+}
+
+
+/*Overrides the bootstrap styles so that the model is always 'fullscreen'*/
+#rmodalDiv .modal{
+  text-align: center;
+}
+
+#rmodalDiv .modal-dialog {
+max-width: 95%;
+display: inline-block;
+}
+
+/*-------------------- Login and Signup Page Styles --------------------*/
+.alert-cookbook {
+  background-color: #e2e3e5;
+  border-color: #d6d8db;
+  color: #383d41;
+}
+
+#signupModalDiv .modal{
+  text-align: justify;
+}
+

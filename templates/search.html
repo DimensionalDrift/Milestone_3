@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Search Results</h1>
+    {% for dish in recipes %}
+        {{dish.name}} <br>
+        {{dish.author}} <br>
+        {{dish.description}} <br>
+    {% endfor %}
+
+{% endblock %}
