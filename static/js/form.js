@@ -49,6 +49,7 @@ $(document).ready(function() {
     // Set select2 defaults
     $.fn.select2.defaults.set("theme", "bootstrap4");
     $.fn.select2.defaults.set("tags", "true");
+    $.fn.select2.defaults.set("selectOnClose", "true");
     $.fn.select2.defaults.set("allowClear", "true");
     initSelect2s();
 });
@@ -63,6 +64,16 @@ function numberer(parent, classname) {
             .attr("name", classname.replace(".", "") + index);
     });
 }
+
+
+// Stop select2 opening again when removing a tag which was forcing you to select a tag
+$("select").on("select2:unselect", function (evt) {
+  if (!evt.params.originalEvent) {
+    return;
+  }
+
+  evt.params.originalEvent.stopPropagation();
+});
 
 // When the 'Add Ingredient' button is pressed, the first row of inputs are cloned and the clone cleared of any excising inputs. In order to clone the select2 inputs they must first be removed then reinitialized.
 $("#ingredientButton").click(function() {

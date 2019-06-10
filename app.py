@@ -32,7 +32,6 @@ def addto_listtable(table, vallist):
         entry = mongo.db[table].find_one({"name": item})
         # If the entry in the table exists increment its number by one
         if entry:
-            print(entry)
             add = entry["number"] + 1
             mongo.db[table].update(entry, {"$set": {"number": add}})
         # Otherwise create an entry
@@ -51,7 +50,7 @@ def formlister(table, form, key, title=True):
     # If the flag is set, make each entry title case, making everything
     # title case might not make sense for everything but it will make
     # for less duplicates, I'll come up with a better solution later
-    if not title:
+    if title:
         for i in range(len(flist)):
             flist[i] = flist[i].title()
 
@@ -92,6 +91,7 @@ if "DEPLOYED" in os.environ:
 else:
     app.config.from_envvar("COOKBOOK_CONFIG")
 
+
 # From a defferent attempt to log in users
 # login_manager = LoginManager()
 # login_manager.init_app(app)
@@ -128,7 +128,6 @@ def postlogin():
     if val and check_password_hash(val["pass_hash"], request.form["loginPassword"]):
         session["logged_in"] = True
         session["username"] = val["username"]
-        print(session)
         return redirect(url_for("home"))
     # else if email was correct
     elif val:
@@ -150,7 +149,6 @@ def logout():
 # User Page - under construction
 @app.route("/user")
 def user():
-    print(mongo.db.users.find_one())
     return render_template("user.html")
 
 
@@ -218,8 +216,6 @@ def postsignup():
 # Still needs to pull data from databases
 @app.route("/submitrecipe")
 def submitrecipe():
-    print(session)
-    print(session.keys())
 
     # This loads all the lists of list tables into memeory, might not
     # be a great idea but I can't think of another way to pass these
@@ -257,13 +253,13 @@ def submitrecipe():
 def postrecipe():
     # Todays date
     today = datetime.datetime.today().strftime("%Y-%m-%d")
-    print(request.form)
 
     # Pulling out values with multiple inputs into lists
     typelist = formlister("categories", request.form, "rform-type")
     cuislist = formlister("cuisines", request.form, "rform-cuisine")
     ingrlist = formlister("ingredients", request.form, "rform-ingredient")
     unitlist = formlister("units", request.form, "rform-unit", title=False)
+    utenlist = formlister("utensils", request.form, "rform-utensils")
     quanlist = request.form.getlist("rform-quantity")
     steplist = request.form.getlist("rform-step")
 
@@ -321,7 +317,6 @@ def postrecipe():
     }
 
     mongo.db["recipes"].insert_one(recipe)
-    print(recipe)
 
     # Currently redirects to the submission page, should redirect to the users
     # recipe page
