@@ -116,6 +116,20 @@ label {
   width: 200px;
 }
 
+.select2-container--bootstrap4 .select2-selection:active{
+  border-color: #4267b2;
+}
+
+.select2-container--bootstrap4 .select2-dropdown{
+  border-color: #4267b2;
+}
+
+.select2-container--open .select2-selection{
+  border-color: #4267b2;
+  border-width: 1px 1px 0 1px;
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+
 /*-------------------- Recipe Modal Styles --------------------*/
 
 #rmodalGrid{

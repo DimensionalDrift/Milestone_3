@@ -25,6 +25,42 @@ from flask_login import (
 import datetime
 import isotime
 
+# Function to add values to list tables that store lists of categories,
+# ingredients etc.
+def addto_listtable(table, vallist):
+    for item in vallist:
+        entry = mongo.db[table].find_one({"name": item})
+        # If the entry in the table exists increment its number by one
+        if entry:
+            print(entry)
+            add = entry["number"] + 1
+            mongo.db[table].update(entry, {"$set": {"number": add}})
+        # Otherwise create an entry
+        else:
+            new_entry = {"name": item, "number": 1}
+            mongo.db[table].insert_one(new_entry)
+
+
+# Function to handle making lists of form inputs that have multiple
+# values, each of the entries are also converted to title case by
+# default, setting the flag title to False will bypass that step
+def formlister(table, form, key, title=True):
+    # Create list
+    flist = form.getlist(key)
+
+    # If the flag is set, make each entry title case, making everything
+    # title case might not make sense for everything but it will make
+    # for less duplicates, I'll come up with a better solution later
+    if not title:
+        for i in range(len(flist)):
+            flist[i] = flist[i].title()
+
+    # Add the values to mongodb tables
+    addto_listtable(table, flist)
+
+    return flist
+
+
 # A user class from a previous version of things
 # class User(object):
 #     def __init__(self, email, username, password):
@@ -61,6 +97,9 @@ mongo = PyMongo(app)
 # Home Page - Under construction
 @app.route("/")
 def home():
+    # temp = "cuisines"
+    # addto_listtable(temp, ["French"])
+    # print(mongo.db[temp].find_one())
     return render_template("hello.html")
 
 
@@ -174,12 +213,32 @@ def postsignup():
 def submitrecipe():
     print(session)
     print(session.keys())
+
+    # This loads all the lists of list tables into memeory, might not
+    # be a great idea but I can't think of another way to pass these
+    # into the select2 lists... .sort({"number": -1})
+    categories = list(mongo.db.categories.find())
+    categories = [d["name"] for d in categories]
+    cuisines = list(mongo.db.cuisines.find())
+    cuisines = [d["name"] for d in cuisines]
+    ingredients = list(mongo.db.ingredients.find())
+    ingredients = [d["name"] for d in ingredients]
+    units = list(mongo.db.units.find())
+    units = [d["name"] for d in units]
+    utensils = list(mongo.db.utensils.find())
+    utensils = [d["name"] for d in utensils]
+
     if ("logged_in" in session.keys()) and (session["logged_in"] is True):
         print("Load page")
         return render_template(
             "recipeform.html",
             key=app.config["GOOGLE_API_KEY"],
             cx=app.config["GOOGLE_CX"],
+            categories=categories,
+            cuisines=cuisines,
+            ingredients=ingredients,
+            units=units,
+            utensils=utensils,
         )
     else:
         flash("Please log in before posting a recipe")
@@ -194,13 +253,12 @@ def postrecipe():
     print(request.form)
 
     # Pulling out values with multiple inputs into lists
-    typelist = request.form.getlist("rform-type")
-    cuislist = request.form.getlist("rform-cuisine")
-    ingrlist = request.form.getlist("rform-ingredient")
+    typelist = formlister("categories", request.form, "rform-type")
+    cuislist = formlister("cuisines", request.form, "rform-cuisine")
+    ingrlist = formlister("ingredients", request.form, "rform-ingredient")
+    unitlist = formlister("units", request.form, "rform-unit", title=False)
     quanlist = request.form.getlist("rform-quantity")
-    unitlist = request.form.getlist("rform-unit")
     steplist = request.form.getlist("rform-step")
-    utenlist = request.form.getlist("rform-utensils")
 
     # Convert time to ISO 8601 format
     tprep = isotime.converttime(request.form["rformTprep"])
@@ -255,6 +313,7 @@ def postrecipe():
         "notes": request.form["rformNotes"],
     }
 
+    mongo.db["recipes"].insert_one(recipe)
     print(recipe)
 
     # Currently redirects to the submission page, should redirect to the users
@@ -281,4 +340,4 @@ def postrecipe():
 # Main loop - will need to be changed when hosting on Heroku
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
-    app.run(host="0.0.0.0", port="8080", debug=True)
+    app.run(host="0.0.0.0", port="8080", debug=False)

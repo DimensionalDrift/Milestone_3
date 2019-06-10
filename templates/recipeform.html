@@ -48,9 +48,9 @@
                                 </label>
                                 <select class="form-control rform-type" multiple="multiple" name="rform-type" required>
                                     <option></option>
-                                    <option>Breakfast</option>
-                                    <option>Lunch</option>
-                                    <option>Dinner</option>
+                                    {% for category in categories %}
+                                    <option>{{category}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -62,9 +62,9 @@
                                 </label>
                                 <select class="form-control rform-cuisine" multiple="multiple" name="rform-cuisine" required>
                                     <option></option>
-                                    <option>American</option>
-                                    <option>French</option>
-                                    <option>Korean</option>
+                                    {% for cuisine in cuisines %}
+                                    <option>{{cuisine}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -102,9 +102,10 @@
                             <div class='col-4 col-md-7 d-flex justify-content-center'>
                                 <select class="form-control rform-ingredient" name='rform-ingredient' required>
                                     <option></option>
-                                    <option>test1</option>
-                                    <option>test2</option>
-                                    <option>test3</option>
+                                    {% for ingredient in ingredients %}
+                                    <option>{{ingredient}}</option>
+                                    {% endfor %}
+
                                 </select>
                             </div>
                             <div class='col-3 col-md-2 d-flex justify-content-center'>
@@ -113,9 +114,9 @@
                             <div class='col-3 col-md-2 d-flex justify-content-center'>
                                 <select class="form-control rform-unit" name="rform-unit" required>
                                     <option></option>
-                                    <option>grams1</option>
-                                    <option>grams2</option>
-                                    <option>grams3</option>
+                                    {% for unit in units %}
+                                    <option>{{unit}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class='col-2 col-md-1 d-flex justify-content-center'>
@@ -203,9 +204,9 @@
                                 </label>
                                 <select class="form-control rform-utensils" name="rform-utensils" multiple="multiple">
                                     <option></option>
-                                    <option>Knife</option>
-                                    <option>Fork</option>
-                                    <option>Spoon</option>
+                                    {% for utensil in utensils %}
+                                    <option>{{utensil}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
