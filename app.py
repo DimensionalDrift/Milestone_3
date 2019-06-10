@@ -84,10 +84,6 @@ def formlister(table, form, key, title=True):
 # Setting up Flask and PyMongo
 app = Flask(__name__)
 
-print("---------- Before ----------")
-for key in app.config:
-    print(key + ":", app.config[key])
-
 if "DEPLOYED" in os.environ:
     app.config["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY")
     app.config["GOOGLE_CX"] = os.environ.get("GOOGLE_CX")
@@ -95,10 +91,6 @@ if "DEPLOYED" in os.environ:
     app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 else:
     app.config.from_envvar("COOKBOOK_CONFIG")
-
-print("---------- After ----------")
-for key in app.config:
-    print(key + ":", app.config[key])
 
 # From a defferent attempt to log in users
 # login_manager = LoginManager()
