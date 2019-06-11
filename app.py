@@ -291,7 +291,7 @@ def postrecipe():
             "ratingValue": 0,
             "reviewCount": 0,
         },
-        "author": "",  # Not exactly sure how this will work...
+        "author": session["username"],  # This should probably follow schema
         "comment": [],
         "cookTime": tcook,
         "datePublished": today,
