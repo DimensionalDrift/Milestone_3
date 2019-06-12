@@ -51,6 +51,7 @@ $(document).ready(function() {
     $.fn.select2.defaults.set("tags", "true");
     $.fn.select2.defaults.set("selectOnClose", "true");
     $.fn.select2.defaults.set("allowClear", "true");
+    $.fn.select2.defaults.set("maximumSelectionLength", 3);
     initSelect2s();
 });
 
@@ -65,14 +66,13 @@ function numberer(parent, classname) {
     });
 }
 
-
 // Stop select2 opening again when removing a tag which was forcing you to select a tag
-$("select").on("select2:unselect", function (evt) {
-  if (!evt.params.originalEvent) {
-    return;
-  }
+$("select").on("select2:unselect", function(evt) {
+    if (!evt.params.originalEvent) {
+        return;
+    }
 
-  evt.params.originalEvent.stopPropagation();
+    evt.params.originalEvent.stopPropagation();
 });
 
 // When the 'Add Ingredient' button is pressed, the first row of inputs are cloned and the clone cleared of any excising inputs. In order to clone the select2 inputs they must first be removed then reinitialized.
@@ -151,9 +151,12 @@ $(function() {
 
 // Function to handle the image picker modal, when a search term is entered a google image search is done and the first 10 images are loaded into a grid in the modal
 $("#rmodalSubmit").click(function() {
-
     var url =
-        "https://www.googleapis.com/customsearch/v1?key=" + key + "&cx=" + cx + "&searchType=image&q=";
+        "https://www.googleapis.com/customsearch/v1?key=" +
+        key +
+        "&cx=" +
+        cx +
+        "&searchType=image&q=";
     var input = $("#rmodalSearch").val();
 
     $(".rmodal-gridcol")
@@ -184,9 +187,11 @@ $("#rmodalSubmit").click(function() {
                     .last()
                     .show();
                 // Once the image loads it is resized
-                $(".rmodal-gridimg").last().on('load', function(){
-                    fitImage($(this));
-                });
+                $(".rmodal-gridimg")
+                    .last()
+                    .on("load", function() {
+                        fitImage($(this));
+                    });
             }
         },
         "json"
@@ -208,7 +213,6 @@ $("#rmodalGrid").on("click", ".rmodal-gridimg", function() {
 
     // Also the image is refitted to the frame on the form page
     fitImage($("#rformImage"));
-
 });
 
 // Alternate time picker using GIJGO, it didn't really work how I wanted but I'm leaving it here for the moment just in case I have to reconsider

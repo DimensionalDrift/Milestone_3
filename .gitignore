@@ -52,6 +52,7 @@ GitHub.sublime-settings
 # Project specific and personal stuff
 # Files
 config.cfg
+out.txt
 
 # Folders
 old/

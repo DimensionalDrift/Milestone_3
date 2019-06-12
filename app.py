@@ -12,6 +12,7 @@ from flask import (
 from flask_pymongo import PyMongo
 import pprint
 from bson.objectid import ObjectId
+from bson.json_util import dumps
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import (
     LoginManager,
@@ -45,7 +46,7 @@ def addto_listtable(table, vallist):
 # default, setting the flag title to False will bypass that step
 def formlister(table, form, key, title=True):
     # Create list
-    flist = form.getlist(key)
+    flist = form.getlist(key).sort()
 
     # If the flag is set, make each entry title case, making everything
     # title case might not make sense for everything but it will make
@@ -88,8 +89,13 @@ if "DEPLOYED" in os.environ:
     app.config["GOOGLE_CX"] = os.environ.get("GOOGLE_CX")
     app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
     app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+    app.config["IP"] = os.environ.get("IP")
+    app.config["PORT"] = os.environ.get("PORT")
+
+    debug = False
 else:
     app.config.from_envvar("COOKBOOK_CONFIG")
+    debug = True
 
 
 # From a defferent attempt to log in users
@@ -149,7 +155,13 @@ def logout():
 # User Page - under construction
 @app.route("/user")
 def user():
-    return render_template("user.html")
+    # print(session["username"])
+    recipes = mongo.db.recipes.find({"author": session["username"]})
+    user = mongo.db.recipes.find_one({"username": session["username"]})
+    # recipes = mongo.db.recipes.find({"author": session["username"]})
+    # for item in recipes:
+    # print(item)
+    return render_template("user.html", recipes=recipes, user=user)
 
 
 # Signup Page
@@ -260,8 +272,8 @@ def postrecipe():
     ingrlist = formlister("ingredients", request.form, "rform-ingredient")
     unitlist = formlister("units", request.form, "rform-unit", title=False)
     utenlist = formlister("utensils", request.form, "rform-utensils")
-    quanlist = request.form.getlist("rform-quantity")
-    steplist = request.form.getlist("rform-step")
+    quanlist = request.form.getlist("rform-quantity").sort()
+    steplist = request.form.getlist("rform-step").sort()
 
     # Convert time to ISO 8601 format
     tprep = isotime.converttime(request.form["rformTprep"])
@@ -292,7 +304,7 @@ def postrecipe():
         "@type": "Recipe",
         "aggregateRating": {
             "@type": "AggregateRating",
-            "ratingValue": 0,
+            "ratingValue": 0.0,
             "reviewCount": 0,
         },
         "author": session["username"],  # This should probably follow schema
@@ -306,7 +318,7 @@ def postrecipe():
             "height": int(imglist[1]),
             "width": int(imglist[2]),
         },
-        "name": request.form["rform-title"],
+        "name": request.form["rform-title"].title(),
         "prepTime": tprep,
         "recipeCategory": typelist,
         "recipeCuisine": cuislist,
@@ -347,4 +359,4 @@ def postrecipe():
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
 
-    app.run(host=os.environ.get("IP"), port=os.environ.get("PORT"), debug=False)
+    app.run(host=app.config["IP"], port=app.config["PORT"], debug=debug)

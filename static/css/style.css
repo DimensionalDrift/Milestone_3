@@ -2,13 +2,14 @@
 
 /*Image frame, this is used to prevent images overflowing the frame*/
 .img-frame {
-  border: 1px solid #ddd;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
   border-radius: 4px;
   padding: 5px;
 }
 
 /* Base image view, the specific height and width should be declared separately*/
-.img-view{
+.img-view {
   margin: 0;
   overflow: hidden;
 }
@@ -63,14 +64,27 @@
   color: #727885;
 }
 
+.btn-cookbook3 {
+  background-color: #ffffff;
+  border: solid #e0e1e4;
+  border-width: 0 1px;
+  border-radius: 0;
+  color: #727885;
+}
+
 .btn-cookbook1:hover {
   background-color: #3b5da0;
   color: #fff;
 }
 
+.btn-cookbook3:hover {
+  background-color: #3b5da0;
+  color: #fff;
+}
+
 /*Remove the focus shadow*/
-.btn-cookbook1:focus,
-.btn-cookbook1.focus {
+.btn:focus,
+.btn.focus {
   box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0);
 }
 
@@ -116,15 +130,15 @@ label {
   width: 200px;
 }
 
-.select2-container--bootstrap4 .select2-selection:active{
+.select2-container--bootstrap4 .select2-selection:active {
   border-color: #4267b2;
 }
 
-.select2-container--bootstrap4 .select2-dropdown{
+.select2-container--bootstrap4 .select2-dropdown {
   border-color: #4267b2;
 }
 
-.select2-container--open .select2-selection{
+.select2-container--open .select2-selection {
   border-color: #4267b2;
   border-width: 1px 1px 0 1px;
   border-radius: 0.25rem 0.25rem 0 0;
@@ -132,9 +146,9 @@ label {
 
 /*-------------------- Recipe Modal Styles --------------------*/
 
-#rmodalGrid{
-  list-style-type:none;
-  padding:0;
+#rmodalGrid {
+  list-style-type: none;
+  padding: 0;
 }
 
 .iv-rmodal {
@@ -142,15 +156,14 @@ label {
   width: 200px;
 }
 
-
 /*Overrides the bootstrap styles so that the model is always 'fullscreen'*/
-#rmodalDiv .modal{
+#rmodalDiv .modal {
   text-align: center;
 }
 
 #rmodalDiv .modal-dialog {
-max-width: 95%;
-display: inline-block;
+  max-width: 95%;
+  display: inline-block;
 }
 
 /*-------------------- Login and Signup Page Styles --------------------*/
@@ -160,7 +173,56 @@ display: inline-block;
   color: #383d41;
 }
 
-#signupModalDiv .modal{
+#signupModalDiv .modal {
   text-align: justify;
 }
 
+/*-------------------- User Page Styles --------------------*/
+.stars-outer {
+  display: inline-block;
+  font-family: FontAwesome;
+  position: relative;
+  font-size: 1.5rem;
+}
+
+.stars-outer::before {
+  content: "\f006 \f006 \f006 \f006 \f006";
+}
+
+.stars-inner {
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+  width: 0;
+  font-size: 1.5rem;
+}
+
+.stars-inner::before {
+  color: #869ece;
+  content: "\f005 \f005 \f005 \f005 \f005";
+}
+
+.iv-user {
+  height: 100px;
+  width: 100px;
+}
+
+.urecipe td {
+  padding-right: 1rem;
+  vertical-align: top;
+}
+
+@media only screen and (min-width: 992px) {
+
+  .iv-user {
+    height: 120px;
+    width: 120px;
+  }
+
+  .urecipe td {
+    padding-right: 1.5rem;
+  }
+
+}

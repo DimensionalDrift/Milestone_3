@@ -72,7 +72,7 @@ https://stackoverflow.com/questions/51404129/how-to-access-external-javascript-f
 https://stackoverflow.com/questions/11178426/how-can-i-pass-data-from-flask-to-javascript-in-a-template/42158426
 https://stackoverflow.com/questions/16310918/css-scale-and-square-center-crop-image
 https://coderwall.com/p/ijrrpa/flask-flash-messages-as-bootstrap-alert
-
+https://webdesign.tutsplus.com/tutorials/a-simple-javascript-technique-for-filling-star-ratings--cms-29450
 
 Conventions and Style Guides
 https://stackoverflow.com/questions/3736553/how-to-execute-function-after-image-is-loaded-into-a-div-with-jquery
