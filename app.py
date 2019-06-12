@@ -281,6 +281,10 @@ def postrecipe():
     for i in range(len(steplist)):
         steplist[i] = {"@type": "HowToStep", "text": steplist[i]}
 
+    # Seperating out the image url and dimensions
+    # This assumes that there are no commas in the url which should be true
+    imglist = request.form["rformImageurl"].split(",")
+
     # Gathering the recipe dictionary
     recipe = {
         # Schema Values
@@ -298,9 +302,9 @@ def postrecipe():
         "description": request.form["rformDescription"],
         "image": {
             "@type": "ImageObject",
-            "url": "",  # This still needs to be implemented
-            "height": 200,
-            "width": 200,
+            "url": imglist[0],
+            "height": int(imglist[1]),
+            "width": int(imglist[2]),
         },
         "name": request.form["rform-title"],
         "prepTime": tprep,

@@ -177,7 +177,9 @@ $("#rmodalSubmit").click(function() {
                 $(".rmodal-gridcol")
                     .last()
                     .find("img")
-                    .attr("src", imglink);
+                    .attr("src", imglink)
+                    .attr("data-height", data.items[i].image.height)
+                    .attr("data-width", data.items[i].image.width);
                 $(".rmodal-gridcol")
                     .last()
                     .show();
@@ -196,9 +198,13 @@ $("#rmodalSubmit").click(function() {
 // When an image is chosen the url for that image is added to a hidden input on the form page so that it can be read by flask
 $("#rmodalGrid").on("click", ".rmodal-gridimg", function() {
     var imglink = $(this).attr("src");
+    var imgheight = $(this).attr("data-height");
+    var imgwidth = $(this).attr("data-width");
     $("#rformImage").attr("src", imglink);
+    $("#rformImage").attr("data-height", imgheight);
+    $("#rformImage").attr("data-width", imgwidth);
     $("#imageModal").modal("hide");
-    $("#rformImageurl").val(imglink);
+    $("#rformImageurl").val([imglink, imgheight, imgwidth]);
 
     // Also the image is refitted to the frame on the form page
     fitImage($("#rformImage"));
