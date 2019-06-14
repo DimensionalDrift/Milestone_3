@@ -6,6 +6,7 @@
   border: 1px solid #dddddd;
   border-radius: 4px;
   padding: 5px;
+  display: inline-block;
 }
 
 /* Base image view, the specific height and width should be declared separately*/
@@ -209,20 +210,11 @@ label {
   width: 100px;
 }
 
-.urecipe td {
-  padding-right: 1rem;
-  vertical-align: top;
-}
-
 @media only screen and (min-width: 992px) {
 
   .iv-user {
     height: 120px;
     width: 120px;
-  }
-
-  .urecipe td {
-    padding-right: 1.5rem;
   }
 
 }

@@ -134,6 +134,7 @@ def postlogin():
     if val and check_password_hash(val["pass_hash"], request.form["loginPassword"]):
         session["logged_in"] = True
         session["username"] = val["username"]
+        session["id"] = str(val["_id"])
         return redirect(url_for("home"))
     # else if email was correct
     elif val:
@@ -157,11 +158,31 @@ def logout():
 def user():
     # print(session["username"])
     recipes = mongo.db.recipes.find({"author": session["username"]})
-    user = mongo.db.recipes.find_one({"username": session["username"]})
+    user = mongo.db.users.find_one({"username": session["username"]})
+
+    # Create a list of the favourites recipes
+    favourites = []
+    for rid in user["favourites"]:
+        favourites.append(mongo.db.recipes.find_one({"_id": ObjectId(rid)}))
+
+    commentdata = []
+    for cid in user["comments"]:
+        comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
+        recipe = mongo.db.recipes.find_one({"_id": ObjectId(comment["recipe_id"])})
+        commentdata.append((comment, recipe))
+
+    print(user["comments"])
+    print(commentdata)
     # recipes = mongo.db.recipes.find({"author": session["username"]})
     # for item in recipes:
     # print(item)
-    return render_template("user.html", recipes=recipes, user=user)
+    return render_template(
+        "user.html",
+        recipes=recipes,
+        user=user,
+        favourites=favourites,
+        commentdata=commentdata,
+    )
 
 
 # Signup Page
@@ -216,6 +237,10 @@ def postsignup():
     if valid is True:
         formval["pass_hash"] = generate_password_hash(formval["password"])
         del formval["password"]
+        # Add blank values to user entry
+        formval["favourites"] = "[]"
+        formval["comments"] = "[]"
+
         mongo.db.users.insert_one(formval)
         session["logged_in"] = True
         session["username"] = formval["username"]

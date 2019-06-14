@@ -1,0 +1,80 @@
+{% block content %}
+<!-- As long as recipe is defined in the parent then this can be included -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="m-0">{{recipe["name"]}} - {{recipe["author"]}}</h5>
+    </div>
+    <div class="card-body">
+        <div class='row'>
+            <!-- Image hides on particularly small screens -->
+            <div class='col-4 col-md-3 d-none d-sm-inline pr-0'>
+                <div class="img-frame">
+                    <div class="img-view iv-user">
+                        {% if
+                        recipe['image']['url']|length >
+                        0 %}
+                        <img
+                            src="{{recipe['image']['url']}}"
+                        />
+                        {% else %}
+                        <img
+                            src="{{ url_for('static', filename='icons/defaultdish.png') }}"
+                        />
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class='col-8 col-md-9'>
+                <div class='row'>
+                    <div class='col-12'>
+                        {{recipe["description"]}}
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-12'>
+                        <div
+                            class="stars-outer"
+                            data-toggle="tooltip"
+                            data-placement="right"
+                            title="{{recipe['aggregateRating']['ratingValue']}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
+                        >
+                            <div
+                                class="stars-inner"
+                                style="width: {{(recipe['aggregateRating']['ratingValue']/5)*100}}%;"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='row d-none d-md-flex'>
+                    <div class='col-6'>
+                        Tags: {% for item in
+                        recipe["recipeCategory"]%}
+                        {{item}}
+                        {% endfor %}
+                    </div>
+                    <div class='col-6'>
+                        Cuisines: {% for item in
+                        recipe["recipeCuisine"]%}
+                        {{item}}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row d-md-none py-1'>
+            <div class='col-6'>
+                Tags: {% for item in
+                recipe["recipeCategory"]%}
+                {{item}}
+                {% endfor %}
+            </div>
+            <div class='col-6'>
+                Cuisines: {% for item in
+                recipe["recipeCuisine"]%}
+                {{item}}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -88,4 +88,14 @@ Icon Credits
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"              title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"              title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"              title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"              title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
+Just to recap quickly:
+
+1. Finish user profile
+2. Create a template for an individual recipe
+3. Create homepage to list all recipes w/ links to individual recipe page for each
+4. On user profile page add edit/delete button for each recipe, and possibly on individual recipe page if user owns that recipe
+5. Write delete route/function -> @app.route('/delete/<recipe_id>/)
+6. Write update route/function -> @app.route('/update/<recipe_id>/')
+7. Create update recipe template w/ pre-filled form for user to update recipe, or add ability to edit inline on the user profile/recipe page and POST to the URL with javascript
+
 -->

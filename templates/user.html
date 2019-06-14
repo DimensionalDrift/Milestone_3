@@ -51,127 +51,26 @@
                 <!-- Subbmitted Recipes View -->
                 <div class="card-view" id="subView">
                     {% for recipe in recipes%}
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="m-0">{{recipe["name"]}}</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="urecipe">
-                                <tr>
-                                    <td rowspan="4">
-                                        <div class="img-frame">
-                                            <div class="img-view iv-user">
-                                                {% if
-                                                recipe['image']['url']|length >
-                                                0 %}
-                                                <img
-                                                    src="{{recipe['image']['url']}}"
-                                                />
-                                                {% else %}
-                                                <img
-                                                    src="{{ url_for('static', filename='icons/defaultdish.png') }}"
-                                                />
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td colspan="2" rowspan="2">
-                                        {{recipe["description"]}}
-                                    </td>
-                                </tr>
-                                <tr></tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <div
-                                            class="stars-outer"
-                                            data-toggle="tooltip"
-                                            data-placement="right"
-                                            title="{{recipe['aggregateRating']['ratingValue']}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
-                                        >
-                                            <div
-                                                class="stars-inner"
-                                                style="width: {{(recipe['aggregateRating']['ratingValue']/5)*100}}%;"
-                                            ></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Tags: {% for item in
-                                        recipe["recipeCategory"]%}
-                                        <span>{{item}}</span>
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        Cuisines: {% for item in
-                                        recipe["recipeCuisine"]%}
-                                        <span>{{item}}</span>
-                                        {% endfor %}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                        {% include 'recipecardsmall.html' %}
                     {% endfor %}
                 </div>
-                <!--                 <div class="card">
-                    <h5 class="card-header font-weight-bold">
-                        Submitted Recipes
-                    </h5>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">
-                            With supporting text below as a natural lead-in to
-                            additional content.
-                        </p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div> -->
-            </div>
-            <!-- Favourite Recipes View -->
-            <div class="card-view" id="favView">
-                <div class="card" style="display: none">
-                    <h5 class="card-header font-weight-bold">
-                        Favourites
-                    </h5>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">
-                            With supporting text below as a natural lead-in to
-                            additional content.
-                        </p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
+                <!-- Favourite Recipes View -->
+                <div class="card-view" id="favView" style="display: none;">
+                    {% for recipe in favourites%}
+                        {% include 'recipecardsmall.html' %}
+                    {% endfor %}
                 </div>
-            </div>
-            <!-- Recipe Comments View -->
-            <div class="card-view" id="comView">
-                <div class="card" style="display: none">
-                    <h5 class="card-header font-weight-bold">
-                        Comments
-                    </h5>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">
-                            With supporting text below as a natural lead-in to
-                            additional content.
-                        </p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
+                <!-- Recipe Comments View -->
+                <div class="card-view" id="comView" style="display: none;">
+                    {% for data in commentdata%}
+                        {% with comment=data[0], recipe=data[1] %}
+                            {% include 'commentcardsmall.html' %}
+                        {% endwith %}
+                    {% endfor %}
                 </div>
-            </div>
-            <!-- Edit User Profile Form View -->
-            <div class="card-view" id="proView">
-                <div class="card" style="display: none">
-                    <h5 class="card-header font-weight-bold">
-                        Edit Profile
-                    </h5>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">
-                            With supporting text below as a natural lead-in to
-                            additional content.
-                        </p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                <!-- Edit User Profile Form View -->
+                <div class="card-view" id="proView" style="display: none;">
+                    <div class='card'>
                     </div>
                 </div>
             </div>
@@ -180,12 +79,29 @@
 </section>
 
 <script type="text/javascript">
+
+    function imagerowsize() {
+       if ($(window).width() <= 768) {
+            $(".subimagerow").attr("rowspan", 3);
+        } else{
+            $(".subimagerow").attr("rowspan", 4);
+        }
+    }
+
+
     $(document).ready(function() {
         // Fit each image correctly
         $(".iv-user > img").each(function() {
             fitImage($(this));
         });
+        imagerowsize();
     });
+
+    $(window).resize(function() {
+        console.log($(window).width());
+        imagerowsize();
+    });
+
 
     // Show the corresponding card and hide the rest on button press
     $("#btnSub").click(function() {
