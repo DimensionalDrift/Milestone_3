@@ -1,13 +1,32 @@
-{% block content %}
 <!-- As long as recipe is defined in the parent then this can be included -->
+{% block content %}
 <div class="card">
     <div class="card-header">
-        <h5 class="m-0">{{recipe["name"]}} - {{recipe["author"]}}</h5>
+            {%if submitflag == True%}
+            <div class='row'>
+                <div class='col-8'>
+                    <a href="#" title="" style="color: black; text-decoration: none;">
+                        <h5 class="m-0">{{recipe["name"]}}</h5>
+                    </a>
+                </div>
+                <div class='col-4 d-flex justify-content-end'>
+                    <button class="btn btn-cookbook2">Edit</button>
+                </div>
+            </div>
+            {% else %}
+            <div class='row'>
+                <div class='col-12'>
+                    <a href="#" title="" style="color: black; text-decoration: none;">
+                        <h5 class="m-0">{{recipe["name"]}} - {{recipe["author"]}}</h5>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
     </div>
     <div class="card-body">
         <div class='row'>
             <!-- Image hides on particularly small screens -->
-            <div class='col-4 col-md-3 d-none d-sm-inline pr-0'>
+            <div class='col-4 col-md-3 d-none d-md-inline pr-0'>
                 <div class="img-frame">
                     <div class="img-view iv-user">
                         {% if
@@ -24,10 +43,14 @@
                     </div>
                 </div>
             </div>
-            <div class='col-8 col-md-9'>
+            <div class='col-12 col-md-9'>
                 <div class='row'>
                     <div class='col-12'>
-                        {{recipe["description"]}}
+                        {% if commentflag == True%}
+                            {{comment['comment']}}
+                        {% else %}
+                            {{recipe["description"]}}
+                        {% endif %}
                     </div>
                 </div>
                 <div class='row'>

@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% block content %}
-
+{% set submitflag = False %}
+{% set commentflag = False %}
 <section>
     <div class="container py-2">
         <div class="row">
@@ -22,57 +23,136 @@
                     <div class="card-body p-0">
                         <ul class="nav d-flex justify-content-center">
                             <li
-                                class="nav-item btn btn-cookbook3 font-weight-bold"
+                                class="nav-item"
                                 id="btnSub"
                             >
-                                <span class="nav-link">Submitted</span>
+                                <a class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='submitted') }}">Submitted</a>
                             </li>
                             <li
-                                class="nav-item btn btn-cookbook3 font-weight-bold"
+                                class="nav-item"
                                 id="btnFav"
                             >
-                                <span class="nav-link">Favourites</span>
+                                <a class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='favourites') }}">Favourites</a>
                             </li>
                             <li
-                                class="nav-item btn btn-cookbook3 font-weight-bold"
+                                class="nav-item"
                                 id="btnCom"
                             >
-                                <span class="nav-link">Comments</span>
+                                <a class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='comments') }}">Comments</a>
                             </li>
                             <li
-                                class="nav-item btn btn-cookbook3 font-weight-bold"
+                                class="nav-item"
                                 id="btnPro"
                             >
-                                <span class="nav-link">Edit Profile</span>
+                                <a class="nav-link btn  btn-cookbook3 font-weight-bold" style="border-width: 0 1px 0 1px;"role="button" href="{{ url_for('user', username=session['username'], view='edit') }}">Edit Profile</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <!-- Subbmitted Recipes View -->
-                <div class="card-view" id="subView">
-                    {% for recipe in recipes%}
-                        {% include 'recipecardsmall.html' %}
-                    {% endfor %}
-                </div>
-                <!-- Favourite Recipes View -->
-                <div class="card-view" id="favView" style="display: none;">
-                    {% for recipe in favourites%}
-                        {% include 'recipecardsmall.html' %}
-                    {% endfor %}
-                </div>
-                <!-- Recipe Comments View -->
-                <div class="card-view" id="comView" style="display: none;">
-                    {% for data in commentdata%}
-                        {% with comment=data[0], recipe=data[1] %}
-                            {% include 'commentcardsmall.html' %}
-                        {% endwith %}
-                    {% endfor %}
-                </div>
-                <!-- Edit User Profile Form View -->
-                <div class="card-view" id="proView" style="display: none;">
-                    <div class='card'>
+                {% if view == "submitted"%}
+                    <div class="card-view" id="subView">
+                        {% if recipes|length < 1%}
+                            <div class='card'>
+                                <div class='card-body'>
+                                    You have not submitted any recipes yet! <br> Click the button below to start adding some of your favourite dishes.
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% for recipe in recipes%}
+                            {% set submitflag = True %}
+                            {% include 'recipecardsmall.html' %}
+                        {% endfor %}
                     </div>
-                </div>
+                {% endif %}
+                <!-- Favourite Recipes View -->
+                {% if view == "favourites"%}
+                    <div class="card-view" id="favView">
+                        {% if favourites|length < 1%}
+                            <div class='card'>
+                                <div class='card-body'>
+                                    You have no favourite recipes yet! <br> Browse the home page or search for some of your favourite dishes using the search bar above.
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% for recipe in favourites%}
+                            {% include 'recipecardsmall.html' %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <!-- Recipe Comments View -->
+                {% if view == "comments"%}
+                    <div class="card-view" id="comView">
+                        {% if commentdata|length < 1%}
+                            <div class='card'>
+                                <div class='card-body'>
+                                    You have not made any comments yet! <br> Making comments on recipes is important to help the community grow.
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% for data in commentdata%}
+                            {% with comment=data[0], recipe=data[1] %}
+                                {% include 'commentcardsmall.html' %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <!-- Edit User Profile Form View -->
+                {% if view == "edit"%}
+                    <div class="card-view" id="proView">
+                        <div class='card'>
+                            <div class='card-body'>
+                                <!-- If the page is loaded and there are alerts then they are displayed -->
+                                {% with messages = get_flashed_messages() %} {% if messages
+                                %} {% for message in messages %}
+                                <div class="alert alert-cookbook text-center" role="alert">
+                                    {{ message }}
+                                </div>
+                                {% endfor %} {% endif %} {% endwith %}
+                                <form action="{{ url_for('postuser') }}" method="POST" id="uform">
+                                    <!-- Section 1 - Basic Details -->
+                                    <div class='row'>
+                                        <div class='col-12'>
+                                        <!--<div class="form-group">
+                                                <label for="uform-name">Name</label>
+                                                {% if name|length > 0%}
+                                                    <input type="text" class="form-control" name="uform-name" placeholder={{name}}>
+                                                {%else%}
+                                                    <input type="text" class="form-control" name="uform-name" placeholder="Enter your name">
+                                                {%endif%}
+                                            </div> -->
+                                            <div class="form-group">
+                                                <label for="uform-email">Email</label>
+                                                <input type="text" class="form-control" name="uform-email" placeholder={{email}}>
+                                            </div>
+                                        </div>
+                                    <!--<div class='col-12'>
+                                            <div class="form-group">
+                                                <label for="uform-username">Username</label>
+                                                <input type="text" class="form-control" name="uform-username" placeholder={{username}}>
+                                            </div>
+                                        </div> -->
+                                        <div class='col-12'>
+                                            <div class="form-group">
+                                                <label for="uform-password">Password</label>
+                                                <input type="password" class="form-control" name="uform-password" placeholder="Enter a new password">
+                                                <small id="uformHelp" class="form-text text-muted">
+                                                  Your password must be over 8 characters long and can contain letters and numbers.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center" >
+                                        <button type="submit" class="btn btn-cookbook1 btn-lg" id="userUpdate" form="uform">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -80,49 +160,13 @@
 
 <script type="text/javascript">
 
-    function imagerowsize() {
-       if ($(window).width() <= 768) {
-            $(".subimagerow").attr("rowspan", 3);
-        } else{
-            $(".subimagerow").attr("rowspan", 4);
-        }
-    }
-
-
     $(document).ready(function() {
         // Fit each image correctly
         $(".iv-user > img").each(function() {
             fitImage($(this));
         });
-        imagerowsize();
     });
 
-    $(window).resize(function() {
-        console.log($(window).width());
-        imagerowsize();
-    });
-
-
-    // Show the corresponding card and hide the rest on button press
-    $("#btnSub").click(function() {
-        $(".card-view").hide();
-        $("#subView").show();
-    });
-
-    $("#btnFav").click(function() {
-        $(".card-view").hide();
-        $("#favView").show();
-    });
-
-    $("#btnCom").click(function() {
-        $(".card-view").hide();
-        $("#comView").show();
-    });
-
-    $("#btnPro").click(function() {
-        $(".card-view").hide();
-        $("#proView").show();
-    });
 </script>
 
 {% endblock %}

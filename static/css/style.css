@@ -68,7 +68,7 @@
 .btn-cookbook3 {
   background-color: #ffffff;
   border: solid #e0e1e4;
-  border-width: 0 1px;
+  border-width: 0 0 0 1px;
   border-radius: 0;
   color: #727885;
 }
@@ -187,7 +187,7 @@ label {
 }
 
 .stars-outer::before {
-  content: "\f006 \f006 \f006 \f006 \f006";
+  content: "\2606 \2606 \2606 \2606 \2606";
 }
 
 .stars-inner {
@@ -196,13 +196,12 @@ label {
   position: absolute;
   top: 0;
   white-space: nowrap;
-  width: 0;
   font-size: 1.5rem;
 }
 
 .stars-inner::before {
   color: #869ece;
-  content: "\f005 \f005 \f005 \f005 \f005";
+  content: "\2605 \2605 \2605 \2605 \2605";
 }
 
 .iv-user {
@@ -217,4 +216,14 @@ label {
     width: 120px;
   }
 
+  .stars-outer::before {
+    content: "\f006 \f006 \f006 \f006 \f006";
+  }
+
+  .stars-inner::before {
+    content: "\f005 \f005 \f005 \f005 \f005";
+  }
+
+
 }
+

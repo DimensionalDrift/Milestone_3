@@ -135,7 +135,8 @@ def postlogin():
         session["logged_in"] = True
         session["username"] = val["username"]
         session["id"] = str(val["_id"])
-        return redirect(url_for("home"))
+        session["email"] = val["email"]
+        return redirect(url_for("user", username=session["username"]))
     # else if email was correct
     elif val:
         flash("Your password is incorrect")
@@ -153,10 +154,21 @@ def logout():
     return redirect(url_for("home"))
 
 
-# User Page - under construction
-@app.route("/user")
-def user():
-    # print(session["username"])
+# User Page
+@app.route("/<username>")
+@app.route("/<username>/<view>")
+def user(username, view="submitted"):
+
+    # If the user is not logged in at all
+    if "username" not in session.keys():
+        flash("Please log in to see your user profile")
+        return redirect(url_for("login"))
+
+    # If the user tries to view a profile that they are not logged in as
+    if username != session["username"]:
+        flash("You are not logged in as this user")
+        return redirect(url_for("login"))
+
     recipes = mongo.db.recipes.find({"author": session["username"]})
     user = mongo.db.users.find_one({"username": session["username"]})
 
@@ -165,24 +177,100 @@ def user():
     for rid in user["favourites"]:
         favourites.append(mongo.db.recipes.find_one({"_id": ObjectId(rid)}))
 
+    # Create a list of the comment tuples, the first item of the list is the comment, the second is the recipe itself
     commentdata = []
     for cid in user["comments"]:
         comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
         recipe = mongo.db.recipes.find_one({"_id": ObjectId(comment["recipe_id"])})
         commentdata.append((comment, recipe))
 
-    print(user["comments"])
-    print(commentdata)
-    # recipes = mongo.db.recipes.find({"author": session["username"]})
-    # for item in recipes:
-    # print(item)
     return render_template(
         "user.html",
-        recipes=recipes,
+        recipes=list(recipes),
         user=user,
         favourites=favourites,
         commentdata=commentdata,
+        email=session["email"],
+        username=session["username"],
+        view=view,
     )
+
+
+# Route to deal with changing user details
+@app.route("/postuser", methods=["POST"])
+def postuser():
+
+    # Invalid charecters
+    invalid = '[,/<>{}]" '
+    # Create a dict of the form input
+    formval = request.form.to_dict()
+    # Boolean flag to check if the inputs are valid
+    valid = True
+
+    # Check if the user inputs are valid
+    if "uform-email" in formval.keys():
+        # Force certain values to be lowercase
+        formval["uform-email"] = formval["uform-email"].lower()
+        if "@" not in formval["uform-email"]:
+            flash("Please enter a valid email")
+            valid = False
+
+        if mongo.db.users.find_one({"email": formval["uform-email"]}):
+            flash(
+                "You have already signed up with this email, if you have "
+                "forgotten your login details then you can get in touch using "
+                "the link at the end of the page"
+            )
+            valid = False
+
+    # I'm not sure about letting the user update their username, the
+    # author in recipe entries is set as the username so it would
+    # require changing all the users recipe entries as well so for the
+    # moment I'm not letting them
+    if "uform-username" in formval.keys():
+        formval["uform-username"] = formval["uform-username"].lower()
+        if 8 > len(formval["uform-username"]):
+            flash("Your username is too short")
+            valid = False
+        if any(x in invalid for x in formval["uform-username"]):
+            flash("Only use letters, numbers and underscores in your username")
+            valid = False
+        # Check the username or email have not already been used
+        if mongo.db.users.find_one({"username": formval["uform-username"]}):
+            flash("User name is already taken")
+            valid = False
+
+    if "uform-password" in formval.keys():
+        formval["uform-password"] = formval["uform-password"].lower()
+        if 8 > len(formval["uform-password"]):
+            flash("Your password too short")
+            valid = False
+
+    # If all the checks have been passed the relevant user details are
+    # added and the user logged in
+    if valid is True:
+        # While it would make sense to update the entry in its relevant
+        # if loops above but doing so meant it was possible that when
+        # the user updated both the email and password but one of them
+        # did not pass their test the correct entry would still update
+        # which is not great UX
+        if "uform-email" in formval.keys():
+            flash("Your email has been updated")
+            session["email"] = formval["uform-email"]
+            mongo.db.users.update_one(
+                {"username": session["username"]},
+                {"$set": {"email": formval["uform-email"]}},
+            )
+        if "uform-password" in formval.keys():
+            flash("Your password has been updated")
+            formval["pass_hash"] = generate_password_hash(formval["uform-password"])
+            del formval["uform-password"]
+            mongo.db.users.update_one(
+                {"username": session["username"]},
+                {"$set": {"pass_hash": formval["pass_hash"]}},
+            )
+
+    return redirect(url_for("user", username=session["username"], view="edit"))
 
 
 # Signup Page
@@ -238,8 +326,8 @@ def postsignup():
         formval["pass_hash"] = generate_password_hash(formval["password"])
         del formval["password"]
         # Add blank values to user entry
-        formval["favourites"] = "[]"
-        formval["comments"] = "[]"
+        formval["favourites"] = []
+        formval["comments"] = []
 
         mongo.db.users.insert_one(formval)
         session["logged_in"] = True
