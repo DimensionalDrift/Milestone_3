@@ -325,6 +325,8 @@ def postsignup():
     if valid is True:
         formval["pass_hash"] = generate_password_hash(formval["password"])
         del formval["password"]
+        # Add todays date
+        formval["datejoined"] = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
         # Add blank values to user entry
         formval["favourites"] = []
         formval["comments"] = []
@@ -342,9 +344,7 @@ def postsignup():
 @app.route("/submitrecipe")
 def submitrecipe():
 
-    # This loads all the lists of list tables into memeory, might not
-    # be a great idea but I can't think of another way to pass these
-    # into the select2 lists... .sort({"number": -1})
+    # This loads all the lists of list tables into memeory, might not be a great idea but I can't think of another way to pass these into the select2 lists... .sort({"number": -1})
     categories = list(mongo.db.categories.find())
     categories = [d["name"] for d in categories]
     cuisines = list(mongo.db.cuisines.find())
@@ -377,7 +377,7 @@ def submitrecipe():
 @app.route("/postrecipe", methods=["POST"])
 def postrecipe():
     # Todays date
-    today = datetime.datetime.today().strftime("%Y-%m-%d")
+    today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
 
     # Pulling out values with multiple inputs into lists
     typelist = formlister("categories", request.form, "rform-type")

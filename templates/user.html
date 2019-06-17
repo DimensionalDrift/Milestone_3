@@ -4,58 +4,106 @@
 <section>
     <div class="container py-2">
         <div class="row">
-            <div
-                class="col-12 col-lg-3 d-flex justify-content-center align-items-start"
-            >
-                <div class="img-frame">
-                    <div class="img-view iv-rform">
-                        <img
-                            src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                            id="profileImage"
-                            class="square"
-                        />
+            <div class="col-12 col-lg-3" >
+                <div class='row'>
+                    <div class='col-12 d-flex d-lg-block justify-content-center'>
+                        <div class="img-frame">
+                            <div class="img-view iv-uprofile">
+                                <img
+                                    src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                    id="profileImage"
+                                    class="square"
+                                />
+                            </div>
+                        </div>
+                        <!-- Hide the info card on small devices -->
+                        <div class='card mx-0 d-none d-lg-block'>
+                            <div class="card-header px-3">
+                                About:
+                            </div>
+                            <ul class="m-3 p-0" style="list-style-type:none;">
+                                <li class="py-1">
+                                    <i class="px-2 far fa-user"></i>
+                                    Username: {{user["username"]}}
+                                </li>
+                                <li class="py-1">
+                                    <i class="px-2 far fa-clock"></i>
+                                    Joined: {{user["datejoined"].strftime("%d/%m/%y")}}
+                                </li>
+                                <li class="py-1">
+                                    <i class="px-2 far fa-plus-square"></i>
+                                    Submitted: {{user["favourites"]|length}}
+                                </li>
+                                <li class="py-1">
+                                    <i class="px-2 far fa-heart"></i>
+                                    Favorited: {{user["comments"]|length}}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-lg-9">
                 <!-- Button Card -->
-                <div class="card text-center">
+                <div class="card">
                     <div class="card-body p-0">
-                        <ul class="nav d-flex justify-content-center">
+                        <div class='row d-lg-none p-3'>
+                            <div class='col-12 col-sm-6'>
+                                <ul class="m-0 p-0" style="list-style-type:none;">
+                                    <li class="py-1">
+                                        <i class="px-2 far fa-user"></i>
+                                        Username: {{user["username"]}}
+                                    </li>
+                                    <li class="py-1">
+                                        <i class="px-2 far fa-clock"></i>
+                                        Joined: {{user["datejoined"].strftime("%d/%m/%y")}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class='col-12 col-sm-6'>
+                                <ul class="m-0 p-0" style="list-style-type:none;">
+                                    <li class="py-1">
+                                        <i class="px-2 far fa-plus-square"></i>
+                                        Submitted: {{user["favourites"]|length}}
+                                    </li>
+                                    <li class="py-1">
+                                        <i class="px-2 far fa-heart"></i>
+                                        Favorited: {{user["comments"]|length}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <ul class="nav nav-fill ">
                             <li
                                 class="nav-item"
-                                id="btnSub"
                             >
-                                <a class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='submitted') }}">Submitted</a>
+                                <a id="btnSub" class="nav-link btn btn-cookbook3 font-weight-bold" style="border-width: 1px 0 0 0;" role="button" href="{{ url_for('user', username=session['username'], view='submitted') }}">Submitted</a>
                             </li>
                             <li
                                 class="nav-item"
-                                id="btnFav"
                             >
-                                <a class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='favourites') }}">Favourites</a>
+                                <a id="btnFav" class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='favourites') }}">Favourites</a>
                             </li>
                             <li
                                 class="nav-item"
-                                id="btnCom"
                             >
-                                <a class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='comments') }}">Comments</a>
+                                <a id="btnCom" class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='comments') }}">Comments</a>
                             </li>
                             <li
                                 class="nav-item"
-                                id="btnPro"
                             >
-                                <a class="nav-link btn  btn-cookbook3 font-weight-bold" style="border-width: 0 1px 0 1px;"role="button" href="{{ url_for('user', username=session['username'], view='edit') }}">Edit Profile</a>
+                                <a id="btnPro" class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='edit') }}">Edit Profile</a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- Subbmitted Recipes View -->
+                <!-- Submitted Recipes View -->
                 {% if view == "submitted"%}
                     <div class="card-view" id="subView">
                         {% if recipes|length < 1%}
                             <div class='card'>
                                 <div class='card-body'>
-                                    You have not submitted any recipes yet! <br> Click the button below to start adding some of your favourite dishes.
+                                    You have not submitted any recipes yet! <br> Click the button below to start adding some of your favorite dishes.
                                 </div>
                             </div>
                         {% endif %}
@@ -72,7 +120,7 @@
                         {% if favourites|length < 1%}
                             <div class='card'>
                                 <div class='card-body'>
-                                    You have no favourite recipes yet! <br> Browse the home page or search for some of your favourite dishes using the search bar above.
+                                    You have no favorite recipes yet! <br> Browse the home page or search for some of your favorite dishes using the search bar above.
                                 </div>
                             </div>
                         {% endif %}
@@ -84,6 +132,7 @@
                 {% endif %}
                 <!-- Recipe Comments View -->
                 {% if view == "comments"%}
+                    {% set commentflag = True %}
                     <div class="card-view" id="comView">
                         {% if commentdata|length < 1%}
                             <div class='card'>
@@ -95,7 +144,7 @@
 
                         {% for data in commentdata%}
                             {% with comment=data[0], recipe=data[1] %}
-                                {% include 'commentcardsmall.html' %}
+                                {% include 'recipecardsmall.html' %}
                             {% endwith %}
                         {% endfor %}
                     </div>
@@ -162,7 +211,7 @@
 
     $(document).ready(function() {
         // Fit each image correctly
-        $(".iv-user > img").each(function() {
+        $(".iv-urecipe > img").each(function() {
             fitImage($(this));
         });
     });

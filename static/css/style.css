@@ -68,8 +68,8 @@
 .btn-cookbook3 {
   background-color: #ffffff;
   border: solid #e0e1e4;
-  border-width: 0 0 0 1px;
   border-radius: 0;
+  border-width: 1px 0 0 1px;
   color: #727885;
 }
 
@@ -204,16 +204,26 @@ label {
   content: "\2605 \2605 \2605 \2605 \2605";
 }
 
-.iv-user {
+.iv-urecipe {
   height: 100px;
   width: 100px;
 }
 
+.iv-uprofile {
+  height: 200px;
+  width: 200px;
+}
+
 @media only screen and (min-width: 992px) {
 
-  .iv-user {
+  .iv-urecipe {
     height: 120px;
     width: 120px;
+  }
+
+  .iv-uprofile {
+    height: auto;
+    width: auto;
   }
 
   .stars-outer::before {
@@ -224,6 +234,13 @@ label {
     content: "\f005 \f005 \f005 \f005 \f005";
   }
 
+  .btn-cookbook3 {
+    border-width: 0 0 0 1px;
+  }
+
+  #btnSub{
+    border-width: 0 0 0 0 !important;
+  }
 
 }
 
