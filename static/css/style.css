@@ -20,6 +20,11 @@
   width: 100%;
 }
 
+.circle{
+  border-radius: 50%;
+  width: 100%;
+}
+
 .portrait {
   height: auto;
   width: 100%;
@@ -49,6 +54,17 @@
 
 .my-footer {
   background-color: #ffffff;
+}
+
+.nav-link > .img-frame{
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.iv-navbar{
+  height: 24px;
+  width: 24px;
 }
 
 /*-------------------- Button Styles --------------------*/
