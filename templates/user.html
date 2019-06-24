@@ -21,24 +21,24 @@
                             <div class="card-header px-3">
                                 About:
                             </div>
-                            <ul class="m-3 p-0" style="list-style-type:none;">
-                                <li class="py-1">
-                                    <i class="px-2 far fa-user"></i>
-                                    Username: {{user["username"]}}
-                                </li>
-                                <li class="py-1">
-                                    <i class="px-2 far fa-clock"></i>
-                                    Joined: {{user["datejoined"].strftime("%d/%m/%y")}}
-                                </li>
-                                <li class="py-1">
-                                    <i class="px-2 far fa-plus-square"></i>
-                                    Submitted: {{user["favourites"]|length}}
-                                </li>
-                                <li class="py-1">
-                                    <i class="px-2 far fa-heart"></i>
-                                    Favorited: {{user["comments"]|length}}
-                                </li>
-                            </ul>
+                            <table class="m-3 p-0">
+                              <tr>
+                                <td class="align-top"><i class="px-2 far fa-user"></i></td>
+                                <td>Username: {{user["username"]}}</td>
+                              </tr>
+                              <tr>
+                                <td><i class="px-2 far fa-clock"></i></td>
+                                <td>Joined: {{user["datejoined"].strftime("%d/%m/%y")}}</td>
+                              </tr>
+                              <tr>
+                                <td><i class="px-2 far fa-plus-square"></i></td>
+                                <td>Submitted: {{recipes|length}}</td>
+                              </tr>
+                              <tr>
+                                <td><i class="px-2 far fa-thumbs-up"></i></td>
+                                <td>Liked: {{user["favourites"]|length}}</td>
+                              </tr>
+                            </table>
                             <!-- Temp button to log out, this should be included in the final design for the navbar in base template -->
                             <div class="d-flex justify-content-center mb-3">
                                 <a class="btn btn-cookbook2 btn-sm" href="/logout">Logout</a>
@@ -52,29 +52,29 @@
                 <div class="card">
                     <div class="card-body p-0">
                         <div class='row d-lg-none p-3'>
-                            <div class='col-12 col-sm-6'>
-                                <ul class="m-0 p-0" style="list-style-type:none;">
-                                    <li class="py-1">
-                                        <i class="px-2 far fa-user"></i>
-                                        Username: {{user["username"]}}
-                                    </li>
-                                    <li class="py-1">
-                                        <i class="px-2 far fa-clock"></i>
-                                        Joined: {{user["datejoined"].strftime("%d/%m/%y")}}
-                                    </li>
-                                </ul>
+                            <div class='col-12 col-sm-6 d-sm-flex justify-content-center'>
+                                <table class="m-0 p-0">
+                                  <tr>
+                                    <td class="align-top"><i class="px-2 far fa-user"></i></td>
+                                    <td>Username: {{user["username"]}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td><i class="px-2 far fa-clock"></i></td>
+                                    <td>Joined: {{user["datejoined"].strftime("%d/%m/%y")}}</td>
+                                  </tr>
+                                </table>
                             </div>
-                            <div class='col-12 col-sm-6'>
-                                <ul class="m-0 p-0" style="list-style-type:none;">
-                                    <li class="py-1">
-                                        <i class="px-2 far fa-plus-square"></i>
-                                        Submitted: {{user["favourites"]|length}}
-                                    </li>
-                                    <li class="py-1">
-                                        <i class="px-2 far fa-heart"></i>
-                                        Favorited: {{user["comments"]|length}}
-                                    </li>
-                                </ul>
+                            <div class='col-12 col-sm-6 d-sm-flex justify-content-center'>
+                                <table class="m-0 p-0">
+                                  <tr>
+                                    <td><i class="px-2 far fa-plus-square"></i></td>
+                                    <td>Submitted: {{recipes|length}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td><i class="px-2 far fa-thumbs-up"></i></td>
+                                    <td>Liked: {{user["favourites"]|length}}</td>
+                                  </tr>
+                                </table>
                             </div>
                         </div>
                         <ul class="nav nav-fill">
@@ -86,7 +86,7 @@
                             <li
                                 class="nav-item"
                             >
-                                <a id="btnFav" class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='favourites') }}">Favourites</a>
+                                <a id="btnFav" class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='favourites') }}">Liked</a>
                             </li>
                             <li
                                 class="nav-item"

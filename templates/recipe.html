@@ -1,9 +1,291 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class='container'>
-    <div class='row'>
-        <div class='col-12'>
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 col-lg-auto d-flex d-lg-block justify-content-center"
+            >
+            <div class="mt-3 img-frame">
+                <div class="img-view iv-recipe">
+                    {% if recipe['image']['url']|length > 0 %}
+                        <img
+                            src="{{recipe['image']['url']}}"
+                            class="square"
+                        />
+                    {% else %}
+                        <img
+                            src="{{ url_for('static', filename='icons/defaultdish.png') }}"
+                            class="square"
+                        />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card mx-0">
+                <div class="card-body">
+                    <h5>Ingredients:</h5>
+                    <hr />
+                    <ul class="nopad-list">
+                        <!-- <li><b>&#8210</b> 1 kg of item1</li> -->
+                        {% for ing in recipe['ingredientdict'] %}
+                            <li>{{ing['quantity']}}{{ing['unit']}} of {{ing['name']}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-8">
+            <div class="card mx-0" style="overflow: hidden">
+                <div class="card-header">
+                    <div class='row'>
+                        <div class='col-9'>
+                            <h2>{{recipe['name']}}</h2>
+                            <h5>By: {{recipe['author']}}</h5>
+                        </div>
+                        <div class='col-3 text-right'>
+                            {% if recipe['author'] == session['username']%}
+                                <button class="btn btn-cookbook2">Edit</button>
+                            {% endif %}
+                            <div data-toggle="modal" data-target="#voteModal">
+                                <div
+                                    class="stars-outer"
+                                    data-toggle="tooltip"
+                                    data-placement="right"
+                                    title="{{recipe['aggregateRating']['ratingValue']}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
+                                >
+                                    <div
+                                        class="stars-inner"
+                                        style="width: {{(recipe['aggregateRating']['ratingValue']/5)*100}}%;"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{recipe['description']}}
+                    </p>
+                    <hr />
+                    <!--<ul class=" p-0" style="list-style-type:none;">
+                        <li class="py-1">
+                            <i class="px-2 far fa-clock"></i>
+                            Prep Time: 00:00
+                        </li>
+                        <li class="py-1">
+                            <i class="px-2 far fa-clock"></i>
+                            Cooking time: 00:00
+                        </li>
+                        <li class="py-1">
+                            <i class=" px-2 fas fa-utensils"></i>
+                            Servings: 4
+                        </li>
+                        <li class="py-1">
+                        </li>
+                        </ul> -->
+                    <div class='row'>
+                        <div class='col-12 col-md-6'>
+                            <table>
+                                <tr>
+                                    <td><i class="px-2 far fa-clock"></i></td>
+                                    <td>Prep Time:</td>
+                                    {% if recipe['cookTime']|length > 0%}
+                                        <td>{{(recipe['cookTime'].strip('PT').replace('H', 'H '))}}</td>
+                                    {% else %}
+                                        <td class="text-center">-</td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Cook Time:</td>
+                                    {% if recipe['prepTime']|length > 0%}
+                                        <td>{{(recipe['prepTime'].strip('PT').replace('H', 'H '))}}</td>
+                                    {% else %}
+                                        <td class="text-center">-</td>
+                                    {% endif %}
+                                </tr>
+                            </table>
+                        </div>
+                        <div class='col-12 col-md-6'>
+                            <table>
+                                <tr>
+                                    <td><i class="px-2 far fa-user"></i></td>
+                                    <td>Servings:</td>
+                                    {% if recipe['recipeYield']|length > 0 %}
+                                        <td class="text-center">{{recipe['recipeYield']}}</td>
+                                    {% else %}
+                                        <td class="text-center">-</td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td><i class="px-2 fas fa-utensils"></i></td>
+                                    <td>Utensils:</td>
+                                    <td class="text-center">
+                                        {% if recipe['utensils']|length > 0 %}
+                                            {% for item in recipe['utensils']%}
+                                                {{item}}
+                                            {% endfor %}
+                                        {% else %}
+                                            <td class="text-center">-</td>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        {% if recipe['notes']|length > 0 %}
+                            <div class='col-12 my-2'>
+                                <table>
+                                    <tr>
+                                        <td class="align-top"><i class="px-2 far fa-sticky-note"></i></td>
+                                        <td colspan="2">{{recipe['notes']}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-6">
+                            <u>Categories:</u>
+                        </div>
+                        <div class="col-6">
+                            <u>Cuisines:</u>
+                        </div>
+                        <div class="col-6">
+                            {% for item in recipe['recipeCategory']%}
+                                <a href="#" class="badge badge-light">
+                                    {{item}}
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <div class="col-6">
+                            {% for item in recipe['recipeCuisine']%}
+                                <a href="#" class="badge badge-light">
+                                    {{item}}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class='row'>
+                        <div class='col-4 text-center'>
+                            {% if like == True %}
+                                <a class="btn btn-cookbook4 btn-block" style="color: #4267b2" role="button" href="{{url_for('recipelike', rid=recipe['_id'])}}">
+                                    <i class="fas fa-lg fa-thumbs-up"></i>
+                                    Like
+                                </a>
+                            {% else %}
+                                <a class="btn btn-cookbook4 btn-block" role="button" href="{{url_for('recipelike', rid=recipe['_id'])}}">
+                                    <i class="far fa-lg fa-thumbs-up"></i>
+                                    Like
+                                </a>
+                            {% endif%}
+                        </div>
+                        <div class='col-4 text-center'>
+                            <button class="btn btn-cookbook4 btn-block" data-toggle="collapse" data-target="#collapseComments">
+                                <i class="far fa-lg fa-comment-alt"></i>
+                                Comments
+                            </button>
+                        </div>
+                        <div class='col-4 text-center'>
+                            <button class="btn btn-cookbook4 btn-block" data-toggle="tooltip" data-placement="top" title="Comming Soon!">
+                                <i class="fas fa-lg fa-share"></i>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+                    <div class='row collapse {% if show %} show {% endif %}' id="collapseComments">
+                        <div class="col-12">
+                            <hr class="hr-full">
+                            <div class='row'>
+                                {% if comments|length < 1%}
+                                    <div class="col-12 pb-2 text-center">
+                                        There are no comments
+                                    </div>
+                                {% endif %}
+                                {% for comment in comments%}
+                                    <div class="col-12 pb-2 d-flex">
+                                        <div class="iv-comment mr-2">
+                                            <img
+                                                src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                                id="profileImage"
+                                                class="circle"
+                                                />
+                                        </div>
+                                        <div>
+                                            <div class="comment">
+                                                <b style="color: #3858a3;">{{comment[1]['username']}}</b> {{comment[0]['comment']}}
+                                            </div>
+                                            <div class="comment-time">
+                                                {{comment[0]['date'].strftime("%d %b %y")}} at {{comment[0]['date'].strftime("%H:%M")}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {% if session["logged_in"] == True%}
+                                    <form class="col-12 d-flex" action="{{ url_for('recipecomment', rid=recipe['_id'])}}" method="POST" id="cform">
+                                        <div class="iv-comment mr-2">
+                                            <img
+                                                src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                                id="profileImage"
+                                                class="circle"
+                                                />
+                                        </div>
+                                        <div class="comment commentbox flex-fill">
+                                            <input type="text" name="comment" placeholder="Write a comment...">
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mx-0">
+                <div class="card-body">
+                    <h5>Steps:</h5>
+                    <hr />
+                    <ul class="nopad-list">
+                        {% for step in recipe['recipeInstructions'] %}
+                            <li>{{step['text']}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="voteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rate this recipe</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                <span>&times;</span>
+                </button>
+            </div>
+            <form action="{{ url_for('recipevote', rid=recipe['_id'])}}" method="POST">
+                <div class="modal-body row">
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="stars">
+                            <input class="star star-5" id="star-5" type="radio" name="star" value="5"/>
+                            <label class="star star-5" for="star-5"></label>
+                            <input class="star star-4" id="star-4" type="radio" name="star" value="4"/>
+                            <label class="star star-4" for="star-4"></label>
+                            <input class="star star-3" id="star-3" type="radio" name="star" value="3"/>
+                            <label class="star star-3" for="star-3"></label>
+                            <input class="star star-2" id="star-2" type="radio" name="star" value="2"/>
+                            <label class="star star-2" for="star-2"></label>
+                            <input class="star star-1" id="star-1" type="radio" name="star" value="1"/>
+                            <label class="star star-1" for="star-1"></label>
+                        </div>
+                    </div>
+                    <div class='col-12 d-flex justify-content-center'>
+                        <button type="submit" class="btn btn-cookbook2">
+                        Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

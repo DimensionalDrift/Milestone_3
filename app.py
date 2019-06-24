@@ -41,12 +41,10 @@ def addto_listtable(table, vallist):
             mongo.db[table].insert_one(new_entry)
 
 
-# Function to handle making lists of form inputs that have multiple
-# values, each of the entries are also converted to title case by
-# default, setting the flag title to False will bypass that step
+# Function to handle making lists of form inputs that have multiple values, each of the entries are also converted to title case by default, setting the flag title to False will bypass that step
 def formlister(table, form, key, title=True):
     # Create list
-    flist = form.getlist(key).sort()
+    flist = form.getlist(key)
 
     # If the flag is set, make each entry title case, making everything
     # title case might not make sense for everything but it will make
@@ -59,6 +57,16 @@ def formlister(table, form, key, title=True):
     addto_listtable(table, flist)
 
     return flist
+
+
+# Function checks if a recipe is in a users list of favourites
+def likecheck(rid):
+    if "logged_in" in session and session["logged_in"] is True:
+        userfav = mongo.db.users.find_one({"email": session["email"]})
+        if rid in userfav["favourites"]:
+            return True
+
+    return False
 
 
 # A user class from a previous version of things
@@ -155,8 +163,8 @@ def logout():
 
 
 # User Page
-@app.route("/<username>")
-@app.route("/<username>/<view>")
+@app.route("/user/<username>")
+@app.route("/user/<username>/<view>")
 def user(username, view="submitted"):
 
     # If the user is not logged in at all
@@ -175,8 +183,10 @@ def user(username, view="submitted"):
     # Create a list of the favourites recipes
     favourites = []
     for rid in user["favourites"]:
+        print(rid)
         favourites.append(mongo.db.recipes.find_one({"_id": ObjectId(rid)}))
 
+    print(len(user["favourites"]))
     # Create a list of the comment tuples, the first item of the list is the comment, the second is the recipe itself
     commentdata = []
     for cid in user["comments"]:
@@ -339,6 +349,89 @@ def postsignup():
         return redirect(url_for("signup"))
 
 
+# Recipe Page
+@app.route("/recipe/<rid>")
+def recipe(rid):
+    # rid = "5d01579debcefa0f8b46318c"
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
+    print(recipe)
+    comments = []
+    for cid in recipe["comment"]:
+        comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
+        user = mongo.db.users.find_one({"_id": ObjectId(comment["user_id"])})
+        comments.append((comment, user))
+
+    # If the user is logged in and the user has liked the recipe then the like flag is set
+    like = likecheck(rid)
+
+    if request.args.get("show"):
+        show = request.args.get("show")
+    else:
+        show = False
+
+    return render_template(
+        "recipe.html", recipe=recipe, like=like, comments=comments, show=show
+    )
+
+
+# Route to deal with liking a recipe, this exposes a recipes database id, I'm not sure if it's a security risk...
+@app.route("/recipe/<rid>/like")
+def recipelike(rid):
+
+    if "logged_in" in session and session["logged_in"] is True:
+        user = mongo.db.users.find_one({"_id": ObjectId(session["id"])})
+        if likecheck(rid) is False:
+            mongo.db.users.update(user, {"$push": {"favourites": rid}})
+        else:
+            mongo.db.users.update(user, {"$pull": {"favourites": rid}})
+
+    return redirect(url_for("recipe", rid=rid))
+
+
+@app.route("/recipe/<rid>/comment", methods=["POST"])
+def recipecomment(rid):
+
+    today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
+    print(today)
+    if "logged_in" in session and session["logged_in"] is True:
+        comment = {
+            "user_id": session["id"],
+            "recipe_id": rid,
+            "date": today,
+            "comment": request.form["comment"],
+        }
+        newcomment = mongo.db.comments.insert_one(comment)
+        recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
+        mongo.db.recipes.update(recipe, {"$push": {"comment": newcomment.inserted_id}})
+        print(newcomment.inserted_id)
+
+    return redirect(url_for(".recipe", rid=rid, show=True))
+
+
+@app.route("/recipe/<rid>/vote", methods=["POST"])
+def recipevote(rid):
+
+    if "logged_in" in session and session["logged_in"] is True:
+
+        recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
+        avg = recipe["aggregateRating"]["ratingValue"]
+        num = recipe["aggregateRating"]["reviewCount"]
+
+        newavg = ((avg * num) + int(request.form["star"])) / (num + 1)
+
+        print(avg, num, int(request.form["star"]), newavg)
+        mongo.db.recipes.update(
+            recipe,
+            {
+                "$set": {
+                    "aggregateRating": {"ratingValue": newavg, "reviewCount": num + 1}
+                }
+            },
+        )
+
+    return redirect(url_for("recipe", rid=rid))
+
+
 # Recipe Submission Page
 # Still needs to pull data from databases
 @app.route("/submitrecipe")
@@ -385,8 +478,13 @@ def postrecipe():
     ingrlist = formlister("ingredients", request.form, "rform-ingredient")
     unitlist = formlister("units", request.form, "rform-unit", title=False)
     utenlist = formlister("utensils", request.form, "rform-utensils")
-    quanlist = request.form.getlist("rform-quantity").sort()
-    steplist = request.form.getlist("rform-step").sort()
+    quanlist = request.form.getlist("rform-quantity")
+    steplist = request.form.getlist("rform-step")
+
+    # Sort lists
+    typelist = sorted(typelist)
+    cuislist = sorted(cuislist)
+    utenlist = sorted(utenlist)
 
     # Convert time to ISO 8601 format
     tprep = isotime.converttime(request.form["rformTprep"])
@@ -445,6 +543,8 @@ def postrecipe():
         "notes": request.form["rformNotes"],
     }
 
+    print(request.form)
+    print(recipe)
     mongo.db["recipes"].insert_one(recipe)
 
     # Currently redirects to the submission page, should redirect to the users

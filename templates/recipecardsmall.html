@@ -5,7 +5,7 @@
             {%if submitflag == True%}
             <div class='row'>
                 <div class='col-8'>
-                    <a href="#" title="" style="color: black; text-decoration: none;">
+                    <a href="/recipe/{{recipe['_id']}}" title="title" style="color: black; text-decoration: none;">
                         <h5 class="m-0">{{recipe["name"]}}</h5>
                     </a>
                 </div>
@@ -16,7 +16,7 @@
             {% else %}
             <div class='row'>
                 <div class='col-12'>
-                    <a href="#" title="" style="color: black; text-decoration: none;">
+                    <a href="/recipe/{{recipe['_id']}}" title="" style="color: black; text-decoration: none;">
                         <h5 class="m-0">{{recipe["name"]}} - {{recipe["author"]}}</h5>
                     </a>
                 </div>
@@ -29,9 +29,7 @@
             <div class='col-4 col-md-3 d-none d-md-inline pr-0'>
                 <div class="img-frame">
                     <div class="img-view iv-urecipe">
-                        {% if
-                        recipe['image']['url']|length >
-                        0 %}
+                        {% if recipe['image']['url']|length > 0 %}
                         <img
                             src="{{recipe['image']['url']}}"
                         />
@@ -70,8 +68,7 @@
                 </div>
                 <div class='row d-none d-md-flex'>
                     <div class='col-6'>
-                        Tags: {% for item in
-                        recipe["recipeCategory"]%}
+                        Tags: {% for item in recipe["recipeCategory"]%}
                         {{item}}
                         {% endfor %}
                     </div>
