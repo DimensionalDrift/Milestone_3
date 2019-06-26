@@ -392,7 +392,7 @@ def recipelike(rid):
 def recipecomment(rid):
 
     today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
-    print(today)
+
     if "logged_in" in session and session["logged_in"] is True:
         comment = {
             "user_id": session["id"],
@@ -548,11 +548,11 @@ def postrecipe():
     }
 
     print(recipe)
-    mongo.db["recipes"].insert_one(recipe)
+    newrecipe = mongo.db["recipes"].insert_one(recipe)
 
     # Currently redirects to the submission page, should redirect to the users
     # recipe page
-    return redirect(url_for("home"))
+    return redirect(url_for("recipe", rid=newrecipe.inserted_id))
 
 
 # Junk Routes
