@@ -29,14 +29,10 @@
             <div class='col-4 col-md-3 d-none d-md-inline pr-0'>
                 <div class="img-frame">
                     <div class="img-view iv-urecipe">
-                        {% if recipe['image']['url']|length > 0 %}
-                        <img
-                            src="{{recipe['image']['url']}}"
-                        />
+                        {% if recipe['image']['url'] %}
+                            <img src="{{recipe['image']['url']}}"/>
                         {% else %}
-                        <img
-                            src="{{ url_for('static', filename='icons/defaultdish.png') }}"
-                        />
+                            <img src="{{ url_for('static', filename='icons/defaultdish.png') }}"/>
                         {% endif %}
                     </div>
                 </div>

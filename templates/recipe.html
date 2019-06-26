@@ -5,7 +5,7 @@
             >
             <div class="mt-3 img-frame">
                 <div class="img-view iv-recipe">
-                    {% if recipe['image']['url']|length > 0 %}
+                    {% if recipe['image']['url'] %}
                         <img
                             src="{{recipe['image']['url']}}"
                             class="square"
@@ -42,8 +42,10 @@
                         <div class='col-3 text-right'>
                             {% if recipe['author'] == session['username']%}
                                 <button class="btn btn-cookbook2">Edit</button>
+                                <div>
+                            {% else %}
+                                <div data-toggle="modal" data-target="#voteModal">
                             {% endif %}
-                            <div data-toggle="modal" data-target="#voteModal">
                                 <div
                                     class="stars-outer"
                                     data-toggle="tooltip"

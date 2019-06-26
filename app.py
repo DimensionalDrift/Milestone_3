@@ -419,7 +419,6 @@ def recipevote(rid):
 
         newavg = ((avg * num) + int(request.form["star"])) / (num + 1)
 
-        print(avg, num, int(request.form["star"]), newavg)
         mongo.db.recipes.update(
             recipe,
             {
@@ -469,6 +468,8 @@ def submitrecipe():
 # Recipe posting route - handles the form data
 @app.route("/postrecipe", methods=["POST"])
 def postrecipe():
+
+    print(request.form)
     # Todays date
     today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
 
@@ -506,7 +507,10 @@ def postrecipe():
 
     # Seperating out the image url and dimensions
     # This assumes that there are no commas in the url which should be true
-    imglist = request.form["rformImageurl"].split(",")
+    if len(request.form["rformImageurl"]) > 0:
+        imglist = request.form["rformImageurl"].split(",")
+    else:
+        imglist = [None, 0, 0]
 
     # Gathering the recipe dictionary
     recipe = {
@@ -543,7 +547,6 @@ def postrecipe():
         "notes": request.form["rformNotes"],
     }
 
-    print(request.form)
     print(recipe)
     mongo.db["recipes"].insert_one(recipe)
 
