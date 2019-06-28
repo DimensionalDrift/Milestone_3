@@ -26,6 +26,37 @@ from flask_login import (
 import datetime
 import isotime
 
+# Recipe Blank
+# I should probably use a recipe class to handle the recipe in python but for the minute this should do
+recipeblank = {
+    # Schema Values
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 0.0,
+        "reviewCount": 0,
+    },
+    "author": "",
+    "comment": [],
+    "cookTime": "",
+    "datePublished": "",
+    "description": "",
+    "image": {"@type": "ImageObject", "url": "", "height": 0, "width": 0},
+    "name": "",
+    "prepTime": "",
+    "recipeCategory": [],
+    "recipeCuisine": [],
+    "recipeIngredient": [],
+    "recipeInstructions": [],
+    "recipeYield": "",
+    "totalTime": "",
+    # My Values
+    "ingredientdict": [],
+    "utensils": [],
+    "notes": "",
+}
+
 # Function to add values to list tables that store lists of categories,
 # ingredients etc.
 def addto_listtable(table, vallist):
@@ -67,6 +98,26 @@ def likecheck(rid):
             return True
 
     return False
+
+
+# This loads all the lists of list tables into memeory, might not be a great idea but I can't think of another way to pass these into the select2 lists... .sort({"number": -1})
+def dblistload():
+
+    # Load the lists with the database entries
+    categories = list(mongo.db.categories.find())
+    cuisines = list(mongo.db.cuisines.find())
+    ingredients = list(mongo.db.ingredients.find())
+    units = list(mongo.db.units.find())
+    utensils = list(mongo.db.utensils.find())
+
+    # Load only the names from the database
+    categories = [d["name"] for d in categories]
+    cuisines = [d["name"] for d in cuisines]
+    ingredients = [d["name"] for d in ingredients]
+    units = [d["name"] for d in units]
+    utensils = [d["name"] for d in utensils]
+
+    return categories, cuisines, ingredients, units, utensils
 
 
 # A user class from a previous version of things
@@ -403,9 +454,8 @@ def recipecomment(rid):
         newcomment = mongo.db.comments.insert_one(comment)
         recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
         mongo.db.recipes.update(recipe, {"$push": {"comment": newcomment.inserted_id}})
-        print(newcomment.inserted_id)
 
-    return redirect(url_for(".recipe", rid=rid, show=True))
+    return redirect(url_for("recipe", rid=rid, show=True))
 
 
 @app.route("/recipe/<rid>/vote", methods=["POST"])
@@ -431,24 +481,64 @@ def recipevote(rid):
     return redirect(url_for("recipe", rid=rid))
 
 
+# Recipe edit page
+@app.route("/recipe/<rid>/edit")
+def recipeedit(rid):
+    if "logged_in" in session and session["logged_in"] is True:
+        # Load the lists
+        categories, cuisines, ingredients, units, utensils = dblistload()
+
+        # Load the recipe
+        recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
+
+        if recipe["cookTime"]:
+            cookTime = isotime.fromisostring(recipe["cookTime"])
+        else:
+            cookTime = "00:00"
+        if recipe["prepTime"]:
+            prepTime = isotime.fromisostring(recipe["prepTime"])
+        else:
+            prepTime = "00:00"
+
+        print(recipe["cookTime"], recipe["cookTime"])
+        print(cookTime, prepTime)
+        return render_template(
+            "recipeform.html",
+            key=app.config["GOOGLE_API_KEY"],
+            cx=app.config["GOOGLE_CX"],
+            rid=rid,
+            categories=categories,
+            cuisines=cuisines,
+            ingredients=ingredients,
+            units=units,
+            utensils=utensils,
+            recipe=recipe,
+            cookTime=cookTime,
+            prepTime=prepTime,
+        )
+    else:
+        flash("You must be logged in to edit a recipe")
+        return redirect(url_for("login"))
+
+
+# Recipe edit page
+@app.route("/recipe/<rid>/delete")
+def recipedelete(rid):
+
+    mongo.db.recipes.delete_one({"_id": ObjectId(rid)})
+
+    return redirect(url_for("user", username=session["username"], view="submitted"))
+
+
 # Recipe Submission Page
-# Still needs to pull data from databases
 @app.route("/submitrecipe")
 def submitrecipe():
 
-    # This loads all the lists of list tables into memeory, might not be a great idea but I can't think of another way to pass these into the select2 lists... .sort({"number": -1})
-    categories = list(mongo.db.categories.find())
-    categories = [d["name"] for d in categories]
-    cuisines = list(mongo.db.cuisines.find())
-    cuisines = [d["name"] for d in cuisines]
-    ingredients = list(mongo.db.ingredients.find())
-    ingredients = [d["name"] for d in ingredients]
-    units = list(mongo.db.units.find())
-    units = [d["name"] for d in units]
-    utensils = list(mongo.db.utensils.find())
-    utensils = [d["name"] for d in utensils]
-
     if ("logged_in" in session.keys()) and (session["logged_in"] is True):
+
+        # Load the lists
+        categories, cuisines, ingredients, units, utensils = dblistload()
+
         print("Load page")
         return render_template(
             "recipeform.html",
@@ -459,6 +549,9 @@ def submitrecipe():
             ingredients=ingredients,
             units=units,
             utensils=utensils,
+            recipe=recipeblank,
+            cookTime="00:00",
+            prepTime="00:00",
         )
     else:
         flash("Please log in before posting a recipe")
@@ -468,7 +561,7 @@ def submitrecipe():
 # Recipe posting route - handles the form data
 @app.route("/postrecipe", methods=["POST"])
 def postrecipe():
-
+    print("Im Submitting!")
     print(request.form)
     # Todays date
     today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
@@ -507,6 +600,8 @@ def postrecipe():
 
     # Seperating out the image url and dimensions
     # This assumes that there are no commas in the url which should be true
+
+    print(request.form["rformImageurl"])
     if len(request.form["rformImageurl"]) > 0:
         imglist = request.form["rformImageurl"].split(",")
     else:
@@ -548,11 +643,107 @@ def postrecipe():
     }
 
     print(recipe)
-    mongo.db["recipes"].insert_one(recipe)
+    newrecipe = mongo.db["recipes"].insert_one(recipe)
 
     # Currently redirects to the submission page, should redirect to the users
     # recipe page
-    return redirect(url_for("home"))
+    return redirect(url_for("recipe", rid=newrecipe.inserted_id))
+
+
+# Recipe posting route - handles the form data
+@app.route("/updaterecipe/<rid>", methods=["POST"])
+def updaterecipe(rid):
+    print("Im updating!")
+    oldrecipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
+
+    # print(request.form)
+    # Todays date
+    today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
+
+    # Pulling out values with multiple inputs into lists
+    typelist = formlister("categories", request.form, "rform-type")
+    cuislist = formlister("cuisines", request.form, "rform-cuisine")
+    ingrlist = formlister("ingredients", request.form, "rform-ingredient")
+    unitlist = formlister("units", request.form, "rform-unit", title=False)
+    utenlist = formlister("utensils", request.form, "rform-utensils")
+    quanlist = request.form.getlist("rform-quantity")
+    steplist = request.form.getlist("rform-step")
+
+    # Sort lists
+    typelist = sorted(typelist)
+    cuislist = sorted(cuislist)
+    utenlist = sorted(utenlist)
+
+    # Convert time to ISO 8601 format
+    tprep = isotime.converttime(request.form["rformTprep"])
+    tcook = isotime.converttime(request.form["rformTcook"])
+    tadd = isotime.addtime(request.form["rformTprep"], request.form["rformTcook"])
+
+    # 'Zipping' the ingredients into a list and a list of dictionaries
+    ingrdictlist = []
+    ingrfulllist = []
+    for i in range(len(ingrlist)):
+        ingrdictlist.append(
+            {"name": ingrlist[i], "quantity": quanlist[i], "unit": unitlist[i]}
+        )
+        ingrfulllist.append(quanlist[i] + " " + unitlist[i] + " " + ingrlist[i])
+
+    # 'Zipping' the steps into Schema dictionaries
+    for i in range(len(steplist)):
+        steplist[i] = {"@type": "HowToStep", "text": steplist[i]}
+
+    # Seperating out the image url and dimensions
+    # This assumes that there are no commas in the url which should be true
+
+    # print(request.form["rformImageurl"])
+    if len(request.form["rformImageurl"]) > 0:
+        imglist = request.form["rformImageurl"].split(",")
+    else:
+        imglist = [None, 0, 0]
+
+    # Gathering the recipe dictionary
+    recipe = {
+        # Schema Values
+        "@context": "https://schema.org/",
+        "@type": "Recipe",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": 0.0,
+            "reviewCount": 0,
+        },
+        "author": session["username"],  # This should probably follow schema
+        "comment": [],
+        "cookTime": tcook,
+        "datePublished": oldrecipe["datePublished"],
+        "description": request.form["rformDescription"],
+        "image": {
+            "@type": "ImageObject",
+            "url": imglist[0],
+            "height": int(imglist[1]),
+            "width": int(imglist[2]),
+        },
+        "name": request.form["rform-title"].title(),
+        "prepTime": tprep,
+        "recipeCategory": typelist,
+        "recipeCuisine": cuislist,
+        "recipeIngredient": ingrfulllist,
+        "recipeInstructions": steplist,
+        "recipeYield": request.form["rform-serving"],
+        "totalTime": tadd,
+        # My Values
+        "ingredientdict": ingrdictlist,
+        "utensils": utenlist,
+        "notes": request.form["rformNotes"],
+    }
+
+    exemptlist = ["_id", "comment", "aggregateRating", "datePublished"]
+    for item in recipe:
+        if recipe[item] != oldrecipe[item] and item not in exemptlist:
+            mongo.db.recipes.update_one(
+                {"_id": ObjectId(rid)}, {"$set": {item: recipe[item]}}
+            )
+
+    return redirect(url_for("recipe", rid=rid))
 
 
 # Junk Routes

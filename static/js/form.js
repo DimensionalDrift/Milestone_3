@@ -136,7 +136,7 @@ $("#removeStep").click(function() {
 $(function() {
     $("#rformTprep").datetimepicker({
         format: "HH:mm",
-        defaultDate: Date.parse("2000-01-01T00:00"),
+        defaultDate: pDate,
         stepping: 5
     });
 });
@@ -144,7 +144,7 @@ $(function() {
 $(function() {
     $("#rformTcook").datetimepicker({
         format: "HH:mm",
-        defaultDate: Date.parse("2000-01-01T00:00"),
+        defaultDate: cDate,
         stepping: 5
     });
 });

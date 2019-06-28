@@ -41,8 +41,13 @@
                         </div>
                         <div class='col-3 text-right'>
                             {% if recipe['author'] == session['username']%}
-                                <button class="btn btn-cookbook2">Edit</button>
-                                <div>
+                                <a class="btn btn-cookbook2" role="button" href="{{url_for('recipeedit', rid=recipe['_id'])}}">
+                                    Edit
+                                </a>
+                                <a class="btn btn-cookbook2" role="button" data-toggle="modal" data-target="#deleteModal">
+                                    Delete
+                                </a>
+                                <div data-toggle="modal" data-target="#novoteModal">
                             {% else %}
                                 <div data-toggle="modal" data-target="#voteModal">
                             {% endif %}
@@ -67,22 +72,6 @@
                         {{recipe['description']}}
                     </p>
                     <hr />
-                    <!--<ul class=" p-0" style="list-style-type:none;">
-                        <li class="py-1">
-                            <i class="px-2 far fa-clock"></i>
-                            Prep Time: 00:00
-                        </li>
-                        <li class="py-1">
-                            <i class="px-2 far fa-clock"></i>
-                            Cooking time: 00:00
-                        </li>
-                        <li class="py-1">
-                            <i class=" px-2 fas fa-utensils"></i>
-                            Servings: 4
-                        </li>
-                        <li class="py-1">
-                        </li>
-                        </ul> -->
                     <div class='row'>
                         <div class='col-12 col-md-6'>
                             <table>
@@ -245,7 +234,7 @@
             <div class="card mx-0">
                 <div class="card-body">
                     <h5>Steps:</h5>
-                    <hr />
+                    <hr/>
                     <ul class="nopad-list">
                         {% for step in recipe['recipeInstructions'] %}
                             <li>{{step['text']}}</li>
@@ -256,39 +245,17 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="voteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Rate this recipe</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                <span>&times;</span>
-                </button>
-            </div>
-            <form action="{{ url_for('recipevote', rid=recipe['_id'])}}" method="POST">
-                <div class="modal-body row">
-                    <div class="col-12 d-flex justify-content-center">
-                        <div class="stars">
-                            <input class="star star-5" id="star-5" type="radio" name="star" value="5"/>
-                            <label class="star star-5" for="star-5"></label>
-                            <input class="star star-4" id="star-4" type="radio" name="star" value="4"/>
-                            <label class="star star-4" for="star-4"></label>
-                            <input class="star star-3" id="star-3" type="radio" name="star" value="3"/>
-                            <label class="star star-3" for="star-3"></label>
-                            <input class="star star-2" id="star-2" type="radio" name="star" value="2"/>
-                            <label class="star star-2" for="star-2"></label>
-                            <input class="star star-1" id="star-1" type="radio" name="star" value="1"/>
-                            <label class="star star-1" for="star-1"></label>
-                        </div>
-                    </div>
-                    <div class='col-12 d-flex justify-content-center'>
-                        <button type="submit" class="btn btn-cookbook2">
-                        Submit
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+
+<div id="starmodalDiv">
+    {% include 'starmodal.html' %}
 </div>
+
+<div id="nostarmodalDiv">
+    {% include 'nostarmodal.html' %}
+</div>
+
+<div id="deletemodalDiv">
+    {% include 'deletemodal.html' %}
+</div>
+
 {% endblock %}

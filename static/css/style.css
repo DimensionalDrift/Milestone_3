@@ -108,6 +108,10 @@
   background-color: #f5f6f7;
 }
 
+.btn-cookbookdelete:hover{
+  background-color: #E63946;
+}
+
 /*Remove the focus shadow*/
 .btn:focus,
 .btn.focus {

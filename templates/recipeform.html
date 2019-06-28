@@ -4,10 +4,18 @@
     <div class='container'>
         <!-- Page Title -->
         <div class='row justify-content-center pt-3 pb-2'>
-            <h1>Submit Your Recipe</h1>
+            {% if recipe['name'] %}
+                <h1>Edit Your Recipe</h1>
+            {% else %}
+                <h1>Submit Your Recipe</h1>
+            {% endif %}
         </div>
         <!-- Recipe Form -->
-        <form action="{{ url_for('postrecipe') }}" method="POST" id="rform">
+        {%if recipe['name']%}
+            <form action="{{ url_for('updaterecipe', rid=rid) }}" method="POST" id="rform">
+        {% else %}
+            <form action="{{ url_for('postrecipe') }}" method="POST" id="rform">
+        {% endif %}
             <!-- Section 1 - Basic Details -->
             <div class='card'>
                 <h4 class="card-header">General Information</h4>
@@ -16,11 +24,11 @@
                         <div class='col-12 col-md-8'>
                             <div class="form-group">
                                 <label for="rform-title">Recipe Title</label>
-                                <input type="text" class="form-control" name="rform-title" placeholder="Recipe Title" required>
+                                <input type="text" class="form-control" name="rform-title" placeholder="Recipe Title" value="{{recipe['name']}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="rformDescription">Recipe Description</label>
-                                <textarea class="form-control" id="rformDescription" rows="3" placeholder="Give a little description of your recipe, where did you find it? What makes it unique?" name="rformDescription"></textarea>
+                                <textarea class="form-control" id="rformDescription" rows="3" placeholder="Give a little description of your recipe, where did you find it? What makes it unique?" name="rformDescription">{{recipe['description']}}</textarea>
                             </div>
                         </div>
                         <div class='col-12 col-md-4'>
@@ -28,14 +36,19 @@
                                 <div class="m-0 text-center thumbnail">
                                     <div class="img-frame">
                                         <div class="img-view iv-rform">
-                                            <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" alt="placeholder+image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
+                                            {% if recipe['image']['url']%}
+                                                <img src="{{recipe['image']['url']}}" alt="placeholder+image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
+                                            {% else %}
+                                                <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" alt="placeholder+image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="caption">
                                         Click here to add an image
                                     </div>
                                 </div>
-                                <input type="text" class="form-control d-none" name="rformImageurl" id="rformImageurl" placeholder="Recipe Title">
+                                <input type="text" class="form-control d-none" name="rformImageurl" id="rformImageurl"
+                                value="{{recipe['image']['url']}},{{recipe['image']['height']}},{{recipe['image']['width']}}">
                             </div>
                         </div>
                     </div>
@@ -47,9 +60,16 @@
                                     <i class="far fa-question-circle"></i>
                                 </label>
                                 <select class="form-control rform-type" multiple="multiple" name="rform-type" required>
-                                    <option></option>
+                                    {% if recipe['recipeCategory']|length > 0 %}
+                                        {% for item in recipe['recipeCategory']%}
+                                            <option selected="selected">{{item}}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option></option>
+                                    {% endif %}
+
                                     {% for category in categories %}
-                                    <option>{{category}}</option>
+                                        <option>{{category}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -61,9 +81,16 @@
                                     <i class="far fa-question-circle"></i>
                                 </label>
                                 <select class="form-control rform-cuisine" multiple="multiple" name="rform-cuisine" required>
-                                    <option></option>
+                                    {% if recipe['recipeCuisine']|length > 0 %}
+                                        {% for item in recipe['recipeCuisine']%}
+                                            <option selected="selected">{{item}}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option></option>
+                                    {% endif %}
+
                                     {% for cuisine in cuisines %}
-                                    <option>{{cuisine}}</option>
+                                        <option>{{cuisine}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -98,31 +125,60 @@
                         </div>
                         <!-- Ingredient Inputs -->
                         <!-- When the Add Ingredient button is clicked this div is cloned and appended to the parent div above -->
-                        <div class='form-row mb-2 ingredientrow' id='ingredientrow0'>
-                            <div class='col-4 col-md-7 d-flex justify-content-center'>
-                                <select class="form-control rform-ingredient" name='rform-ingredient' required>
-                                    <option></option>
-                                    {% for ingredient in ingredients %}
-                                    <option>{{ingredient}}</option>
-                                    {% endfor %}
+                        {% for ingredict in recipe['ingredientdict'] %}
+                            <div class='form-row mb-2 ingredientrow' id='ingredientrow0'>
+                                <div class='col-4 col-md-7 d-flex justify-content-center'>
+                                    <select class="form-control rform-ingredient" name='rform-ingredient' required>
+                                        <option>{{ingredict['name']}}</option>
+                                        {% for ingredient in ingredients %}
+                                        <option>{{ingredient}}</option>
+                                        {% endfor %}
 
-                                </select>
+                                    </select>
+                                </div>
+                                <div class='col-3 col-md-2 d-flex justify-content-center'>
+                                    <input type="number" class="form-control rform-quantity" name="rform-quantity" placeholder="Enter Quantity" min="0" max="999" step="0.01" value="{{ingredict['quantity']}}" required>
+                                </div>
+                                <div class='col-3 col-md-2 d-flex justify-content-center'>
+                                    <select class="form-control rform-unit" name="rform-unit" required>
+                                        <option>{{ingredict['unit']}}</option>
+                                        {% for unit in units %}
+                                        <option>{{unit}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class='col-2 col-md-1 d-flex justify-content-center'>
+                                    <button type="button" class="btn btn-cookbook2" id="removeIngredient"><i class="fas fa-minus fa-lg"></i></button>
+                                </div>
                             </div>
-                            <div class='col-3 col-md-2 d-flex justify-content-center'>
-                                <input type="number" class="form-control rform-quantity" name="rform-quantity" placeholder="Enter Quantity" min="0" max="999" step="0.01" required>
+                        {% endfor %}
+                        {% if not recipe['name'] %}
+                            <div class='form-row mb-2 ingredientrow' id='ingredientrow0'>
+                                <div class='col-4 col-md-7 d-flex justify-content-center'>
+                                    <select class="form-control rform-ingredient" name='rform-ingredient' required>
+                                        <option></option>
+                                        {% for ingredient in ingredients %}
+                                        <option>{{ingredient}}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                                <div class='col-3 col-md-2 d-flex justify-content-center'>
+                                    <input type="number" class="form-control rform-quantity" name="rform-quantity" placeholder="Enter Quantity" min="0" max="999" step="0.01" required>
+                                </div>
+                                <div class='col-3 col-md-2 d-flex justify-content-center'>
+                                    <select class="form-control rform-unit" name="rform-unit" required>
+                                        <option></option>
+                                        {% for unit in units %}
+                                        <option>{{unit}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class='col-2 col-md-1 d-flex justify-content-center'>
+                                    <button type="button" class="btn btn-cookbook2" id="removeIngredient"><i class="fas fa-minus fa-lg"></i></button>
+                                </div>
                             </div>
-                            <div class='col-3 col-md-2 d-flex justify-content-center'>
-                                <select class="form-control rform-unit" name="rform-unit" required>
-                                    <option></option>
-                                    {% for unit in units %}
-                                    <option>{{unit}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class='col-2 col-md-1 d-flex justify-content-center'>
-                                <button type="button" class="btn btn-cookbook2" id="removeIngredient"><i class="fas fa-minus fa-lg"></i></button>
-                            </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="card-footer text-center" id="ingredientButton">
@@ -149,14 +205,26 @@
                         </div>
                         <!-- Step Inputs -->
                         <!-- Same as above, Add Step clones this div and appends it -->
-                        <div class='form-row mb-2 steprow' id='steprow0'>
-                            <div class='col-10 col-md-11 d-flex justify-content-center'>
-                                <input type="text" class="form-control s-step" name='rform-step' required>
+                        {% for step in recipe['recipeInstructions'] %}
+                            <div class='form-row mb-2 steprow' id='steprow0'>
+                                <div class='col-10 col-md-11 d-flex justify-content-center'>
+                                    <input type="text" class="form-control s-step" name='rform-step' value="{{step['text']}}" required>
+                                </div>
+                                <div class='col-2 col-md-1 d-flex justify-content-center'>
+                                    <button type="button" class="btn btn-cookbook2" id="removeStep"><i class="fas fa-minus fa-lg"></i></button>
+                                </div>
                             </div>
-                            <div class='col-2 col-md-1 d-flex justify-content-center'>
-                                <button type="button" class="btn btn-cookbook2" id="removeStep"><i class="fas fa-minus fa-lg"></i></button>
+                        {% endfor %}
+                        {% if not recipe['name'] %}
+                            <div class='form-row mb-2 steprow' id='steprow0'>
+                                <div class='col-10 col-md-11 d-flex justify-content-center'>
+                                    <input type="text" class="form-control s-step" name='rform-step' required>
+                                </div>
+                                <div class='col-2 col-md-1 d-flex justify-content-center'>
+                                    <button type="button" class="btn btn-cookbook2" id="removeStep"><i class="fas fa-minus fa-lg"></i></button>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="card-footer text-center" id="stepButton">
@@ -175,7 +243,8 @@
                                     Prep Time
                                     <i class="far fa-question-circle"></i>
                                 </label>
-                                <input type="text" class="form-control datetimepicker-input" id="rformTprep" data-toggle="datetimepicker" data-target="#rformTprep" placeholder="hh:mm" name='rformTprep'/>
+                                <input type="text" class="form-control datetimepicker-input" id="rformTprep" data-toggle="datetimepicker" data-target="#rformTprep" placeholder="{{prepTime}}" name='rformTprep'/>
+
                             </div>
                         </div>
                         <div class='col-12 col-md-3'>
@@ -184,7 +253,7 @@
                                     Cook Time
                                     <i class="far fa-question-circle"></i>
                                 </label>
-                                <input type="text" class="form-control datetimepicker-input" id="rformTcook" data-toggle="datetimepicker" data-target="#rformTcook" placeholder="hh:mm" name='rformTcook'/>
+                                <input type="text" class="form-control datetimepicker-input" id="rformTcook" data-toggle="datetimepicker" data-target="#rformTcook" placeholder="{{cookTime}}" name='rformTcook'/>
                             </div>
                         </div>
                         <div class='col-12 col-md-3'>
@@ -193,7 +262,7 @@
                                     Servings
                                     <i class="far fa-question-circle"></i>
                                 </label>
-                                <input type="number" class="form-control rform-serving" placeholder="Enter Quantity" min="0" max="99" step="1" name='rform-serving'>
+                                <input type="number" class="form-control rform-serving" placeholder="Enter Quantity" min="0" max="99" step="1" value="{{recipe['recipeYield']}}" name='rform-serving'>
                             </div>
                         </div>
                         <div class='col-12 col-md-3'>
@@ -203,7 +272,14 @@
                                     <i class="far fa-question-circle"></i>
                                 </label>
                                 <select class="form-control rform-utensils" name="rform-utensils" multiple="multiple">
-                                    <option></option>
+                                    {% if recipe['utensils']|length > 0 %}
+                                        {% for item in recipe['utensils']%}
+                                            <option selected="selected">{{item}}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option></option>
+                                    {% endif %}
+
                                     {% for utensil in utensils %}
                                     <option>{{utensil}}</option>
                                     {% endfor %}
@@ -213,14 +289,24 @@
                         <div class='col-12'>
                             <div class="form-group">
                                 <label for="rformNotes">Additional Notes</label>
-                                <textarea class="form-control" id="rformNotes" rows="2" placeholder="Are there any tips or things to look out for in this recipe that you would like to add?" name='rformNotes'></textarea>
+                                <textarea class="form-control" id="rformNotes" rows="2" placeholder="Are there any tips or things to look out for in this recipe that you would like to add?" name='rformNotes'>{{recipe['notes']}}</textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center" >
-                <button type="submit" class="btn btn-cookbook1 btn-lg" id="rformSubmit" form="rform">Submit</button>
+                <div class='col-2 d-flex justify-content-center'>
+                    <button type="submit" class="btn btn-cookbook1 btn-lg" id="rformSubmit" form="rform">Submit</button>
+
+                </div>
+                {% if recipe['name'] %}
+                <div class='col-2 d-flex justify-content-center'>
+                    <a class="btn btn-cookbook1 btn-lg" role="button" href="{{url_for('recipe', rid=recipe['_id'])}}">
+                        Cancel
+                    </a>
+                </div>
+                {% endif %}
             </div>
         </form>
         <!-- Image picker modal
@@ -235,6 +321,10 @@
 <script type="text/javascript">
     var key = "{{ key }}";
     var cx = "{{ cx }}";
+    // Notes: Using a function in the template does not work, now the times must be processed outside the template then be fed in. This further leads me to think that a class will be better for this, the recipe class can have a function to retun any time format requested which would be dead handy
+    var pDate = Date.parse("2000-01-01T{{prepTime}}");
+    var cDate = Date.parse("2000-01-01T{{cookTime}}");
+    console.log(phrs, pmin, chrs, cmin);
 </script>
 <!-- My Javascript -->
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/form.js') }}"></script>

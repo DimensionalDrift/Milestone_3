@@ -10,7 +10,12 @@
                     </a>
                 </div>
                 <div class='col-4 d-flex justify-content-end'>
-                    <button class="btn btn-cookbook2">Edit</button>
+                    <a class="btn btn-cookbook2" role="button" href="{{url_for('recipeedit', rid=recipe['_id'])}}">
+                        Edit
+                    </a>
+                    <a class="btn btn-cookbook2" role="button" data-toggle="modal" data-target="#deleteModal">
+                        Delete
+                    </a>
                 </div>
             </div>
             {% else %}
