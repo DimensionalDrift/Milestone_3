@@ -55,7 +55,7 @@
                                     class="stars-outer"
                                     data-toggle="tooltip"
                                     data-placement="right"
-                                    title="{{recipe['aggregateRating']['ratingValue']}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
+                                    title="{{recipe['aggregateRating']['ratingValue']|round(2)}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
                                 >
                                     <div
                                         class="stars-inner"

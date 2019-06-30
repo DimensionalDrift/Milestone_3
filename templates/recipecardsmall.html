@@ -1,64 +1,93 @@
-<!-- As long as recipe is defined in the parent then this can be included -->
 {% block content %}
+<!-- Small Recipe Card - final -->
+<!-- This template is used in two views, one where the recipes description is shown as in the list of the users submitted recipes and another with comments the user has made on the recipe. The different views are handled using the commentflag variable in the parent template above. -->
 <div class="card">
+    <!-- Recipe card title -->
     <div class="card-header">
-            {%if submitflag == True%}
-            <div class='row'>
-                <div class='col-8'>
-                    <a href="/recipe/{{recipe['_id']}}" title="title" style="color: black; text-decoration: none;">
+        <!-- If the recipe was submitted by the currently logged in user then delete and edit control buttons are included  -->
+        {% if submitflag == True%}
+            <div class="row">
+                <div class="col-12 col-sm-8">
+                    <a
+                        href="/recipe/{{recipe['_id']}}"
+                        title="title"
+                        style="color: black; text-decoration: none;"
+                    >
                         <h5 class="m-0">{{recipe["name"]}}</h5>
                     </a>
                 </div>
-                <div class='col-4 d-flex justify-content-end'>
-                    <a class="btn btn-cookbook2" role="button" href="{{url_for('recipeedit', rid=recipe['_id'])}}">
+                <div class="col-12 col-sm-4 d-flex justify-content-sm-end p-1 pl-3">
+                    <a
+                        class="btn btn-cookbook2 btn-sm mr-1"
+                        role="button"
+                        href="{{url_for('recipeedit', rid=recipe['_id'])}}"
+                    >
                         Edit
                     </a>
-                    <a class="btn btn-cookbook2" role="button" data-toggle="modal" data-target="#deleteModal">
+                    <a
+                        class="btn btn-cookbook2 btn-sm ml-1"
+                        role="button"
+                        data-toggle="modal"
+                        data-target="#deleteModal"
+                    >
                         Delete
                     </a>
                 </div>
             </div>
-            {% else %}
-            <div class='row'>
-                <div class='col-12'>
-                    <a href="/recipe/{{recipe['_id']}}" title="" style="color: black; text-decoration: none;">
-                        <h5 class="m-0">{{recipe["name"]}} - {{recipe["author"]}}</h5>
+        <!-- Otherwise the title of the recipe is rendered with the authors name -->
+        {% else %}
+            <div class="row">
+                <div class="col-12">
+                    <a
+                        href="/recipe/{{recipe['_id']}}"
+                        title=""
+                        style="color: black; text-decoration: none;"
+                    >
+                        <h5 class="m-0">
+                            {{recipe["name"]}} - {{recipe["author"]}}
+                        </h5>
                     </a>
                 </div>
             </div>
-            {% endif %}
+        {% endif %}
     </div>
+    <!-- Recipe card body -->
     <div class="card-body">
-        <div class='row'>
-            <!-- Image hides on particularly small screens -->
-            <div class='col-4 col-md-3 d-none d-md-inline pr-0'>
+        <div class="row">
+            <!-- Image - hides on particularly small screens -->
+            <div class="col-4 col-md-3 d-none d-md-inline pr-0">
                 <div class="img-frame">
                     <div class="img-view iv-urecipe">
+                        <!-- If an image is included in the recipe entry it is rendered, of not then the default recipe image is used -->
                         {% if recipe['image']['url'] %}
-                            <img src="{{recipe['image']['url']}}"/>
+                            <img src="{{recipe['image']['url']}}" />
                         {% else %}
-                            <img src="{{ url_for('static', filename='icons/defaultdish.png') }}"/>
+                            <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" />
                         {% endif %}
                     </div>
                 </div>
             </div>
-            <div class='col-12 col-md-9'>
-                <div class='row'>
-                    <div class='col-12'>
+            <!-- Text and Tags -->
+            <div class="col-12 col-md-9 align-items-end">
+                <!-- Description or comment row -->
+                <div class="row" style="min-height: 40%;">
+                    <div class="col-12">
+                        <!-- When the comment flag is set a comment is displayed, otherwise the recipes description is displayed -->
                         {% if commentflag == True%}
-                            {{comment['comment']}}
+                            {{comment['comment']}} - {{comment['date'].strftime("%d %b %y")}} at {{comment['date'].strftime("%H:%M")}}
                         {% else %}
                             {{recipe["description"]}}
                         {% endif %}
                     </div>
                 </div>
-                <div class='row'>
-                    <div class='col-12'>
+                <!-- Star rating row -->
+                <div class="row">
+                    <div class="col-12">
                         <div
                             class="stars-outer"
                             data-toggle="tooltip"
                             data-placement="right"
-                            title="{{recipe['aggregateRating']['ratingValue']}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
+                            title="{{recipe['aggregateRating']['ratingValue']|round(2)}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
                         >
                             <div
                                 class="stars-inner"
@@ -67,35 +96,32 @@
                         </div>
                     </div>
                 </div>
-                <div class='row d-none d-md-flex'>
-                    <div class='col-6'>
-                        Tags: {% for item in recipe["recipeCategory"]%}
-                        {{item}}
+                <!-- Tag row - the list of tags are iterated across to be rendered -->
+                <div class="row">
+                    <div class="col-6">
+                        Categories:
+                        {% for item in recipe['recipeCategory']%}
+                            <a href="#" class="badge badge-light">
+                                {{item}}
+                            </a>
                         {% endfor %}
                     </div>
-                    <div class='col-6'>
-                        Cuisines: {% for item in
-                        recipe["recipeCuisine"]%}
-                        {{item}}
+                    <div class="col-6">
+                        Cuisines:
+                        {% for item in recipe['recipeCuisine']%}
+                            <a href="#" class="badge badge-light">
+                                {{item}}
+                            </a>
                         {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
-        <div class='row d-md-none py-1'>
-            <div class='col-6'>
-                Tags: {% for item in
-                recipe["recipeCategory"]%}
-                {{item}}
-                {% endfor %}
-            </div>
-            <div class='col-6'>
-                Cuisines: {% for item in
-                recipe["recipeCuisine"]%}
-                {{item}}
-                {% endfor %}
-            </div>
-        </div>
     </div>
+</div>
+
+<!-- The delete modal used to be included in the user template but unfortunately the page would not load because of the delete button. It needs the recipe id for the flask route and each id is defined in each recipecard so a modal needs to be defined for each card. It would be better if only one modal was needed rather than one for each card as this means that there is a load of extra html that is not needed. I presume extra html will slow down the load times of the page but that should be tested later. If that is true then I'm not sure how to pass details from one bit of html to another, some JavaScript might need to be used but I would like to avoid it if I can. -->
+<div id="deletemodalDiv">
+    {% include 'deletemodal.html' %}
 </div>
 {% endblock %}

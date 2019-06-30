@@ -324,7 +324,7 @@
     // Notes: Using a function in the template does not work, now the times must be processed outside the template then be fed in. This further leads me to think that a class will be better for this, the recipe class can have a function to retun any time format requested which would be dead handy
     var pDate = Date.parse("2000-01-01T{{prepTime}}");
     var cDate = Date.parse("2000-01-01T{{cookTime}}");
-    console.log(phrs, pmin, chrs, cmin);
+
 </script>
 <!-- My Javascript -->
 <script type="text/javascript" src="{{ url_for('static', filename = 'js/form.js') }}"></script>

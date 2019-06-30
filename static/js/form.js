@@ -151,6 +151,8 @@ $(function() {
 
 // Function to handle the image picker modal, when a search term is entered a google image search is done and the first 10 images are loaded into a grid in the modal
 $("#rmodalSubmit").click(function() {
+    // This hides the image grid so that when re-searching for an image the initial placeholder image will not be visible
+    $("#rmodalGrid").hide();
     var url =
         "https://www.googleapis.com/customsearch/v1?key=" +
         key +
@@ -169,6 +171,7 @@ $("#rmodalSubmit").click(function() {
         function(data, status) {
             // The image grid is hidden at first to hide the default image which is the first choice, this default image both allows the user to clear their result and also allows a sample image div be cloned and filled with the result images
             $(".rmodal-gridcol").show();
+            $("#rmodalGrid").show();
             fitImage($(".rmodal-gridimg").last());
             // For each image in the search, clone the default image and substitute the result
             for (var i = data.items.length - 1; i >= 0; i--) {

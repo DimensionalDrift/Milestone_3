@@ -38,7 +38,7 @@ recipeblank = {
         "reviewCount": 0,
     },
     "author": "",
-    "comment": [],
+    "comments": [],
     "cookTime": "",
     "datePublished": "",
     "description": "",
@@ -209,6 +209,8 @@ def postlogin():
 @app.route("/logout")
 def logout():
     session["logged_in"] = False
+    session.pop("email", None)
+    session.pop("id", None)
     session.pop("username", None)
     return redirect(url_for("home"))
 
@@ -234,10 +236,8 @@ def user(username, view="submitted"):
     # Create a list of the favourites recipes
     favourites = []
     for rid in user["favourites"]:
-        print(rid)
         favourites.append(mongo.db.recipes.find_one({"_id": ObjectId(rid)}))
 
-    print(len(user["favourites"]))
     # Create a list of the comment tuples, the first item of the list is the comment, the second is the recipe itself
     commentdata = []
     for cid in user["comments"]:
@@ -407,7 +407,7 @@ def recipe(rid):
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
     print(recipe)
     comments = []
-    for cid in recipe["comment"]:
+    for cid in recipe["comments"]:
         comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
         user = mongo.db.users.find_one({"_id": ObjectId(comment["user_id"])})
         comments.append((comment, user))
@@ -425,7 +425,7 @@ def recipe(rid):
     )
 
 
-# Route to deal with liking a recipe, this exposes a recipes database id, I'm not sure if it's a security risk...
+# Recipe like page
 @app.route("/recipe/<rid>/like")
 def recipelike(rid):
 
@@ -439,6 +439,7 @@ def recipelike(rid):
     return redirect(url_for("recipe", rid=rid))
 
 
+# Recipe comment page
 @app.route("/recipe/<rid>/comment", methods=["POST"])
 def recipecomment(rid):
 
@@ -451,13 +452,21 @@ def recipecomment(rid):
             "date": today,
             "comment": request.form["comment"],
         }
+        # Comment Id
         newcomment = mongo.db.comments.insert_one(comment)
+        # Add the comment to the recipe
         recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-        mongo.db.recipes.update(recipe, {"$push": {"comment": newcomment.inserted_id}})
+        mongo.db.recipes.update(recipe, {"$push": {"comments": newcomment.inserted_id}})
+        # Add the comment to the user
+        user = mongo.db.users.find_one({"_id": ObjectId(session['id'])})
+        mongo.db.users.update(user, {"$push": {"comments": newcomment.inserted_id}})
+
+
 
     return redirect(url_for("recipe", rid=rid, show=True))
 
 
+# Recipe vote page
 @app.route("/recipe/<rid>/vote", methods=["POST"])
 def recipevote(rid):
 
@@ -521,10 +530,26 @@ def recipeedit(rid):
         return redirect(url_for("login"))
 
 
-# Recipe edit page
+# Recipe delete page
 @app.route("/recipe/<rid>/delete")
 def recipedelete(rid):
 
+    # Delete the comments associated with the recipe from both the comment database and the user entries
+    for comment in mongo.db.comments.find({"recipe_id":rid}):
+        print(comment["_id"])
+        for user in mongo.db.users.find({"comments":ObjectId(comment["_id"])}):
+            print(user["email"])
+            mongo.db.users.update(user, {"$pull": {"comments": ObjectId(comment["_id"])}})
+
+        mongo.db.comments.delete_one(comment)
+
+    # Delete the recipe from favourites
+    for user in mongo.db.users.find():
+        if "favourites" in user.keys() and rid in user["favourites"]:
+            print(user["email"])
+            mongo.db.users.update(user, {"$pull": {"favourites": rid}})
+
+    # Delete the recipe entry
     mongo.db.recipes.delete_one({"_id": ObjectId(rid)})
 
     return redirect(url_for("user", username=session["username"], view="submitted"))
@@ -618,7 +643,7 @@ def postrecipe():
             "reviewCount": 0,
         },
         "author": session["username"],  # This should probably follow schema
-        "comment": [],
+        "comments": [],
         "cookTime": tcook,
         "datePublished": today,
         "description": request.form["rformDescription"],
@@ -712,7 +737,7 @@ def updaterecipe(rid):
             "reviewCount": 0,
         },
         "author": session["username"],  # This should probably follow schema
-        "comment": [],
+        "comments": [],
         "cookTime": tcook,
         "datePublished": oldrecipe["datePublished"],
         "description": request.form["rformDescription"],
@@ -736,7 +761,7 @@ def updaterecipe(rid):
         "notes": request.form["rformNotes"],
     }
 
-    exemptlist = ["_id", "comment", "aggregateRating", "datePublished"]
+    exemptlist = ["_id", "comments", "aggregateRating", "datePublished"]
     for item in recipe:
         if recipe[item] != oldrecipe[item] and item not in exemptlist:
             mongo.db.recipes.update_one(
