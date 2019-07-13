@@ -1,5 +1,6 @@
 {% block content %}
-<!-- Delete Modal - final -->
+<!-- Level 2 Template -->
+<!-- Delete Modal - Check1 -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -20,7 +21,7 @@
                 </div>
                 <div class="col-12">
                     <a
-                        href="{{url_for('recipedelete', rid=recipe['_id'])}}"
+                        href="{{ url_for('recipedelete', rid=recipe['_id']) }}"
                         role="button"
                         class="btn btn-cookbook2 btn-cookbookdelete"
                         role="button"

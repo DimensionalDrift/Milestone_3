@@ -65,7 +65,7 @@ def addto_listtable(table, vallist):
         # If the entry in the table exists increment its number by one
         if entry:
             add = entry["number"] + 1
-            mongo.db[table].update(entry, {"$set": {"number": add}})
+            mongo.db[table].update(entry, {"$set": {"number": add }})
         # Otherwise create an entry
         else:
             new_entry = {"name": item, "number": 1}
@@ -320,7 +320,7 @@ def postuser():
             session["email"] = formval["uform-email"]
             mongo.db.users.update_one(
                 {"username": session["username"]},
-                {"$set": {"email": formval["uform-email"]}},
+                {"$set": {"email": formval["uform-email"] }},
             )
         if "uform-password" in formval.keys():
             flash("Your password has been updated")
@@ -328,7 +328,7 @@ def postuser():
             del formval["uform-password"]
             mongo.db.users.update_one(
                 {"username": session["username"]},
-                {"$set": {"pass_hash": formval["pass_hash"]}},
+                {"$set": {"pass_hash": formval["pass_hash"] }},
             )
 
     return redirect(url_for("user", username=session["username"], view="edit"))
@@ -403,7 +403,7 @@ def postsignup():
 # Recipe Page
 @app.route("/recipe/<rid>")
 def recipe(rid):
-    # rid = "5d01579debcefa0f8b46318c"
+
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
     print(recipe)
     comments = []
@@ -432,9 +432,9 @@ def recipelike(rid):
     if "logged_in" in session and session["logged_in"] is True:
         user = mongo.db.users.find_one({"_id": ObjectId(session["id"])})
         if likecheck(rid) is False:
-            mongo.db.users.update(user, {"$push": {"favourites": rid}})
+            mongo.db.users.update(user, {"$push": {"favourites": rid }})
         else:
-            mongo.db.users.update(user, {"$pull": {"favourites": rid}})
+            mongo.db.users.update(user, {"$pull": {"favourites": rid }})
 
     return redirect(url_for("recipe", rid=rid))
 
@@ -456,10 +456,10 @@ def recipecomment(rid):
         newcomment = mongo.db.comments.insert_one(comment)
         # Add the comment to the recipe
         recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-        mongo.db.recipes.update(recipe, {"$push": {"comments": newcomment.inserted_id}})
+        mongo.db.recipes.update(recipe, {"$push": {"comments": newcomment.inserted_id }})
         # Add the comment to the user
         user = mongo.db.users.find_one({"_id": ObjectId(session['id'])})
-        mongo.db.users.update(user, {"$push": {"comments": newcomment.inserted_id}})
+        mongo.db.users.update(user, {"$push": {"comments": newcomment.inserted_id }})
 
 
 
@@ -539,7 +539,7 @@ def recipedelete(rid):
         print(comment["_id"])
         for user in mongo.db.users.find({"comments":ObjectId(comment["_id"])}):
             print(user["email"])
-            mongo.db.users.update(user, {"$pull": {"comments": ObjectId(comment["_id"])}})
+            mongo.db.users.update(user, {"$pull": {"comments": ObjectId(comment["_id"]) }})
 
         mongo.db.comments.delete_one(comment)
 
@@ -547,7 +547,7 @@ def recipedelete(rid):
     for user in mongo.db.users.find():
         if "favourites" in user.keys() and rid in user["favourites"]:
             print(user["email"])
-            mongo.db.users.update(user, {"$pull": {"favourites": rid}})
+            mongo.db.users.update(user, {"$pull": {"favourites": rid }})
 
     # Delete the recipe entry
     mongo.db.recipes.delete_one({"_id": ObjectId(rid)})
@@ -765,7 +765,7 @@ def updaterecipe(rid):
     for item in recipe:
         if recipe[item] != oldrecipe[item] and item not in exemptlist:
             mongo.db.recipes.update_one(
-                {"_id": ObjectId(rid)}, {"$set": {item: recipe[item]}}
+                {"_id": ObjectId(rid)}, {"$set": {item: recipe[item] }}
             )
 
     return redirect(url_for("recipe", rid=rid))

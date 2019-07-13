@@ -1,26 +1,27 @@
 {% block content %}
-<!-- Small Recipe Card - final -->
+<!-- Level 2 Template -->
+<!-- Small Recipe Card - Check1 -->
 <!-- This template is used in two views, one where the recipes description is shown as in the list of the users submitted recipes and another with comments the user has made on the recipe. The different views are handled using the commentflag variable in the parent template above. -->
 <div class="card">
     <!-- Recipe card title -->
     <div class="card-header">
         <!-- If the recipe was submitted by the currently logged in user then delete and edit control buttons are included  -->
-        {% if submitflag == True%}
+        {% if submitflag == True %}
             <div class="row">
                 <div class="col-12 col-sm-8">
                     <a
-                        href="/recipe/{{recipe['_id']}}"
+                        href="/recipe/{{ recipe['_id'] }}"
                         title="title"
                         style="color: black; text-decoration: none;"
                     >
-                        <h5 class="m-0">{{recipe["name"]}}</h5>
+                        <h5 class="m-0">{{ recipe["name"] }}</h5>
                     </a>
                 </div>
-                <div class="col-12 col-sm-4 d-flex justify-content-sm-end p-1 pl-3">
+                <div class="col-12 col-sm-4 d-flex justify-content-end p-1 pl-3">
                     <a
                         class="btn btn-cookbook2 btn-sm mr-1"
                         role="button"
-                        href="{{url_for('recipeedit', rid=recipe['_id'])}}"
+                        href="{{ url_for('recipeedit', rid=recipe['_id']) }}"
                     >
                         Edit
                     </a>
@@ -39,12 +40,12 @@
             <div class="row">
                 <div class="col-12">
                     <a
-                        href="/recipe/{{recipe['_id']}}"
+                        href="/recipe/{{ recipe['_id'] }}"
                         title=""
                         style="color: black; text-decoration: none;"
                     >
                         <h5 class="m-0">
-                            {{recipe["name"]}} - {{recipe["author"]}}
+                            {{ recipe["name"] }} - {{ recipe["author"] }}
                         </h5>
                     </a>
                 </div>
@@ -60,7 +61,7 @@
                     <div class="img-view iv-urecipe">
                         <!-- If an image is included in the recipe entry it is rendered, of not then the default recipe image is used -->
                         {% if recipe['image']['url'] %}
-                            <img src="{{recipe['image']['url']}}" />
+                            <img src="{{ recipe['image']['url'] }}" />
                         {% else %}
                             <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" />
                         {% endif %}
@@ -73,10 +74,10 @@
                 <div class="row" style="min-height: 40%;">
                     <div class="col-12">
                         <!-- When the comment flag is set a comment is displayed, otherwise the recipes description is displayed -->
-                        {% if commentflag == True%}
-                            {{comment['comment']}} - {{comment['date'].strftime("%d %b %y")}} at {{comment['date'].strftime("%H:%M")}}
+                        {% if commentflag == True %}
+                            {{ comment['comment'] }} - {{ comment['date'].strftime("%d %b %y") }} at {{ comment['date'].strftime("%H:%M") }}
                         {% else %}
-                            {{recipe["description"]}}
+                            {{ recipe["description"] }}
                         {% endif %}
                     </div>
                 </div>
@@ -87,11 +88,11 @@
                             class="stars-outer"
                             data-toggle="tooltip"
                             data-placement="right"
-                            title="{{recipe['aggregateRating']['ratingValue']|round(2)}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
+                            title="{{ recipe['aggregateRating']['ratingValue']|round(2) }}/5, {{ recipe['aggregateRating']['reviewCount'] }} votes"
                         >
                             <div
                                 class="stars-inner"
-                                style="width: {{(recipe['aggregateRating']['ratingValue']/5)*100}}%;"
+                                style="width: {{ (recipe['aggregateRating']['ratingValue']/5)*100 }}%;"
                             ></div>
                         </div>
                     </div>
@@ -100,17 +101,17 @@
                 <div class="row">
                     <div class="col-6">
                         Categories:
-                        {% for item in recipe['recipeCategory']%}
+                        {% for item in recipe['recipeCategory'] %}
                             <a href="#" class="badge badge-light">
-                                {{item}}
+                                {{ item }}
                             </a>
                         {% endfor %}
                     </div>
                     <div class="col-6">
                         Cuisines:
-                        {% for item in recipe['recipeCuisine']%}
+                        {% for item in recipe['recipeCuisine'] %}
                             <a href="#" class="badge badge-light">
-                                {{item}}
+                                {{ item }}
                             </a>
                         {% endfor %}
                     </div>

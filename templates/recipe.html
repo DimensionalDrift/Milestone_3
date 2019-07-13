@@ -1,13 +1,20 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
+<!-- Level 1 Template -->
+<!-- Recipe Page - Check1-->
 <div class="container">
     <div class="row d-flex justify-content-center">
-        <div class="col-12 col-lg-auto d-flex d-lg-block justify-content-center"
-            >
+        <!-- Recipe Image and Ingredients Card -->
+        <div
+            class="col-12 col-lg-auto d-flex d-lg-block justify-content-center"
+        >
+            <!-- Image Frame -->
             <div class="mt-3 img-frame">
                 <div class="img-view iv-recipe">
+                    <!-- If the recipe has an image url it is rendered, otherwise the default image is used -->
                     {% if recipe['image']['url'] %}
                         <img
-                            src="{{recipe['image']['url']}}"
+                            src="{{ recipe['image']['url'] }}"
                             class="square"
                         />
                     {% else %}
@@ -18,234 +25,367 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="card mx-0">
+            <!-- Ingredients Card -->
+            <!-- The info card is hidden on smaller screens as it looks better to have the card inline with the rest of them below -->
+            <div class="card mx-0 d-none d-lg-block">
                 <div class="card-body">
                     <h5>Ingredients:</h5>
                     <hr />
                     <ul class="nopad-list">
-                        <!-- <li><b>&#8210</b> 1 kg of item1</li> -->
+                        <!-- For every ingredient in the recipe print its quantity, unit and name -->
                         {% for ing in recipe['ingredientdict'] %}
-                            <li>{{ing['quantity']}}{{ing['unit']}} of {{ing['name']}}</li>
+                            <li>
+                                {{ ing['quantity'] }}{{ ing['unit'] }} of {{ ing['name'] }}
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
         </div>
+        <!-- Main Info Card and Steps Card -->
         <div class="col-12 col-lg-8">
-            <div class="card mx-0" style="overflow: hidden">
-                <div class="card-header">
-                    <div class='row'>
-                        <div class='col-9'>
-                            <h2>{{recipe['name']}}</h2>
-                            <h5>By: {{recipe['author']}}</h5>
-                        </div>
-                        <div class='col-3 text-right'>
-                            {% if recipe['author'] == session['username']%}
-                                <a class="btn btn-cookbook2" role="button" href="{{url_for('recipeedit', rid=recipe['_id'])}}">
-                                    Edit
-                                </a>
-                                <a class="btn btn-cookbook2" role="button" data-toggle="modal" data-target="#deleteModal">
-                                    Delete
-                                </a>
-                                <div data-toggle="modal" data-target="#novoteModal">
-                            {% else %}
-                                <div data-toggle="modal" data-target="#voteModal">
-                            {% endif %}
-                                <div
-                                    class="stars-outer"
-                                    data-toggle="tooltip"
-                                    data-placement="right"
-                                    title="{{recipe['aggregateRating']['ratingValue']|round(2)}}/5, {{recipe['aggregateRating']['reviewCount']}} votes"
-                                >
+            <div class="row">
+                <!-- Main Info Card -->
+                <div class="col-12">
+                    <div class="card mx-0 mb-0" style="overflow: hidden">
+                        <!-- Main Info Card Header -->
+                        <div class="card-header">
+                            <div class="row">
+                                <!-- Recipe Title and Author -->
+                                <div class="col-12 col-sm-8">
+                                    <h2>{{ recipe['name'] }}</h2>
+                                    <h5>By: {{ recipe['author'] }}</h5>
+                                </div>
+                                <!-- Recipe Rating and User Buttons -->
+                                <div class="col-12 col-sm-4 text-sm-right">
+                                    <!-- When the star rating is clicked it has various behaviors depending on the stat of the site. The states are:
+                                        If the user is not logged in:
+                                            no modal popup
+                                        If the user is logged in and wrote the recipe:
+                                            modal popup saying they cannot rate their own recipe
+                                        If the user is logged and and did not write the recipe:
+                                            modal popup with star buttons to vote on the recipe
+                                    -->
                                     <div
-                                        class="stars-inner"
-                                        style="width: {{(recipe['aggregateRating']['ratingValue']/5)*100}}%;"
-                                    ></div>
+                                        data-toggle="modal"
+                                        data-target="
+                                        {% if session['username'] == recipe['author'] %}
+                                            #nostarModal
+                                        {% elif session['username']%}
+                                            #starModal
+                                        {% else %}
+                                            #blank
+                                        {% endif %}"
+                                    >
+                                        <div
+                                            class="stars-outer"
+                                            data-toggle="tooltip"
+                                            data-placement="right"
+                                            title="{{ recipe['aggregateRating']['ratingValue']|round(2) }}/5, {{ recipe['aggregateRating']['reviewCount'] }} votes"
+                                        >
+                                            <div
+                                                class="stars-inner"
+                                                style="width: {{ (recipe['aggregateRating']['ratingValue']/5)*100 }}%;"
+                                            ></div>
+                                        </div>
+                                    </div>
+                                    <!-- If the user is logged in then display the delete and edit buttons -->
+                                    {% if recipe['author'] == session['username'] %}
+                                        <a
+                                            class="btn btn-cookbook2 btn-sm"
+                                            role="button"
+                                            href="{{ url_for('recipeedit', rid=recipe['_id']) }}"
+                                        >
+                                            Edit
+                                        </a>
+                                        <a
+                                            class="btn btn-cookbook2 btn-sm"
+                                            role="button"
+                                            data-toggle="modal"
+                                            data-target="#deleteModal"
+                                        >
+                                            Delete
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Main Info Card Body -->
+                        <div class="card-body">
+                            <p>
+                                {{ recipe['description'] }}
+                            </p>
+                            <hr />
+                            <!-- Details table, a single list on smaller devices then splits into two columns on larger displays  -->
+                            <div class="row">
+                                <!-- Time Entries -->
+                                <!-- For both time entries if no time is in the database then a - is displayed as a placeholder instead -->
+                                <div class="col-12 col-md-6">
+                                    <table>
+                                        <tr>
+                                            <td><i class="px-2 far fa-clock"></i></td>
+                                            <td>Prep Time:</td>
+                                            {% if recipe['cookTime']|length > 0 %}
+                                                <td>{{ (recipe['cookTime'].strip('PT').replace('H','H ')) }}</td>
+                                            {% else %}
+                                                <td class="text-center">-</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>Cook Time:</td>
+                                            {% if recipe['prepTime']|length > 0 %}
+                                                <td>{{ (recipe['prepTime'].strip('PT').replace('H','H ')) }}</td>
+                                            {% else %}
+                                                <td class="text-center">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </table>
+                                </div>
+                                <!-- Servings and Utensils  -->
+                                <!-- For both entries if the entry is blank in the database then a - is displayed as a placeholder instead -->
+                                <div class="col-12 col-md-6">
+                                    <table>
+                                        <tr>
+                                            <td><i class="px-2 far fa-user"></i></td>
+                                            <td>Servings:</td>
+                                            {% if recipe['recipeYield']|length > 0 %}
+                                                <td class="text-center">
+                                                    {{ recipe['recipeYield'] }}
+                                                </td>
+                                            {% else %}
+                                                <td class="text-center">-</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td><i class="px-2 fas fa-utensils"></i></td>
+                                            <td>Utensils:</td>
+                                            {% if recipe['utensils']|length > 0%}
+                                                {% for item in recipe['utensils'] %}
+                                                    <td class="text-center">{{ item }}</td>
+                                                {% endfor %}
+                                            {% else %}
+                                                <td class="text-center">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <!-- If there is a notes entry in the database then it is displayed -->
+                                {% if recipe['notes']|length > 0 %}
+                                    <div class="col-12 my-2">
+                                        <table>
+                                            <tr>
+                                                <td class="align-top"><i class="px-2 far fa-sticky-note"></i></td>
+                                                <td colspan="2">{{ recipe['notes'] }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <!-- Tag Row -->
+                            <!-- The tags are rendered as badge links which will link to the relevant search for that tag -->
+                            <div class="row my-2">
+                                <div class="col-6">
+                                    <u>Categories:</u>
+                                </div>
+                                <div class="col-6">
+                                    <u>Cuisines:</u>
+                                </div>
+                                <div class="col-6">
+                                    <!-- For each entry in the database create a link badge, there should always be at least one so there is no need to account for otherwise -->
+                                    {% for item in recipe['recipeCategory'] %}
+                                        <a href="#" class="badge badge-light">
+                                            {{ item }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-6">
+                                    <!-- For each entry in the database create a link badge, there should always be at least one so there is no need to account for otherwise -->
+                                    {% for item in recipe['recipeCuisine'] %}
+                                        <a href="#" class="badge badge-light">
+                                            {{ item }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <hr />
+                            <!-- Button Row -->
+                            <!-- The buttons do not have text below them on smaller screens -->
+                            <div class="row">
+                                <!-- Like Button -->
+                                <!-- If the user is logged in then this will toggle between adding and removing the recipe from the users favourites list -->
+                                <div class="col-4 text-center">
+                                    <!-- If the user has liked the recipe then the like is solid and blue -->
+                                    {% if like == True %}
+                                        <a
+                                            class="btn btn-cookbook4 btn-block"
+                                            style="color: #4267b2"
+                                            role="button"
+                                            href="
+                                                {% if session['logged_in'] == True %}
+                                                    {{ url_for('recipelike', rid=recipe['_id']) }}
+                                                {% endif %}"
+                                        >
+                                            <i class="fas fa-lg fa-thumbs-up"></i>
+                                            <span class="d-none d-md-inline">
+                                                Like
+                                            </span>
+                                        </a>
+                                    <!-- Otherwise the like is not solid (hollow?) -->
+                                    {% else %}
+                                        <a
+                                            class="btn btn-cookbook4 btn-block"
+                                            role="button"
+                                            href="
+                                                {% if session['logged_in'] == True %}
+                                                    {{ url_for('recipelike', rid=recipe['_id']) }}
+                                                {% endif %}"
+                                        >
+                                            <i class="far fa-lg fa-thumbs-up"></i>
+                                            <span class="d-none d-md-inline">
+                                                Like
+                                            </span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <!-- Comments Button -->
+                                <!-- This just reveals the comments row below containing any existing comments and/or the ability to add a comment -->
+                                <div class="col-4 text-center">
+                                    <button
+                                        class="btn btn-cookbook4 btn-block"
+                                        data-toggle="collapse"
+                                        data-target="#collapseComments"
+                                    >
+                                        <i class="far fa-lg fa-comment-alt"></i>
+                                        <span class="d-none d-md-inline">
+                                            Comments
+                                        </span>
+                                    </button>
+                                </div>
+                                <!-- Share Button -->
+                                <!-- This doesn't do much at the moment but in the future it would be nice if this copied a link to the clipboard of the recipe so that users can share -->
+                                <div class="col-4 text-center">
+                                    <button
+                                        class="btn btn-cookbook4 btn-block"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Comming Soon!"
+                                    >
+                                        <i class="fas fa-lg fa-share"></i>
+                                        <span class="d-none d-md-inline">
+                                            Share
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Comments Row -->
+                            <!-- If the show flag is set true then the row will be reveled, this is used so that when the user makes a comment, when the page reloads with their comment the row is automatically revealed so the user does not have to click the button again  -->
+                            <div
+                                class="row collapse {% if show %} show {% endif %}"
+                                id="collapseComments"
+                            >
+                                <div class="col-12">
+                                    <hr class="hr-full" />
+                                    <div class="row">
+                                        <!-- If no comments have been made about the recipe then the placeholder is displayed -->
+                                        {% if comments|length < 1 %}
+                                            <div class="col-12 pb-2 text-center">
+                                                There are no comments
+                                            </div>
+                                        {% endif %}
+                                        <!-- If there are comments then they are displayed -->
+                                        {% for comment in comments %}
+                                            <div class="col-12 pb-2 d-flex">
+                                                <div class="iv-comment mr-2">
+                                                    <img
+                                                        src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                                        id="profileImage"
+                                                        class="circle"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <div class="comment">
+                                                        <b style="color: #3858a3;">
+                                                            {{ comment[1]['username'] }}
+                                                        </b>
+                                                        {{ comment[0]['comment'] }}
+                                                    </div>
+                                                    <div class="comment-time">
+                                                        {{ comment[0]['date'].strftime("%d %b %y") }} at {{ comment[0]['date'].strftime("%H:%M") }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        <!-- If the user is logged in then the comments form is displayed -->
+                                        {% if session["logged_in"] == True %}
+                                            <form
+                                                class="col-12 d-flex"
+                                                action="{{ url_for('recipecomment', rid=recipe['_id']) }}"
+                                                method="POST"
+                                                id="cform"
+                                            >
+                                                <div class="iv-comment mr-2">
+                                                    <img
+                                                        src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                                        id="profileImage"
+                                                        class="circle"
+                                                    />
+                                                </div>
+                                                <div class="comment commentbox flex-fill">
+                                                    <input
+                                                        type="text"
+                                                        name="comment"
+                                                        placeholder="Write a comment..."
+                                                    />
+                                                </div>
+                                            </form>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <div class="card-body">
-                    <p>
-                        {{recipe['description']}}
-                    </p>
-                    <hr />
-                    <div class='row'>
-                        <div class='col-12 col-md-6'>
-                            <table>
-                                <tr>
-                                    <td><i class="px-2 far fa-clock"></i></td>
-                                    <td>Prep Time:</td>
-                                    {% if recipe['cookTime']|length > 0%}
-                                        <td>{{(recipe['cookTime'].strip('PT').replace('H', 'H '))}}</td>
-                                    {% else %}
-                                        <td class="text-center">-</td>
-                                    {% endif %}
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>Cook Time:</td>
-                                    {% if recipe['prepTime']|length > 0%}
-                                        <td>{{(recipe['prepTime'].strip('PT').replace('H', 'H '))}}</td>
-                                    {% else %}
-                                        <td class="text-center">-</td>
-                                    {% endif %}
-                                </tr>
-                            </table>
-                        </div>
-                        <div class='col-12 col-md-6'>
-                            <table>
-                                <tr>
-                                    <td><i class="px-2 far fa-user"></i></td>
-                                    <td>Servings:</td>
-                                    {% if recipe['recipeYield']|length > 0 %}
-                                        <td class="text-center">{{recipe['recipeYield']}}</td>
-                                    {% else %}
-                                        <td class="text-center">-</td>
-                                    {% endif %}
-                                </tr>
-                                <tr>
-                                    <td><i class="px-2 fas fa-utensils"></i></td>
-                                    <td>Utensils:</td>
-                                    <td class="text-center">
-                                        {% if recipe['utensils']|length > 0 %}
-                                            {% for item in recipe['utensils']%}
-                                                {{item}}
-                                            {% endfor %}
-                                        {% else %}
-                                            <td class="text-center">-</td>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        {% if recipe['notes']|length > 0 %}
-                            <div class='col-12 my-2'>
-                                <table>
-                                    <tr>
-                                        <td class="align-top"><i class="px-2 far fa-sticky-note"></i></td>
-                                        <td colspan="2">{{recipe['notes']}}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        {% endif %}
-
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-6">
-                            <u>Categories:</u>
-                        </div>
-                        <div class="col-6">
-                            <u>Cuisines:</u>
-                        </div>
-                        <div class="col-6">
-                            {% for item in recipe['recipeCategory']%}
-                                <a href="#" class="badge badge-light">
-                                    {{item}}
-                                </a>
-                            {% endfor %}
-                        </div>
-                        <div class="col-6">
-                            {% for item in recipe['recipeCuisine']%}
-                                <a href="#" class="badge badge-light">
-                                    {{item}}
-                                </a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <hr>
-                    <div class='row'>
-                        <div class='col-4 text-center'>
-                            {% if like == True %}
-                                <a class="btn btn-cookbook4 btn-block" style="color: #4267b2" role="button" href="{{url_for('recipelike', rid=recipe['_id'])}}">
-                                    <i class="fas fa-lg fa-thumbs-up"></i>
-                                    Like
-                                </a>
-                            {% else %}
-                                <a class="btn btn-cookbook4 btn-block" role="button" href="{{url_for('recipelike', rid=recipe['_id'])}}">
-                                    <i class="far fa-lg fa-thumbs-up"></i>
-                                    Like
-                                </a>
-                            {% endif%}
-                        </div>
-                        <div class='col-4 text-center'>
-                            <button class="btn btn-cookbook4 btn-block" data-toggle="collapse" data-target="#collapseComments">
-                                <i class="far fa-lg fa-comment-alt"></i>
-                                Comments
-                            </button>
-                        </div>
-                        <div class='col-4 text-center'>
-                            <button class="btn btn-cookbook4 btn-block" data-toggle="tooltip" data-placement="top" title="Comming Soon!">
-                                <i class="fas fa-lg fa-share"></i>
-                                Share
-                            </button>
-                        </div>
-                    </div>
-                    <div class='row collapse {% if show %} show {% endif %}' id="collapseComments">
-                        <div class="col-12">
-                            <hr class="hr-full">
-                            <div class='row'>
-                                {% if comments|length < 1%}
-                                    <div class="col-12 pb-2 text-center">
-                                        There are no comments
-                                    </div>
-                                {% endif %}
-                                {% for comment in comments%}
-                                    <div class="col-12 pb-2 d-flex">
-                                        <div class="iv-comment mr-2">
-                                            <img
-                                                src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                                                id="profileImage"
-                                                class="circle"
-                                                />
-                                        </div>
-                                        <div>
-                                            <div class="comment">
-                                                <b style="color: #3858a3;">{{comment[1]['username']}}</b> {{comment[0]['comment']}}
-                                            </div>
-                                            <div class="comment-time">
-                                                {{comment[0]['date'].strftime("%d %b %y")}} at {{comment[0]['date'].strftime("%H:%M")}}
-                                            </div>
-                                        </div>
-                                    </div>
+                <!-- Ingredients Card -->
+                <!-- This is only displayed on smaller screens, full width on the smallest, 1/3 width on tablets -->
+                <div class="col-12 col-md-4 d-lg-none">
+                    <div class="card mx-0 mb-0">
+                        <div class="card-body">
+                            <h5>Ingredients:</h5>
+                            <hr />
+                            <ul class="nopad-list">
+                                <!-- For every ingredient in the recipe print its quantity, unit and name -->
+                                {% for ing in recipe['ingredientdict'] %}
+                                    <li>
+                                        {{ ing['quantity'] }}{{ ing['unit'] }} of {{ ing['name'] }}
+                                    </li>
                                 {% endfor %}
-                                {% if session["logged_in"] == True%}
-                                    <form class="col-12 d-flex" action="{{ url_for('recipecomment', rid=recipe['_id'])}}" method="POST" id="cform">
-                                        <div class="iv-comment mr-2">
-                                            <img
-                                                src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                                                id="profileImage"
-                                                class="circle"
-                                                />
-                                        </div>
-                                        <div class="comment commentbox flex-fill">
-                                            <input type="text" name="comment" placeholder="Write a comment...">
-                                        </div>
-                                    </form>
-                                {% endif %}
-                            </div>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card mx-0">
-                <div class="card-body">
-                    <h5>Steps:</h5>
-                    <hr/>
-                    <ul class="nopad-list">
-                        {% for step in recipe['recipeInstructions'] %}
-                            <li>{{step['text']}}</li>
-                        {% endfor %}
-                    </ul>
+                <!-- Steps Card -->
+                <div class="col-12 col-md-8 col-lg-12">
+                    <div class="card mx-0 mb-0">
+                        <div class="card-body">
+                            <h5>Steps:</h5>
+                            <hr />
+                            <ol type="1">
+                                <!-- For every step in the recipe print the step -->
+                                {% for step in recipe['recipeInstructions'] %}
+                                    <li>{{ step['text'] }}</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- These divs contain the modal templates, while not strictly needed it makes the rendered page a little cleaner -->
 <div id="starmodalDiv">
     {% include 'starmodal.html' %}
 </div>
