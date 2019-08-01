@@ -1,0 +1,29 @@
+{% block content %}
+<!-- Level 2 Template -->
+<!-- Activity Card Links - Check1 -->
+<!-- This template is used to generate links to recipes from the activity log list -->
+<hr />
+<a href="/recipe/{{act['recipe_id']}}" class="btn btn-cookbook5">
+    <div class="row">
+        <!-- Image -->
+        <div class="col-3 p-0 d-flex justify-content-center">
+            <div class="img-view ivc-activity">
+                {% if act['recipe_image']['url'] %}
+                    <img
+                        src="{{ act['recipe_image']['url'] }}"
+                        class="landscape"
+                    />
+                {% else %}
+                    <img
+                        src="{{ url_for('static', filename='icons/defaultdish.png') }}"
+                        class="landscape"
+                    />
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-9 pr-0 text-left">
+            <b>{{act["user_name"]}}</b> {{act["activity"]}} {{act["recipe_name"]}}
+        </div>
+    </div>
+</a>
+{% endblock %}

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <!-- Level 0 Template -->
-<!-- Signup Form -->
 <!-- X jsPrettier Check that it all worked -->
 <!-- X Fix Mobile view, the navbar is all over the place! -->
 <!-- X Impelement a Search Function -->
@@ -93,6 +92,13 @@
             crossorigin="anonymous"
         ></script>
 
+        <!-- Infinite Scrolling JavaScript -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-infinitescroll/3.0.6/infinite-scroll.pkgd.js"
+            integrity="sha256-GY6hW4v1tMGO4lEwCSkZsh31IU9FKDZAu1+LYKpO6d8="
+            crossorigin="anonymous"
+        ></script>
+
         <!-- GIJGO Javascript -->
         <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js"></script> -->
 
@@ -110,123 +116,126 @@
     </head>
     <body>
         <!-- Header -->
-        <section>
-            <nav class="navbar navbar-expand-md">
-                <div class="container flex-nowrap">
-                    <a class="navbar-brand" href="/">
-                        <img
-                            src="{{ url_for('static', filename='icons/cookbook_text.png') }}"
-                            alt="Logo"
-                            class="d-none d-lg-block"
-                        />
-                        <img
-                            src="{{ url_for('static', filename='icons/cookbook_invert.png') }}"
-                            alt="Logo"
-                            class="d-lg-none"
-                            style="height: 38px"
-                        />
-                    </a>
-
-                    <!-- Search Form  -->
-                    <form class="form-inline mr-auto d-flex">
-                        <div class="input-group">
-                            <input
-                                class="form-control"
-                                type="search"
-                                placeholder=" Search by Ingredient, Meal..."
+        <section class="fixed-top" id="navsection">
+            <div class="container px-0">
+                <nav class="navbar navbar-expand-md px-0">
+                    <div class="container flex-nowrap px-0">
+                        <a class="navbar-brand" href="/">
+                            <img
+                                src="{{ url_for('static', filename='icons/cookbook_text.png') }}"
+                                alt="Logo"
+                                class="d-none d-lg-block"
                             />
-                            <div class="input-group-append">
-                                <button
-                                    class="btn btn-cookbook2 btn-search"
-                                    type="submit"
-                                >
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                            <img
+                                src="{{ url_for('static', filename='icons/cookbook_invert.png') }}"
+                                alt="Logo"
+                                class="d-lg-none"
+                                style="height: 38px"
+                            />
+                        </a>
 
-                    <!-- Menu button -->
-                    <button
-                        class="navbar-toggler ml-2"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarmenu"
-                    >
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-                <!-- Navbar Menu -->
-                <div class="collapse navbar-collapse" id="navbarmenu">
-                    <ul class="navbar-nav navbar-justified ml-auto">
-                        <li class="nav-item">
-                            {% if session["logged_in"] == True %}
-                            <a
-                                class="nav-link btn btn-cookbook1 d-flex justify-content-center align-content-center"
-                                href="{{ url_for('user', username=session['username'], view='submitted') }}"
-                            >
-                                <div class="iv-navbar mr-2">
-                                    <img
-                                        src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                                        id="profileImage"
-                                        class="circle"
-                                    />
+                        <!-- Search Form  -->
+                        <form class="form-inline mr-auto d-flex">
+                            <div class="input-group">
+                                <input
+                                    class="form-control"
+                                    type="search"
+                                    placeholder=" Search by Ingredient, Meal..."
+                                />
+                                <div class="input-group-append">
+                                    <button
+                                        class="btn btn-cookbook2 btn-search"
+                                        type="submit"
+                                    >
+                                        <i class="fas fa-search"></i>
+                                    </button>
                                 </div>
-                                {{ session["username"] }}
-                            </a>
-                            {% else %}
-                            <a class="nav-link btn btn-cookbook1" href="/login"
-                                >Login</a
-                            >
-                            {% endif %}
-                        </li>
-                        <li class="d-none d-md-inline">
-                            <div class="vline"></div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-cookbook1" href="/"
-                                >Home</a
-                            >
-                        </li>
-                        <li class="d-none d-md-inline">
-                            <div class="vline"></div>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                class="nav-link btn btn-cookbook1"
-                                href="/submitrecipe"
-                                >Submit</a
-                            >
-                        </li>
-                        <li class="d-none d-md-inline">
-                            <div class="vline"></div>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                class="nav-link btn btn-cookbook1"
-                                href="/submitrecipe"
-                                >Browse</a
-                            >
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+                            </div>
+                        </form>
+
+                        <!-- Menu button -->
+                        <button
+                            class="navbar-toggler ml-2"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarmenu"
+                        >
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                    <!-- Navbar Menu -->
+                    <div class="collapse navbar-collapse" id="navbarmenu">
+                        <ul class="navbar-nav navbar-justified ml-auto">
+                            <li class="nav-item">
+                                {% if session["logged_in"] == True %}
+                                <a
+                                    class="nav-link btn btn-cookbook1 d-flex justify-content-center align-content-center"
+                                    href="{{ url_for('user', username=session['username'], view='submitted') }}"
+                                >
+                                    <div class="img-view ivc-navbar mr-2">
+                                        <img
+                                            src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                            id="profileImage"
+                                            class="circle"
+                                        />
+                                    </div>
+                                    {{ session["username"] }}
+                                </a>
+                                {% else %}
+                                <a
+                                    class="nav-link btn btn-cookbook1"
+                                    href="/login"
+                                    >Login</a
+                                >
+                                {% endif %}
+                            </li>
+                            <li class="d-none d-md-inline">
+                                <div class="vline"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-cookbook1" href="/"
+                                    >Home</a
+                                >
+                            </li>
+                            <li class="d-none d-md-inline">
+                                <div class="vline"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link btn btn-cookbook1"
+                                    href="/submitrecipe"
+                                    >Submit</a
+                                >
+                            </li>
+                            <li class="d-none d-md-inline">
+                                <div class="vline"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-cookbook1" href="/#"
+                                    >Browse</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
         </section>
 
         <!-- Body -->
         <section class="my-body">
-            {% block content %} {% endblock %}
+            {% block content %}
+            {% endblock %}
         </section>
 
         <!-- Footer -->
         <section class="my-footer">
             <div class="container-fluid">
                 <div class="row py-3">
-                    <div class='col-12'>
+                    <div class="col-12">
                         <table class="w-100">
                             <tr>
                                 <td>
-                                    Cookbook <span id=footeryear></span>
+                                    Cookbook <span id="footeryear"></span>
                                 </td>
                                 <td class="text-right">
                                     <a
@@ -242,10 +251,7 @@
                                     Developed by
                                 </td>
                                 <td class="text-right">
-                                    <a
-                                        href="#"
-                                      >Contact Us</a
-                                    >
+                                    <a href="#">Contact Us</a>
                                 </td>
                             </tr>
                             <tr>
@@ -270,9 +276,17 @@
             {% include 'disclaimermodal.html' %}
         </div>
 
-        <!-- Place current year in footer -->
+        <!-- Place current year in footer and shift images in frame -->
+        <!-- X Images need a major overhaul in how they are rendered -->
         <script type="text/javascript">
-          $("#footeryear").append(new Date().getFullYear());
+            // When the document is finished loading all the relevant images are fit
+            // $(document).ready(function() {
+            //   // Fit each image correctly
+            //   $(".img-view > img").each(function() {
+            //       fitImage($(this));
+            //   });
+            // });
+            $("#footeryear").append(new Date().getFullYear());
         </script>
     </body>
 </html>

@@ -1,0 +1,216 @@
+{% block content %}
+<!-- Level 3 Template -->
+<!-- Large Recipe Card - Check1 -->
+<!-- This template is used for the home page when users are browsing recipes -->
+<div class="card recipecardlarge">
+    <!-- Recipe card title -->
+    <div class="card-header">
+        <div class="row">
+            <div class="col-12">
+                <a
+                    href="/recipe/{{ recipe['_id'] }}"
+                    title=""
+                    style="color: black; text-decoration: none;"
+                >
+                    <h5 class="m-0">
+                        {{ recipe["name"] }} - {{ recipe["author"] }}
+                    </h5>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Image -->
+    <!-- If an image is included in the recipe entry it is rendered, of not then the default recipe image is used -->
+    {% if recipe['image']['url'] %}
+        <img
+            src="{{ recipe['image']['url'] }}"
+            class="card-img-top"
+        />
+    {% else %}
+        <img
+            src="{{ url_for('static', filename='icons/defaultdish.png') }}"
+            class="card-img-top"
+        />
+    {% endif %}
+    <!-- Recipe card body -->
+    <div class="card-body">
+        <div class="row">
+            <!-- Text and Tags -->
+            <div class="col-12 align-items-end">
+                <!-- Description and Star rating row -->
+                <div class="row pb-2">
+                    <div class="col-12 col-lg-9">
+                        {{ recipe["description"] }}
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <div
+                            class="stars-outer"
+                            data-toggle="tooltip"
+                            data-placement="right"
+                            title="{{ recipe['aggregateRating']['ratingValue']|round(2) }}/5, {{ recipe['aggregateRating']['reviewCount'] }} votes"
+                        >
+                            <div
+                                class="stars-inner"
+                                style="width: {{ (recipe['aggregateRating']['ratingValue']/5)*100 }}%;"
+                            ></div>
+                        </div>
+                    </div>
+                    <!-- Tag row - the list of tags are iterated across to be rendered -->
+                    <div class="col-12 col-sm-6">
+                        Categories:
+                        {% for item in recipe['recipeCategory'] %}
+                            <a href="#" class="badge badge-light">
+                                {{ item }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        Cuisines:
+                        {% for item in recipe['recipeCuisine'] %}
+                            <a href="#" class="badge badge-light">
+                                {{ item }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- X Put in horizontal line dividern -->
+            <hr class="mt-5 mb-5" />
+            <!-- Button Row -->
+            <!-- The buttons do not have text below them on smaller screens -->
+            <div class="col-12">
+                <div class="row">
+                    <!-- Like Button -->
+                    <!-- If the user is logged in then this will toggle between adding and removing the recipe from the users favourites list -->
+                    <div class="col-4 text-center">
+                        <!-- If the user has liked the recipe then the like is solid and blue -->
+                        {% if like == True %}
+                            <a
+                                class="btn btn-cookbook4 btn-block"
+                                style="color: #4267b2"
+                                role="button"
+                                href="{{ url_for('recipelike', rid=recipe['_id']) }}"
+                            >
+                                <i class="fas fa-lg fa-thumbs-up"></i>
+                                <span class="d-none d-md-inline">
+                                    Like
+                                </span>
+                            </a>
+                        <!-- Otherwise the like is not solid (hollow?) -->
+                        {% else %}
+                            <a
+                                class="btn btn-cookbook4 btn-block"
+                                role="button"
+                                href="{{ url_for('recipelike', rid=recipe['_id']) }}"
+                            >
+                                <i class="far fa-lg fa-thumbs-up"></i>
+                                <span class="d-none d-md-inline">
+                                    Like
+                                </span>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <!-- Comments Button -->
+                    <!-- This just reveals the comments row below containing any existing comments and/or the ability to add a comment -->
+                    <div class="col-4 text-center">
+                        <button
+                            class="btn btn-cookbook4 btn-block"
+                            data-toggle="collapse"
+                            data-target="#collapseComments"
+                        >
+                            <i class="far fa-lg fa-comment-alt"></i>
+                            <span class="d-none d-md-inline">
+                                Comments
+                            </span>
+                        </button>
+                    </div>
+                    <!-- Share Button -->
+                    <!-- This doesn't do much at the moment but in the future it would be nice if this copied a link to the clipboard of the recipe so that users can share -->
+                    <div class="col-4 text-center">
+                        <button
+                            class="btn btn-cookbook4 btn-block"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Comming Soon!"
+                        >
+                            <i class="fas fa-lg fa-share"></i>
+                            <span class="d-none d-md-inline">
+                                Share
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Comments Row -->
+            <!-- If the show flag is set true then the row will be reveled, this is used so that when the user makes a comment, when the page reloads with their comment the row is automatically revealed so the user does not have to click the button again  -->
+            <div class="col-12">
+                <div class="row collapse" id="collapseComments">
+                    <div class="col-12">
+                        <div class="row">
+                            <!-- If no comments have been made about the recipe then the placeholder is displayed -->
+                            {% if comments|length < 1 %}
+                                <div class="col-12 pb-2 text-center">
+                                    There are no comments
+                                </div>
+                            {% endif %}
+                            <!-- If there are comments then they are displayed -->
+                            {% for comment in comments %}
+                                <div class="col-12 pb-2 d-flex">
+                                    <div class="img-view ivc-comment mr-2">
+                                        <img
+                                            src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                            id="profileImage"
+                                            class="circle"
+                                        />
+                                    </div>
+                                    <div>
+                                        <div class="comment">
+                                            <b style="color: #3858a3;">
+                                                {{ comment[1]['username'] }}
+                                            </b>
+                                            {{ comment[0]['comment'] }}
+                                        </div>
+                                        <div class="comment-time">
+                                            {{ comment[0]['date'].strftime("%d %b %y") }} at {{ comment[0]['date'].strftime("%H:%M") }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <!-- If the user is logged in then the comments form is displayed -->
+                            {% if session["logged_in"] == True %}
+                                <form
+                                    class="col-12 d-flex"
+                                    action="{{ url_for('recipecomment', rid=recipe['_id']) }}"
+                                    method="POST"
+                                    id="cform"
+                                >
+                                    <div class="img-view ivc-comment mr-2">
+                                        <img
+                                            src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                            id="profileImage"
+                                            class="circle"
+                                        />
+                                    </div>
+                                    <div class="comment commentbox flex-fill">
+                                        <input
+                                            type="text"
+                                            name="comment"
+                                            placeholder="Write a comment..."
+                                        />
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The delete modal used to be included in the user template but unfortunately the page would not load because of the delete button. It needs the recipe id for the flask route and each id is defined in each recipecard so a modal needs to be defined for each card. It would be better if only one modal was needed rather than one for each card as this means that there is a load of extra html that is not needed. I presume extra html will slow down the load times of the page but that should be tested later. If that is true then I'm not sure how to pass details from one bit of html to another, some JavaScript might need to be used but I would like to avoid it if I can. -->
+<!-- <div id="deletemodalDiv"> -->
+<!-- { include 'deletemodal.html' %} -->
+<!-- </div> -->
+{% endblock %}
