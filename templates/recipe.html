@@ -222,10 +222,7 @@
                                             class="btn btn-cookbook4 btn-block"
                                             style="color: #4267b2"
                                             role="button"
-                                            href="
-                                                {% if session['logged_in'] == True %}
-                                                    {{ url_for('recipelike', rid=recipe['_id']) }}
-                                                {% endif %}"
+                                            href="{{ url_for('recipelike', rid=recipe['_id']) }}"
                                         >
                                             <i class="fas fa-lg fa-thumbs-up"></i>
                                             <span class="d-none d-md-inline">
@@ -237,10 +234,7 @@
                                         <a
                                             class="btn btn-cookbook4 btn-block"
                                             role="button"
-                                            href="
-                                                {% if session['logged_in'] == True %}
-                                                    {{ url_for('recipelike', rid=recipe['_id']) }}
-                                                {% endif %}"
+                                            href="{{ url_for('recipelike', rid=recipe['_id']) }}"
                                         >
                                             <i class="far fa-lg fa-thumbs-up"></i>
                                             <span class="d-none d-md-inline">
@@ -297,7 +291,7 @@
                                         <!-- If there are comments then they are displayed -->
                                         {% for comment in comments %}
                                             <div class="col-12 pb-2 d-flex">
-                                                <div class="iv-comment mr-2">
+                                                <div class="img-view ivc-comment mr-2">
                                                     <img
                                                         src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                                         id="profileImage"
@@ -325,7 +319,7 @@
                                                 method="POST"
                                                 id="cform"
                                             >
-                                                <div class="iv-comment mr-2">
+                                                <div class="img-view ivc-comment mr-2">
                                                     <img
                                                         src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                                         id="profileImage"

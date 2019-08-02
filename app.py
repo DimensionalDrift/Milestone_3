@@ -57,6 +57,12 @@ recipeblank = {
     "notes": "",
 }
 
+
+# Function that returns the current date and time
+def getdate():
+    return datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
+
+
 # Function to add values to list tables that store lists of categories,
 # ingredients etc.
 def addto_listtable(table, vallist):
@@ -65,7 +71,7 @@ def addto_listtable(table, vallist):
         # If the entry in the table exists increment its number by one
         if entry:
             add = entry["number"] + 1
-            mongo.db[table].update(entry, {"$set": {"number": add }})
+            mongo.db[table].update(entry, {"$set": {"number": add}})
         # Otherwise create an entry
         else:
             new_entry = {"name": item, "number": 1}
@@ -120,6 +126,53 @@ def dblistload():
     return categories, cuisines, ingredients, units, utensils
 
 
+# Function to retrieve a number of recipes from the database
+# The default order is by decending datePublished
+def recipeget(num, skip=0, sort="datePublished", order=-1):
+    recipes = mongo.db.recipes.find().sort(sort, order).limit(num).skip(num * skip)
+    recipes = list(recipes)
+
+    return recipes
+
+
+# Function to log an activity to the list of user activities, this database is used on the home page to give the user the sense that the website is active and encourage them to interact with the site.
+def activitylog(uname, uid, rname, rid, rimage, act):
+    if act == "comment":
+        activity = "commented on"
+
+    elif act == "like":
+        activity = "liked"
+
+    elif act == "add":
+        activity = "submitted the recipe for"
+
+    else:
+        activity = ""
+
+    new_entry = {
+        "user_name": uname,
+        "user_id": uid,
+        "recipe_name": rname,
+        "recipe_id": rid,
+        "recipe_image": rimage,
+        "date": getdate(),
+        "activity": activity,
+    }
+
+    if len(activity) > 1:
+        mongo.db.activity.insert_one(new_entry)
+    else:
+        print("Inncorect activity type")
+
+
+def activityfeed(num):
+
+    activity = mongo.db.activity.find().sort("date", -1).limit(num)
+    activity = list(activity)
+
+    return activity
+
+
 # A user class from a previous version of things
 # class User(object):
 #     def __init__(self, email, username, password):
@@ -168,11 +221,23 @@ mongo = PyMongo(app)
 
 # Home Page - Under construction
 @app.route("/")
-def home():
-    # temp = "cuisines"
-    # addto_listtable(temp, ["French"])
-    # print(mongo.db[temp].find_one())
-    return render_template("hello.html")
+@app.route("/page/<page>")
+def home(page="0"):
+    # Number of recipes to load on homepage
+    num = 5
+
+    # Calculate total number of recipes and maximum number of pages
+    total = mongo.db.recipes.count()
+    page = int(page)
+    pagemax = divmod(total, num)[0]
+
+    recipes = recipeget(num, page)
+
+    activity = activityfeed(5)
+
+    return render_template(
+        "index.html", recipes=recipes, page=page, pagemax=pagemax, activity=activity
+    )
 
 
 # Login Page
@@ -230,6 +295,7 @@ def user(username, view="submitted"):
         flash("You are not logged in as this user")
         return redirect(url_for("login"))
 
+    # At the moment all the users recipes are loaded and displayed, this is fine at the moment as a user usually has a small number of recipes but in the future there should be some lazy loading or pagination to reduce load times
     recipes = mongo.db.recipes.find({"author": session["username"]})
     user = mongo.db.users.find_one({"username": session["username"]})
 
@@ -320,7 +386,7 @@ def postuser():
             session["email"] = formval["uform-email"]
             mongo.db.users.update_one(
                 {"username": session["username"]},
-                {"$set": {"email": formval["uform-email"] }},
+                {"$set": {"email": formval["uform-email"]}},
             )
         if "uform-password" in formval.keys():
             flash("Your password has been updated")
@@ -328,7 +394,7 @@ def postuser():
             del formval["uform-password"]
             mongo.db.users.update_one(
                 {"username": session["username"]},
-                {"$set": {"pass_hash": formval["pass_hash"] }},
+                {"$set": {"pass_hash": formval["pass_hash"]}},
             )
 
     return redirect(url_for("user", username=session["username"], view="edit"))
@@ -387,7 +453,7 @@ def postsignup():
         formval["pass_hash"] = generate_password_hash(formval["password"])
         del formval["password"]
         # Add todays date
-        formval["datejoined"] = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
+        formval["datejoined"] = getdate()
         # Add blank values to user entry
         formval["favourites"] = []
         formval["comments"] = []
@@ -428,13 +494,26 @@ def recipe(rid):
 # Recipe like page
 @app.route("/recipe/<rid>/like")
 def recipelike(rid):
-
+    print("Like Page Loaded")
     if "logged_in" in session and session["logged_in"] is True:
         user = mongo.db.users.find_one({"_id": ObjectId(session["id"])})
+        recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
         if likecheck(rid) is False:
-            mongo.db.users.update(user, {"$push": {"favourites": rid }})
+            mongo.db.users.update(user, {"$push": {"favourites": rid}})
+            # Add the like to the global feed
+            activitylog(
+                user["username"],
+                session["id"],
+                recipe["name"],
+                rid,
+                recipe["image"],
+                "like",
+            )
         else:
-            mongo.db.users.update(user, {"$pull": {"favourites": rid }})
+            mongo.db.users.update(user, {"$pull": {"favourites": rid}})
+    else:
+        flash("Pleaes log in or sign up to like and comment on recipes!")
+        return redirect(url_for("login"))
 
     return redirect(url_for("recipe", rid=rid))
 
@@ -443,25 +522,30 @@ def recipelike(rid):
 @app.route("/recipe/<rid>/comment", methods=["POST"])
 def recipecomment(rid):
 
-    today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
-
     if "logged_in" in session and session["logged_in"] is True:
         comment = {
             "user_id": session["id"],
             "recipe_id": rid,
-            "date": today,
+            "date": getdate(),
             "comment": request.form["comment"],
         }
         # Comment Id
         newcomment = mongo.db.comments.insert_one(comment)
         # Add the comment to the recipe
         recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-        mongo.db.recipes.update(recipe, {"$push": {"comments": newcomment.inserted_id }})
+        mongo.db.recipes.update(recipe, {"$push": {"comments": newcomment.inserted_id}})
         # Add the comment to the user
-        user = mongo.db.users.find_one({"_id": ObjectId(session['id'])})
-        mongo.db.users.update(user, {"$push": {"comments": newcomment.inserted_id }})
-
-
+        user = mongo.db.users.find_one({"_id": ObjectId(session["id"])})
+        mongo.db.users.update(user, {"$push": {"comments": newcomment.inserted_id}})
+        # Add the activity to the global feed
+        activitylog(
+            user["username"],
+            session["id"],
+            recipe["name"],
+            rid,
+            recipe["image"],
+            "comment",
+        )
 
     return redirect(url_for("recipe", rid=rid, show=True))
 
@@ -535,11 +619,13 @@ def recipeedit(rid):
 def recipedelete(rid):
 
     # Delete the comments associated with the recipe from both the comment database and the user entries
-    for comment in mongo.db.comments.find({"recipe_id":rid}):
+    for comment in mongo.db.comments.find({"recipe_id": rid}):
         print(comment["_id"])
-        for user in mongo.db.users.find({"comments":ObjectId(comment["_id"])}):
+        for user in mongo.db.users.find({"comments": ObjectId(comment["_id"])}):
             print(user["email"])
-            mongo.db.users.update(user, {"$pull": {"comments": ObjectId(comment["_id"]) }})
+            mongo.db.users.update(
+                user, {"$pull": {"comments": ObjectId(comment["_id"])}}
+            )
 
         mongo.db.comments.delete_one(comment)
 
@@ -547,7 +633,7 @@ def recipedelete(rid):
     for user in mongo.db.users.find():
         if "favourites" in user.keys() and rid in user["favourites"]:
             print(user["email"])
-            mongo.db.users.update(user, {"$pull": {"favourites": rid }})
+            mongo.db.users.update(user, {"$pull": {"favourites": rid}})
 
     # Delete the recipe entry
     mongo.db.recipes.delete_one({"_id": ObjectId(rid)})
@@ -588,8 +674,6 @@ def submitrecipe():
 def postrecipe():
     print("Im Submitting!")
     print(request.form)
-    # Todays date
-    today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
 
     # Pulling out values with multiple inputs into lists
     typelist = formlister("categories", request.form, "rform-type")
@@ -645,7 +729,7 @@ def postrecipe():
         "author": session["username"],  # This should probably follow schema
         "comments": [],
         "cookTime": tcook,
-        "datePublished": today,
+        "datePublished": getdate(),
         "description": request.form["rformDescription"],
         "image": {
             "@type": "ImageObject",
@@ -669,10 +753,21 @@ def postrecipe():
 
     print(recipe)
     newrecipe = mongo.db["recipes"].insert_one(recipe)
+    rid = newrecipe.inserted_id
+
+    # Add the submission to the global feed
+    activitylog(
+        session["username"],
+        session["id"],
+        recipe["name"],
+        rid,
+        recipe["image"],
+        "add",
+    )
 
     # Currently redirects to the submission page, should redirect to the users
     # recipe page
-    return redirect(url_for("recipe", rid=newrecipe.inserted_id))
+    return redirect(url_for("recipe", rid=rid))
 
 
 # Recipe posting route - handles the form data
@@ -680,10 +775,6 @@ def postrecipe():
 def updaterecipe(rid):
     print("Im updating!")
     oldrecipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-
-    # print(request.form)
-    # Todays date
-    today = datetime.datetime.utcnow()  # .strftime("%Y-%m-%d")
 
     # Pulling out values with multiple inputs into lists
     typelist = formlister("categories", request.form, "rform-type")
@@ -765,7 +856,7 @@ def updaterecipe(rid):
     for item in recipe:
         if recipe[item] != oldrecipe[item] and item not in exemptlist:
             mongo.db.recipes.update_one(
-                {"_id": ObjectId(rid)}, {"$set": {item: recipe[item] }}
+                {"_id": ObjectId(rid)}, {"$set": {item: recipe[item]}}
             )
 
     return redirect(url_for("recipe", rid=rid))

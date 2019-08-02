@@ -1,364 +1,408 @@
 /*-------------------- General Styles --------------------*/
-
-/*Image frame, this is used to prevent images overflowing the frame*/
-.img-frame {
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 4px;
-  display: inline-block;
-  padding: 5px;
-}
-
-/* Base image view, the specific height and width should be declared separately*/
-.img-view {
-  margin: 0;
-  overflow: hidden;
-}
-
-/* Using the fitImage function, each of these styles are applied dynamically to each image depending on its orientation*/
-.square {
-  width: 100%;
-}
-
-.circle{
-  border-radius: 50%;
-  width: 100%;
-}
-
-.portrait {
-  height: auto;
-  width: 100%;
-}
-
-.landscape {
-  height: 100%;
-  width: auto;
-}
-
-a {
-  color: #385898;
-}
-
-/*-------------------- Base Styles --------------------*/
-.my-body {
-  background-color: #edf0f5;
-  padding-bottom: 1rem;
-}
-
-.navbar {
-  background-color: #4267b2;
-}
-
-.vline {
-  border-right: #3b5c9f 1px solid;
-  height: 1.5rem;
-  margin-top: 0.5625rem;
-}
-
-.my-footer {
-  background-color: #ffffff;
-}
-
-.nav-link > .img-frame{
-  border: 0;
-  border-radius: 50%;
-  padding: 0;
-}
-
-.iv-navbar{
-  height: 24px;
-  width: 24px;
-}
-
-/*-------------------- Button Styles --------------------*/
-/* The button styles have been taken from or override the Bootstrap css files*/
-.btn-cookbook1 {
-  background-color: #4267b2;
-  border-color: #4267b2;
-  color: #fff;
-}
-
-.btn-cookbook2 {
-  background-color: #f5f6f7;
-  border: 1px solid #e0e1e4;
-  color: #727885;
-}
-
-.btn-cookbook3 {
-  background-color: #ffffff;
-  border: solid #e0e1e4;
-  border-radius: 0;
-  border-width: 1px 0 0 1px;
-  color: #727885;
-}
-
-.btn-cookbook4 {
-  background-color: #ffffff;
-  color: #727885;
-}
-
-.btn-cookbook1:hover {
-  background-color: #3b5da0;
-  color: #fff;
-}
-
-.btn-cookbook3:hover {
-  background-color: #3b5da0;
-  color: #fff;
-}
-
-.btn-cookbook4:hover {
-  background-color: #f5f6f7;
-}
-
-.btn-cookbookdelete:hover{
-  background-color: #E63946;
-}
-
-/*Remove the focus shadow*/
-.btn:focus,
-.btn.focus {
-  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0);
-}
-
-.btn-search {
-  border-width: 1px 1px 1px 0;
-}
-
-/*-------------------- Recipe Form Styles --------------------*/
-.form-control {
-  border: 1px solid #e0e1e4;
-}
-
-.form-control:focus {
-  background-color: #fff;
-  border-color: #4267b2;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0);
-  color: #495057;
-  outline: 0;
-}
-
-label {
-  padding-left: 0.25rem;
-}
-
-.select2 {
-  max-width: 100%;
-}
-
-.card {
-  margin: 1rem;
-}
-
-.card-header {
-  background-color: #f5f6f7;
-}
-
-.card-footer:hover > span {
-  text-decoration: underline !important;
-}
-
-.iv-rform {
-  height: 200px;
-  width: 200px;
-}
-
-.select2-container--bootstrap4 .select2-selection:active {
-  border-color: #4267b2;
-}
-
-.select2-container--bootstrap4 .select2-dropdown {
-  border-color: #4267b2;
-}
-
-.select2-container--open .select2-selection {
-  border-color: #4267b2;
-  border-width: 1px 1px 0 1px;
-  border-radius: 0.25rem 0.25rem 0 0;
-}
-
-/*-------------------- Recipe Modal Styles --------------------*/
-
-#rmodalGrid {
-  list-style-type: none;
-  padding: 0;
-}
-
-.iv-rmodal {
-  height: 200px;
-  width: 200px;
-}
-
-/*Overrides the bootstrap styles so that the model is always 'fullscreen'*/
-#rmodalDiv .modal {
-  text-align: center;
-}
-
-#rmodalDiv .modal-dialog {
-  max-width: 95%;
-  display: inline-block;
-}
-
-/*-------------------- Login and Signup Page Styles --------------------*/
-.alert-cookbook {
-  background-color: #e2e3e5;
-  border-color: #d6d8db;
-  color: #383d41;
-}
-
-#signupModalDiv .modal {
-  text-align: justify;
-}
-
-/*-------------------- User Page Styles --------------------*/
-.stars-outer {
-  display: inline-block;
-  font-family: FontAwesome;
-  position: relative;
-  font-size: 1.5rem;
-}
-
-.stars-outer::before {
-  content: "\2606 \2606 \2606 \2606 \2606";
-}
-
-.stars-inner {
-  left: 0;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  white-space: nowrap;
-  font-size: 1.5rem;
-}
-
-.stars-inner::before {
-  color: #869ece;
-  content: "\2605 \2605 \2605 \2605 \2605";
-}
-
-.iv-urecipe {
-  height: 100px;
-  width: 100px;
-}
-
-.iv-uprofile {
-  height: 200px;
-  width: 200px;
-}
-
-@media only screen and (min-width: 992px) {
-
-  .iv-urecipe {
-    height: 120px;
-    width: 120px;
+  /*Body padding is needed so that the content comes down below the fixed-top navbar*/
+  body {
+    padding-top: 58px;
   }
 
-  .iv-uprofile {
-    height: auto;
+  /*Image frame, this is used to prevent images overflowing the frame*/
+  .img-frame {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 5px;
+  }
+
+  /* Base image view, the specific height and width should be declared separately*/
+  .img-view {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  /* Using the fitImage function, each of these styles are applied dynamically to each image depending on its orientation*/
+  .square {
+    width: 100%;
+  }
+
+  .circle {
+    height: 100%;
     width: auto;
   }
 
-  .stars-outer::before {
-    content: "\f006 \f006 \f006 \f006 \f006";
+  .portrait {
+    height: auto;
+    width: 100%;
   }
 
-  .stars-inner::before {
-    content: "\f005 \f005 \f005 \f005 \f005";
+  .landscape {
+    height: 100%;
+    width: auto;
+  }
+
+  a {
+    color: #385898;
+  }
+
+  .affix {
+    top: 20px;
+    z-index: 9999 !important;
+  }
+
+  .page-load-status {
+    display: none; /*hidden by default */
+    padding-top: 20px;
+    text-align: center;
+  }
+
+/*-------------------- Base Styles --------------------*/
+  .my-body {
+    background-color: #edf0f5;
+    padding-bottom: 1rem;
+  }
+
+  #navsection {
+    background-color: #4267b2;
+  }
+
+  .vline {
+    border-right: #3b5c9f 1px solid;
+    height: 1.5rem;
+    margin-top: 0.5625rem;
+  }
+
+  .my-footer {
+    background-color: #ffffff;
+  }
+
+  .nav-link > .img-frame {
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  .ivc-navbar {
+    border: 1px solid #e6e6e6;
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+  }
+
+/*-------------------- Button Styles --------------------*/
+  /* The button styles have been taken from or override the Bootstrap css files*/
+  .btn-cookbook1 {
+    background-color: #4267b2;
+    border-color: #4267b2;
+    color: #fff;
+  }
+
+  .btn-cookbook2 {
+    background-color: #f5f6f7;
+    border: 1px solid #e0e1e4;
+    color: #727885;
   }
 
   .btn-cookbook3 {
-    border-width: 0 0 0 1px;
+    background-color: #ffffff;
+    border: solid #e0e1e4;
+    border-radius: 0;
+    border-width: 1px 0 0 1px;
+    color: #727885;
   }
 
-  #btnSub{
-    border-width: 0 0 0 0 !important;
+  .btn-cookbook4 {
+    background-color: #ffffff;
+    color: #727885;
   }
 
-}
+  .btn-cookbook1:hover {
+    background-color: #3b5da0;
+    color: #fff;
+  }
+
+  .btn-cookbook3:hover {
+    background-color: #3b5da0;
+    color: #fff;
+  }
+
+  .btn-cookbook4:hover {
+    background-color: #f5f6f7;
+  }
+
+  .btn-cookbook5:hover {
+    background-color: #f5f6f7;
+    border-color: #e7e9eb;
+  }
+
+  .btn-cookbookdelete:hover {
+    background-color: #e63946;
+  }
+
+  /*Remove the focus shadow*/
+  .btn:focus,
+  .btn.focus {
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0);
+  }
+
+  .btn-search {
+    border-width: 1px 1px 1px 0;
+  }
+
+/*-------------------- Home Page Styles --------------------*/
+  .ivc-home {
+    border: 1px solid #e6e6e6;
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+  }
+
+  #explore {
+    margin: 0;
+    padding: 12px 12px 6px 6px;
+  }
+
+  .explore-icon {
+    font-size: 24px;
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .ivc-activity {
+    border: 1px solid #e6e6e6;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+  }
+
+/*-------------------- Recipe Form Styles --------------------*/
+  .form-control {
+    border: 1px solid #e0e1e4;
+  }
+
+  .form-control:focus {
+    background-color: #fff;
+    border-color: #4267b2;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0);
+    color: #495057;
+    outline: 0;
+  }
+
+  label {
+    padding-left: 0.25rem;
+  }
+
+  .select2 {
+    max-width: 100%;
+  }
+
+  .card {
+    margin: 1rem;
+  }
+
+  .card-header {
+    background-color: #f5f6f7;
+  }
+
+  .card-footer:hover > span {
+    text-decoration: underline !important;
+  }
+
+  .iv-rform {
+    height: 200px;
+    width: 200px;
+  }
+
+  .select2-container--bootstrap4 .select2-selection:active {
+    border-color: #4267b2;
+  }
+
+  .select2-container--bootstrap4 .select2-dropdown {
+    border-color: #4267b2;
+  }
+
+  .select2-container--open .select2-selection {
+    border-color: #4267b2;
+    border-width: 1px 1px 0 1px;
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+
+/*-------------------- Recipe Modal Styles --------------------*/
+  #rmodalGrid {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .iv-rmodal {
+    height: 200px;
+    width: 200px;
+  }
+
+  /*Overrides the bootstrap styles so that the model is always 'fullscreen'*/
+  #rmodalDiv .modal {
+    text-align: center;
+  }
+
+  #rmodalDiv .modal-dialog {
+    display: inline-block;
+    max-width: 95%;
+  }
+
+/*-------------------- Login and Signup Page Styles --------------------*/
+  .alert-cookbook {
+    background-color: #e2e3e5;
+    border-color: #d6d8db;
+    color: #383d41;
+  }
+
+  #signupModalDiv .modal {
+    text-align: justify;
+  }
+
+/*-------------------- User Page Styles --------------------*/
+  .stars-outer {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-size: 1.5rem;
+    position: relative;
+  }
+
+  .stars-outer::before {
+    content: "\2606 \2606 \2606 \2606 \2606";
+  }
+
+  .stars-inner {
+    font-size: 1.5rem;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    white-space: nowrap;
+  }
+
+  .stars-inner::before {
+    color: #869ece;
+    content: "\2605 \2605 \2605 \2605 \2605";
+  }
+
+  .iv-urecipe {
+    height: 100px;
+    width: 100px;
+  }
+
+  .iv-uprofile {
+    height: 200px;
+    width: 200px;
+  }
+
+  @media only screen and (min-width: 992px) {
+    .iv-urecipe {
+      height: 120px;
+      width: 120px;
+    }
+
+    .iv-uprofile {
+      height: auto;
+      width: auto;
+    }
+
+    .stars-outer::before {
+      content: "\f006 \f006 \f006 \f006 \f006";
+    }
+
+    .stars-inner::before {
+      content: "\f005 \f005 \f005 \f005 \f005";
+    }
+
+    .btn-cookbook3 {
+      border-width: 0 0 0 1px;
+    }
+
+    #btnSub {
+      border-width: 0 0 0 0 !important;
+    }
+  }
 
 /*-------------------- Recipe Page Styles --------------------*/
-
-.hr-full{
-  width: 200%;
-  left: -50%;
-  position: relative;
-}
-
-.iv-recipe{
-  height: 25vh;
-  width: auto;
-}
-
-.iv-comment{
-  height: 42px;
-  width: 42px;
-}
-
-.comment{
-  background-color: #F2F3F5;
-  border-radius: 25px;
-  padding: 8px 12px;
-}
-
-.comment-time{
-  color: #606770;
-  font-size: .8em;
-  padding: 4px 12px;
-}
-
-.commentbox{
-  border: 1px solid #ccd0d5;
-}
-
-.commentbox > input{
-  background-color: #F2F3F5;
-  border: 0;
-  width: 100%;
-}
-
-.commentbox > input:focus{
-  border: 0;
-  background-color: #F2F3F5;
-  outline: none;
-}
-
-.nopad-list{
-  list-style-type: none;
-  padding: 0;
-}
-
-@media only screen and (min-width: 992px) {
-
-  .iv-recipe{
-    height: auto;
-    width: 20vw;
-    max-width: 300px;
+  .hr-full {
+    left: -50%;
+    position: relative;
+    width: 200%;
   }
 
-}
+  .iv-recipe {
+    height: 25vh;
+    width: auto;
+  }
 
+  .ivc-comment {
+    border: 1px solid #e6e6e6;
+    border-radius: 50%;
+    height: 42px;
+    width: 42px;
+  }
 
-input.star{
-  display: none;
-}
+  .comment {
+    background-color: #f2f3f5;
+    border-radius: 25px;
+    padding: 8px 12px;
+  }
 
-label.star {
-  float: right;
-  padding: 10px;
-  font-size: 36px;
-}
+  .comment-time {
+    color: #606770;
+    font-size: 0.8em;
+    padding: 4px 12px;
+  }
 
-input.star:checked ~ label.star:before {
-  content:'\f005';
-  color: #869ece;
-}
+  .commentbox {
+    border: 1px solid #ccd0d5;
+  }
 
-input.star:hover ~ label.star:before {
-  content:'\f005';
-  color: #869ece;
-}
+  .commentbox > input {
+    background-color: #f2f3f5;
+    border: 0;
+    width: 100%;
+  }
 
-label.star:before{
-  content:'\f006';
-  font-family: FontAwesome;
-}
+  .commentbox > input:focus {
+    background-color: #f2f3f5;
+    border: 0;
+    outline: none;
+  }
+
+  .nopad-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  @media only screen and (min-width: 992px) {
+    .iv-recipe {
+      height: auto;
+      max-width: 300px;
+      width: 20vw;
+    }
+  }
+
+  input.star {
+    display: none;
+  }
+
+  label.star {
+    float: right;
+    font-size: 36px;
+    padding: 10px;
+  }
+
+  input.star:checked ~ label.star:before {
+    color: #869ece;
+    content: "\f005";
+  }
+
+  input.star:hover ~ label.star:before {
+    color: #869ece;
+    content: "\f005";
+  }
+
+  label.star:before {
+    content: "\f006";
+    font-family: FontAwesome;
+  }
