@@ -1,0 +1,74 @@
+{% block content %}
+<!-- Level 2 Template -->
+<!-- Star Rating Modal - Check1-->
+<div class="modal fade" id="starModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <!-- Modal header with close button -->
+            <div class="modal-header card-header">
+                <h5 class="modal-title card-title">Rate this recipe</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form
+                class="modal-body card-body row"
+                action="{{ url_for('recipevote', rid=recipe['_id']) }}"
+                method="POST"
+            >
+                <div class="col-12 d-flex justify-content-center">
+                    <!-- Each input is a radio button which is associated with its star number, that number is then sent to the database -->
+                    <div class="stars">
+                        <input
+                            class="star star-5"
+                            id="star-5"
+                            type="radio"
+                            name="star"
+                            value="5"
+                        />
+                        <label class="star star-5" for="star-5"></label>
+                        <input
+                            class="star star-4"
+                            id="star-4"
+                            type="radio"
+                            name="star"
+                            value="4"
+                        />
+                        <label class="star star-4" for="star-4"></label>
+                        <input
+                            class="star star-3"
+                            id="star-3"
+                            type="radio"
+                            name="star"
+                            value="3"
+                        />
+                        <label class="star star-3" for="star-3"></label>
+                        <input
+                            class="star star-2"
+                            id="star-2"
+                            type="radio"
+                            name="star"
+                            value="2"
+                        />
+                        <label class="star star-2" for="star-2"></label>
+                        <input
+                            class="star star-1"
+                            id="star-1"
+                            type="radio"
+                            name="star"
+                            value="1"
+                        />
+                        <label class="star star-1" for="star-1"></label>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-cookbook2">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,19 +1,30 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
+<!-- Level 1 Template - Check1-->
+<!-- Signup Form -->
 <div class="container">
     <div class="row">
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <!-- Signup Card -->
             <div class="card my-5">
-                <div class="card-header text-center py-3">
-                    <h3>Sign up to Cookbook</h3>
-                </div>
+                <!-- Card Header -->
+                <h3 class="card-header text-center py-3">
+                    Sign up to Cookbook
+                </h3>
+                <!-- Card Body -->
                 <div class="card-body">
-                    <!-- If the page is loaded and there are alerts then they are displayed -->
-                    {% with messages = get_flashed_messages() %} {% if messages
-                    %} {% for message in messages %}
-                    <div class="alert alert-cookbook text-center" role="alert">
-                        {{ message }}
-                    </div>
-                    {% endfor %} {% endif %} {% endwith %}
+                    <!-- If the page is loaded while there are alerts queued then they are displayed -->
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-cookbook text-center" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <!-- Signup form -->
+                    <!-- The enter key is suppressed since the disclaimer modal contains the submit button and I would like the user to read the disclaimer first -->
                     <form
                         form
                         action="{{ url_for('postsignup') }}"
@@ -21,6 +32,7 @@
                         id="signupform"
                         onkeydown="return event.key != 'Enter';"
                     >
+                        <!-- Email Input -->
                         <div class="form-group py-1">
                             <label hidden for="signupEmail">Email</label>
                             <!-- Usually you would let the input handle an invalid email but since I am using a flash box for other incorrect inputs I thought it would be more consistent to handle it that way -->
@@ -34,6 +46,7 @@
                                 autofocus
                             />
                         </div>
+                        <!-- Username Input -->
                         <div class="form-group py-1">
                             <label hidden for="signupUsername">User Name</label>
                             <input
@@ -45,6 +58,8 @@
                                 required
                             />
                         </div>
+                        <!-- Password Input -->
+                        <!-- After some reading and pondering it was decided that it's better to not ask the user to enter the password twice like a lot of websites do. The thinking is that it's not great UX to ask the user to repeat themselves. Should the user enter the wrong password by mistake then when there is a method to recover their password then it's fine to not have to ask. -->
                         <div class="form-group py-1">
                             <label hidden for="signupPassword">Password</label>
                             <input
@@ -55,11 +70,17 @@
                                 name="password"
                                 required
                             />
+                            <!-- Info explaining the requirements for the password and username -->
                             <small id="signupHelp" class="form-text text-muted">
-                              Your username and password must be over 8 characters long, both may contain letters and numbers but your username may not use spaces or special characters.
+                                Your username and password must be over 8
+                                characters long, both may contain letters and
+                                numbers but your username may not use spaces or
+                                special characters.
                             </small>
                         </div>
                         <div>
+                            <!-- Disclaimer button -->
+                            <!-- The disclaimer modal has the submit button for the form -->
                             <button
                                 class="btn btn-lg btn-cookbook1 btn-block"
                                 type="button"
@@ -75,25 +96,9 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
+
+<!-- Signup Modal -->
 <div id="signupModalDiv">
-    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h3 class="modal-title" id="signupModalTitle">Disclaimer</h3>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            This is a student project for the Code Institute course in Full Stack Web Development. As such, no guarantees can be made regarding the safety of your personal information as the security implemented on this site is known to be simple. <br>Please <b>do not reuse current passwords</b> from other sites or give any personal information that you are not comfortable to give. Dummy credentials can be used as no emails will be sent to you without you requesting one first. <br>If you loose your login details or have any questions you can contact the site admin using the contact form, a link to which can be found in the footer below. <br>Thank you for your understanding and enjoy using Cookbook!
-          </div>
-          <div class="modal-footer justify-content-center">
-            <button type="submit" form="signupform" class="btn btn-cookbook1 btn-lg">I Accept</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include 'signupmodal.html' %}
 </div>
 {% endblock %}

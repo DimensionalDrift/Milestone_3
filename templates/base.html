@@ -1,143 +1,278 @@
 <!DOCTYPE html>
+<!-- Level 0 Template -->
+<!-- Signup Form -->
+<!-- X jsPrettier Check that it all worked -->
+<!-- X Fix Mobile view, the navbar is all over the place! -->
+<!-- X Impelement a Search Function -->
 <html lang="en">
-  <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-      <!-- Adding Bootstrap 4 styling, Font Awesome fonts -->
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" type="text/css" />
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+        <!-- Adding Bootstrap 4 styling, Font Awesome fonts -->
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.9.0/css/all.css"
+        />
 
-      <!-- select2 styling -->
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/select2-bootstrap4.css') }}">
+        <!-- select2 styling -->
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/select2-bootstrap4.css') }}"
+        />
 
-      <!-- Tempus Dominus styling -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+        <!-- Tempus Dominus styling -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"
+        />
 
+        <!-- GIJGO styling -->
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css" /> -->
 
-      <!-- GIJGO styling -->
-      <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css" /> -->
+        <!-- Favicon -->
+        <link
+            rel="shortcut icon"
+            type="image/png"
+            href="{{ url_for('static', filename='icons/cookbook.png') }}"
+        />
 
-      <!-- Favicon -->
-      <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='icons/cookbook.png') }}" />
+        <!-- My styles -->
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/style.css') }}"
+        />
+        <title>Cookbook</title>
 
-      <!-- My styles -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
-      <title>Cookbook</title>
+        <!-- I know normally this should be loaded at the bottom of the page but since I need to keep page specific code in the flask templates the JavaScript needs to be loaded before the template so those scripts work -->
+        <!-- jQuery Javascript -->
+        <script
+            src="https://code.jquery.com/jquery-3.4.0.min.js"
+            integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+            crossorigin="anonymous"
+        ></script>
 
-      <!-- I know normally this should be loaded at the bottom of the page but since I need to keep page specific code in the flask templates the JavaScript needs to be loaded before the template so those scripts work -->
-      <!-- jQuery Javascript -->
-      <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+        <!-- Bootstrap JavaScript -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"
+        ></script>
 
-      <!-- Bootstrap JavaScript -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <!-- select2 Javascript -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"
+            integrity="sha256-L8glE3PzqSO1/nrEHYWoNyozn5i3ETucQoJGA7gp2mI="
+            crossorigin="anonymous"
+        ></script>
 
-      <!-- select2 Javascript -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <!-- Tempus Dominus Javascript -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+            integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ="
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
+            integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
+            crossorigin="anonymous"
+        ></script>
 
-      <!-- Tempus Dominus Javascript -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- GIJGO Javascript -->
+        <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js"></script> -->
 
-      <!-- GIJGO Javascript -->
-      <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js"></script> -->
+        <!-- fitImage Javascript -->
+        <script
+            type="text/javascript"
+            src="{{ url_for('static', filename = 'js/fitImage.js') }}"
+        ></script>
 
-      <!-- fitImage Javascript -->
-      <script type="text/javascript" src="{{ url_for('static', filename = 'js/fitImage.js') }}"></script>
+        <!-- tooltip Javascript -->
+        <script
+            type="text/javascript"
+            src="{{ url_for('static', filename = 'js/tooltip.js') }}"
+        ></script>
+    </head>
+    <body>
+        <!-- Header -->
+        <section>
+            <nav class="navbar navbar-expand-md">
+                <div class="container flex-nowrap">
+                    <a class="navbar-brand" href="/">
+                        <img
+                            src="{{ url_for('static', filename='icons/cookbook_text.png') }}"
+                            alt="Logo"
+                            class="d-none d-lg-block"
+                        />
+                        <img
+                            src="{{ url_for('static', filename='icons/cookbook_invert.png') }}"
+                            alt="Logo"
+                            class="d-lg-none"
+                            style="height: 38px"
+                        />
+                    </a>
 
-      <!-- tooltip Javascript -->
-      <script type="text/javascript" src="{{ url_for('static', filename = 'js/tooltip.js') }}"></script>
-  </head>
-<body>
-    <!-- Header -->
-    <section>
-      <nav class="navbar navbar-expand-lg ">
-        <a class="navbar-brand" href="/">
-          <img src="{{ url_for('static', filename='icons/cookbook_text.png') }}" alt="Logo" class="d-none d-lg-block">
-          <img src="{{ url_for('static', filename='icons/cookbook_invert.png') }}" alt="Logo" class="d-lg-none" style='height: 38px'>
-        </a>
+                    <!-- Search Form  -->
+                    <form class="form-inline mr-auto d-flex">
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                type="search"
+                                placeholder=" Search by Ingredient, Meal..."
+                            />
+                            <div class="input-group-append">
+                                <button
+                                    class="btn btn-cookbook2 btn-search"
+                                    type="submit"
+                                >
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
 
-        <form class="form-inline mr-auto">
-          <div class="input-group">
-            <input class="form-control" type="search" placeholder=" Search by Ingredient, Meal...">
-            <div class="input-group-append">
-              <button class="btn btn-cookbook2 btn-search" type="submit"><i class="fas fa-search fa-lg"></i></button>
+                    <!-- Menu button -->
+                    <button
+                        class="navbar-toggler ml-2"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#navbarmenu"
+                    >
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <!-- Navbar Menu -->
+                <div class="collapse navbar-collapse" id="navbarmenu">
+                    <ul class="navbar-nav navbar-justified ml-auto">
+                        <li class="nav-item">
+                            {% if session["logged_in"] == True %}
+                            <a
+                                class="nav-link btn btn-cookbook1 d-flex justify-content-center align-content-center"
+                                href="{{ url_for('user', username=session['username'], view='submitted') }}"
+                            >
+                                <div class="iv-navbar mr-2">
+                                    <img
+                                        src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                                        id="profileImage"
+                                        class="circle"
+                                    />
+                                </div>
+                                {{ session["username"] }}
+                            </a>
+                            {% else %}
+                            <a class="nav-link btn btn-cookbook1" href="/login"
+                                >Login</a
+                            >
+                            {% endif %}
+                        </li>
+                        <li class="d-none d-md-inline">
+                            <div class="vline"></div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-cookbook1" href="/"
+                                >Home</a
+                            >
+                        </li>
+                        <li class="d-none d-md-inline">
+                            <div class="vline"></div>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link btn btn-cookbook1"
+                                href="/submitrecipe"
+                                >Submit</a
+                            >
+                        </li>
+                        <li class="d-none d-md-inline">
+                            <div class="vline"></div>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link btn btn-cookbook1"
+                                href="/submitrecipe"
+                                >Browse</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </section>
+
+        <!-- Body -->
+        <section class="my-body">
+            {% block content %} {% endblock %}
+        </section>
+
+        <!-- Footer -->
+        <section class="my-footer">
+            <div class="container-fluid">
+                <div class="row py-3">
+                    <div class='col-12'>
+                        <table class="w-100">
+                            <tr>
+                                <td>
+                                    Cookbook <span id=footeryear></span>
+                                </td>
+                                <td class="text-right">
+                                    <a
+                                        href="#"
+                                        data-toggle="modal"
+                                        data-target="#disclaimerModal"
+                                        >Disclaimer</a
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Developed by
+                                </td>
+                                <td class="text-right">
+                                    <a
+                                        href="#"
+                                      >Contact Us</a
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Chris Anderson
+                                </td>
+                                <td class="text-right">
+                                    <a
+                                        href="https://github.com/DimensionalDrift/Milestone_3"
+                                        target="_blank"
+                                        >About This Project</a
+                                    >
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
-          </div>
-        </form>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              {%if session["logged_in"] == True%}
-                <a class="nav-link btn btn-cookbook1 d-flex justify-content-center align-content-center" href="{{ url_for('user', username=session['username'], view='submitted') }}">
-                      <div class="iv-navbar mr-2">
-                          <img
-                              src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                              id="profileImage"
-                              class="circle"
-                          />
-                      </div>
-                  {{session["username"]}}
-                </a>
-              {% else %}
-                <a class="nav-link btn btn-cookbook1" href="/login">Login</a>
-              {% endif %}
-            </li>
-            <li>
-              <div class="vline"></div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link btn btn-cookbook1" href="/">Home</a>
-            </li>
-            <li>
-              <div class="vline"></div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link btn btn-cookbook1" href="/submitrecipe">Submit</a>
-            </li>
-            <li>
-              <div class="vline"></div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle btn btn-cookbook1" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                Browse
-              </a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Meal Type</a>
-                <a class="dropdown-item" href="#">Ingredient</a>
-                <a class="dropdown-item" href="#">Cooking Time</a>
-              </div>
-            </li>
-           </ul>
+        </section>
+        <!-- Disclaimer modal -->
+        <div id="disclaimermodallDiv">
+            {% include 'disclaimermodal.html' %}
         </div>
-      </nav>
-    </section>
 
-    <!-- Body -->
-    <section class='my-body'>
-      {% block content %}
-      {% endblock %}
-    </section>
-
-    <!-- Footer -->
-    <section class='my-footer'>
-      <div class='container'>
-          <div class='row'>
-            <div class='col-12 text-center'>
-              <p>Some Footer Content to be added later</p>
-              <p>This site is for educational purposes</p>
-            </div>
-          </div>
-      </div>
-    </section>
-
-</body>
+        <!-- Place current year in footer -->
+        <script type="text/javascript">
+          $("#footeryear").append(new Date().getFullYear());
+        </script>
+    </body>
 </html>

@@ -1,0 +1,36 @@
+{% block content %}
+<!-- Level 2 Template -->
+<!-- Delete Modal - Check1 -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <!-- Modal header with close button -->
+            <div class="modal-header card-header">
+                <h5 class="modal-title card-title">
+                    Delete this recipe?
+                </h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body card-body text-center row">
+                <div class="col-12">
+                    Are you sure you want to delete your recipe, this cannot be
+                    undone.
+                </div>
+                <div class="col-12">
+                    <a
+                        href="{{ url_for('recipedelete', rid=recipe['_id']) }}"
+                        role="button"
+                        class="btn btn-cookbook2 btn-cookbookdelete"
+                        role="button"
+                    >
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

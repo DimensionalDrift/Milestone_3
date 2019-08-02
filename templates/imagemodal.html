@@ -1,30 +1,54 @@
 {% block content %}
+<!-- Level 2 Template -->
+<!-- Image modal - Check1 -->
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
+            <!-- Modal header with close button -->
             <div class="modal-header card-header">
-                <h5 class="modal-title card-title" id="imageModalLabel">Choose Recipe Image</h5>
+                <h5 class="modal-title card-title" id="imageModalLabel">
+                    Choose Recipe Image
+                </h5>
                 <button type="button" class="close" data-dismiss="modal">
-                <span>&times;</span>
+                    <span>&times;</span>
                 </button>
             </div>
+            <!-- Modal body -->
             <div class="modal-body card-body">
                 Search for an image that best represents your recipe
+                <!-- Image Search form  -->
                 <form class="form-group mr-auto" id="rmodal">
                     <div class="input-group">
-                        <input class="form-control" type="text" placeholder=" Search by Ingredient, Meal..." id="rmodalSearch">
+                        <input
+                            class="form-control"
+                            type="text"
+                            placeholder=" Search by Ingredient, Meal..."
+                            id="rmodalSearch"
+                        />
                         <div class="input-group-append">
-                            <button class="btn btn-cookbook2 btn-search" type="submit" form="rmodal" id="rmodalSubmit"><i class="fas fa-search fa-lg"></i></button>
+                            <button
+                                class="btn btn-cookbook2 btn-search"
+                                type="submit"
+                                form="rmodal"
+                                id="rmodalSubmit"
+                            >
+                                <i class="fas fa-search fa-lg"></i>
+                            </button>
                         </div>
                     </div>
                 </form>
-                <!-- Template image to be cloned and loaded with google search images
-                    Currently the images are stretched and squashed so that they are square, the Google Custom Search API does not allow you to only search for square images so this will have to be dealt with in the future-->
-                <ul class='row' id="rmodalGrid">
-                    <li class="col-lg-3 col-md-4 col-sm-6 rmodal-gridcol py-3 d-flex justify-content-center" style="display: none !important;">
+                <!-- Template image to be cloned and loaded with google search images -->
+                <ul class="row" id="rmodalGrid">
+                    <li
+                        class="col-lg-3 col-md-4 col-sm-6 rmodal-gridcol py-3 d-flex justify-content-center"
+                        style="display: none !important;"
+                    >
                         <div class="img-frame">
                             <div class="img-view iv-rmodal">
-                                <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" class="rmodal-gridimg">
+                                <img
+                                    src="{{ url_for('static', filename='icons/defaultdish.png') }}"
+                                    class="rmodal-gridimg"
+                                />
                             </div>
                         </div>
                     </li>

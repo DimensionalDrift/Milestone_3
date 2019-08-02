@@ -35,6 +35,10 @@
   width: auto;
 }
 
+a {
+  color: #385898;
+}
+
 /*-------------------- Base Styles --------------------*/
 .my-body {
   background-color: #edf0f5;
@@ -47,9 +51,8 @@
 
 .vline {
   border-right: #3b5c9f 1px solid;
-  display: block;
   height: 1.5rem;
-  margin-top: 0.66rem;
+  margin-top: 0.5625rem;
 }
 
 .my-footer {
@@ -106,6 +109,10 @@
 
 .btn-cookbook4:hover {
   background-color: #f5f6f7;
+}
+
+.btn-cookbookdelete:hover{
+  background-color: #E63946;
 }
 
 /*Remove the focus shadow*/

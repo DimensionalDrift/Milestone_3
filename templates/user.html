@@ -1,225 +1,296 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
+<!-- Level 1 Template -->
+<!-- User Page - Check1 -->
+<!-- These flags are used to tell the recipecard template which version to render, difference is quite small so it seemed a shame to make another full template just to change essentially one or two lines -->
 {% set submitflag = False %}
 {% set commentflag = False %}
-<section>
-    <div class="container py-2">
-        <div class="row">
-            <div class="col-12 col-lg-3" >
-                <div class='row'>
-                    <div class='col-12 d-flex d-lg-block justify-content-center'>
-                        <div class="img-frame">
-                            <div class="img-view iv-uprofile">
-                                <img
-                                    src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                                    id="profileImage"
-                                    class="square"
-                                />
-                            </div>
-                        </div>
-                        <!-- Hide the info card on small devices -->
-                        <div class='card mx-0 d-none d-lg-block'>
-                            <div class="card-header px-3">
-                                About:
-                            </div>
-                            <table class="m-3 p-0">
-                              <tr>
-                                <td class="align-top"><i class="px-2 far fa-user"></i></td>
-                                <td>Username: {{user["username"]}}</td>
-                              </tr>
-                              <tr>
-                                <td><i class="px-2 far fa-clock"></i></td>
-                                <td>Joined: {{user["datejoined"].strftime("%d/%m/%y")}}</td>
-                              </tr>
-                              <tr>
-                                <td><i class="px-2 far fa-plus-square"></i></td>
-                                <td>Submitted: {{recipes|length}}</td>
-                              </tr>
-                              <tr>
-                                <td><i class="px-2 far fa-thumbs-up"></i></td>
-                                <td>Liked: {{user["favourites"]|length}}</td>
-                              </tr>
-                            </table>
-                            <!-- Temp button to log out, this should be included in the final design for the navbar in base template -->
-                            <div class="d-flex justify-content-center mb-3">
-                                <a class="btn btn-cookbook2 btn-sm" href="/logout">Logout</a>
-                            </div>
-                        </div>
-                    </div>
+<div class="container py-2">
+    <div class="row">
+        <!-- User Image and Info Card -->
+        <div class="col-12 col-lg-3 d-flex d-lg-block justify-content-center">
+            <!-- Image Frame -->
+            <div class="img-frame">
+                <div class="img-view iv-uprofile">
+                    <img
+                        src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
+                        id="profileImage"
+                        class="square"
+                    />
                 </div>
             </div>
-            <div class="col-12 col-lg-9">
-                <!-- Button Card -->
-                <div class="card">
-                    <div class="card-body p-0">
-                        <div class='row d-lg-none p-3'>
-                            <div class='col-12 col-sm-6 d-sm-flex justify-content-center'>
-                                <table class="m-0 p-0">
-                                  <tr>
-                                    <td class="align-top"><i class="px-2 far fa-user"></i></td>
-                                    <td>Username: {{user["username"]}}</td>
-                                  </tr>
-                                  <tr>
-                                    <td><i class="px-2 far fa-clock"></i></td>
-                                    <td>Joined: {{user["datejoined"].strftime("%d/%m/%y")}}</td>
-                                  </tr>
-                                </table>
-                            </div>
-                            <div class='col-12 col-sm-6 d-sm-flex justify-content-center'>
-                                <table class="m-0 p-0">
-                                  <tr>
-                                    <td><i class="px-2 far fa-plus-square"></i></td>
-                                    <td>Submitted: {{recipes|length}}</td>
-                                  </tr>
-                                  <tr>
-                                    <td><i class="px-2 far fa-thumbs-up"></i></td>
-                                    <td>Liked: {{user["favourites"]|length}}</td>
-                                  </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <ul class="nav nav-fill">
-                            <li
-                                class="nav-item"
-                            >
-                                <a id="btnSub" class="nav-link btn btn-cookbook3 font-weight-bold" style="border-width: 1px 0 0 0;" role="button" href="{{ url_for('user', username=session['username'], view='submitted') }}">Submitted</a>
-                            </li>
-                            <li
-                                class="nav-item"
-                            >
-                                <a id="btnFav" class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='favourites') }}">Liked</a>
-                            </li>
-                            <li
-                                class="nav-item"
-                            >
-                                <a id="btnCom" class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='comments') }}">Comments</a>
-                            </li>
-                            <li
-                                class="nav-item"
-                            >
-                                <a id="btnPro" class="nav-link btn  btn-cookbook3 font-weight-bold" role="button" href="{{ url_for('user', username=session['username'], view='edit') }}">Edit Profile</a>
-                            </li>
-                        </ul>
-                    </div>
+            <!-- User Info Card -->
+            <!-- The info card is hidden on smaller screens as it looks better to have the information contained above the button card -->
+            <div class="card mx-0 d-none d-lg-block">
+                <div class="card-header px-3">
+                    About:
                 </div>
-                <!-- Submitted Recipes View -->
-                {% if view == "submitted"%}
-                    <div class="card-view" id="subView">
-                        {% if recipes|length < 1%}
-                            <div class='card'>
-                                <div class='card-body'>
-                                    You have not submitted any recipes yet! <br> Click the button below to start adding some of your favorite dishes.
-                                </div>
-                            </div>
-                        {% endif %}
+                <table class="m-3 p-0">
+                    <tr>
+                        <td class="align-top"><i class="px-2 far fa-user"></i></td>
+                        <td>Username: {{ user["username"] }}</td>
+                    </tr>
+                    <tr>
+                        <td><i class="px-2 far fa-clock"></i></td>
+                        <td>Joined: {{ user["datejoined"].strftime("%d/%m/%y") }}</td>
+                    </tr>
+                    <tr>
+                        <td><i class="px-2 far fa-plus-square"></i></td>
+                        <td>Submitted: {{ recipes|length }}</td>
+                    </tr>
+                    <tr>
+                        <td><i class="px-2 far fa-thumbs-up"></i></td>
+                        <td>Liked: {{ user["favourites"]|length }}</td>
+                    </tr>
+                </table>
 
-                        {% for recipe in recipes%}
-                            {% set submitflag = True %}
-                            {% include 'recipecardsmall.html' %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <!-- Favourite Recipes View -->
-                {% if view == "favourites"%}
-                    <div class="card-view" id="favView">
-                        {% if favourites|length < 1%}
-                            <div class='card'>
-                                <div class='card-body'>
-                                    You have no favorite recipes yet! <br> Browse the home page or search for some of your favorite dishes using the search bar above.
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% for recipe in favourites%}
-                            {% include 'recipecardsmall.html' %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <!-- Recipe Comments View -->
-                {% if view == "comments"%}
-                    {% set commentflag = True %}
-                    <div class="card-view" id="comView">
-                        {% if commentdata|length < 1%}
-                            <div class='card'>
-                                <div class='card-body'>
-                                    You have not made any comments yet! <br> Making comments on recipes is important to help the community grow.
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% for data in commentdata%}
-                            {% with comment=data[0], recipe=data[1] %}
-                                {% include 'recipecardsmall.html' %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <!-- Edit User Profile Form View -->
-                {% if view == "edit"%}
-                    <div class="card-view" id="proView">
-                        <div class='card'>
-                            <div class='card-body'>
-                                <!-- If the page is loaded and there are alerts then they are displayed -->
-                                {% with messages = get_flashed_messages() %} {% if messages
-                                %} {% for message in messages %}
-                                <div class="alert alert-cookbook text-center" role="alert">
-                                    {{ message }}
-                                </div>
-                                {% endfor %} {% endif %} {% endwith %}
-                                <form action="{{ url_for('postuser') }}" method="POST" id="uform">
-                                    <!-- Section 1 - Basic Details -->
-                                    <div class='row'>
-                                        <div class='col-12'>
-                                        <!--<div class="form-group">
-                                                <label for="uform-name">Name</label>
-                                                {% if name|length > 0%}
-                                                    <input type="text" class="form-control" name="uform-name" placeholder={{name}}>
-                                                {%else%}
-                                                    <input type="text" class="form-control" name="uform-name" placeholder="Enter your name">
-                                                {%endif%}
-                                            </div> -->
-                                            <div class="form-group">
-                                                <label for="uform-email">Email</label>
-                                                <input type="text" class="form-control" name="uform-email" placeholder={{email}}>
-                                            </div>
-                                        </div>
-                                    <!--<div class='col-12'>
-                                            <div class="form-group">
-                                                <label for="uform-username">Username</label>
-                                                <input type="text" class="form-control" name="uform-username" placeholder={{username}}>
-                                            </div>
-                                        </div> -->
-                                        <div class='col-12'>
-                                            <div class="form-group">
-                                                <label for="uform-password">Password</label>
-                                                <input type="password" class="form-control" name="uform-password" placeholder="Enter a new password">
-                                                <small id="uformHelp" class="form-text text-muted">
-                                                  Your password must be over 8 characters long and can contain letters and numbers.
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-center" >
-                                        <button type="submit" class="btn btn-cookbook1 btn-lg" id="userUpdate" form="uform">Update</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
+                <!-- Button to log out, I can't think of a better place to put it as it looks weird in the navbar of the base template -->
+                <div class="d-flex justify-content-center mb-3">
+                    <a class="btn btn-cookbook2 btn-sm" href="/logout"
+                        >Logout</a
+                    >
+                </div>
             </div>
         </div>
+        <!-- Button card and view specific content -->
+        <div class="col-12 col-lg-9">
+            <!-- Button Card -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <!-- User Info Table -->
+                    <!-- This is only displayed on smaller screens -->
+                    <div class="row d-lg-none p-3">
+                        <div
+                            class="col-12 col-sm-6 d-sm-flex justify-content-center"
+                        >
+                            <table class="m-0 p-0">
+                                <tr>
+                                    <td class="align-top"><i class="px-2 far fa-user"></i></td>
+                                    <td>Username: {{ user["username"] }}</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="px-2 far fa-clock"></i></td>
+                                    <td>Joined: {{ user["datejoined"].strftime("%d/%m/%y") }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div
+                            class="col-12 col-sm-6 d-sm-flex justify-content-center"
+                        >
+                            <table class="m-0 p-0">
+                                <tr>
+                                    <td><i class="px-2 far fa-plus-square"></i></td>
+                                    <td>Submitted: {{ recipes|length }}</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="px-2 far fa-thumbs-up"></i></td>
+                                    <td>Liked: {{ user["favourites"]|length }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Button Row -->
+                    <ul class="nav nav-fill">
+                        <li class="nav-item">
+                            <a
+                                id="btnSub"
+                                class="nav-link btn btn-cookbook3 font-weight-bold"
+                                style="border-width: 1px 0 0 0;"
+                                role="button"
+                                href="{{ url_for('user', username=session['username'], view='submitted') }}"
+                            >
+                                Submitted
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                id="btnFav"
+                                class="nav-link btn btn-cookbook3 font-weight-bold"
+                                role="button"
+                                href="{{ url_for('user', username=session['username'], view='favourites') }}"
+                            >
+                                Liked
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                id="btnCom"
+                                class="nav-link btn btn-cookbook3 font-weight-bold"
+                                role="button"
+                                href="{{ url_for('user', username=session['username'], view='comments') }}"
+                            >
+                                Comments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                id="btnPro"
+                                class="nav-link btn btn-cookbook3 font-weight-bold"
+                                role="button"
+                                href="{{ url_for('user', username=session['username'], view='edit') }}"
+                            >
+                                Edit Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Submitted Recipes View -->
+            <!-- If the 'view' part of the url is 'submitted' (which is the default) then the list of the recipes that the user has submitted is loaded, each one rendered in the recipecardsmall template -->
+            {% if view == "submitted" %}
+                <div class="card-view" id="subView">
+                    <!-- If no recipes have been submitted by the user then a message is displayed in their place encouraging the user to start submitting -->
+                    {% if recipes|length < 1 %}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class='col-12 text-sm-center'>
+                                    You have not submitted any recipes yet!
+                                </div>
+                                <div class='col-12 text-lg-center'>
+                                    Click the submit button above to start adding some of your favorite dishes.
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!-- For every recipe in the users profile a recipe card is loaded with the recipe description -->
+                    {% for recipe in recipes %}
+                        {% set submitflag = True %}
+                        {% include 'recipecardsmall.html' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- Favourite Recipes View -->
+            <!-- If the 'view' part of the url is 'favourites' then the list of the recipes that the user has liked is loaded, each one rendered in the recipecardsmall template -->
+            {% if view == "favourites" %}
+                <div class="card-view" id="favView">
+                    <!-- If no recipes have been favourited by the user then a message is displayed in their place encouraging the user to start liking recipes -->
+                    {% if favourites|length < 1 %}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class='col-12 text-sm-center'>
+                                    You have no favorite recipes yet!
+                                </div>
+                                <div class='col-12 text-lg-center'>
+                                    Browse the home page or search for some of your favorite dishes using the search bar above.
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!-- For every favourited recipe in the users profile a recipe card is loaded with the recipe description -->
+                    {% for recipe in favourites %}
+                        {% include 'recipecardsmall.html' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- Recipe Comments View -->
+            <!-- If the 'view' part of the url is 'comments' then the list of the recipes that the user has commented on is loaded, each one rendered in the recipecardsmall template -->
+            {% if view == "comments" %}
+                {% set commentflag = True %}
+                <div class="card-view" id="comView">
+                    <!-- If no comments have been made by the user then a message is displayed in their place encouraging the user to start commenting on recipes -->
+                    {% if commentdata|length < 1 %}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class='col-12 text-sm-center'>
+                                    You have not made any comments yet!
+                                </div>
+                                <div class='col-12 text-lg-center'>
+                                    Making comments on recipes is important to help the community grow.
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!-- For every comment in the users profile a recipe card is loaded with the users comment -->
+                    {% for data in commentdata %}
+                        {% with comment=data[0], recipe=data[1] %}
+                            {% include 'recipecardsmall.html' %}
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- Edit User Profile Form View -->
+            <!-- If the 'view' part of the url is 'edit' then a form is loaded allowing the user to change their email and password. A future feature would be that the user can have a non unique name rather than just their username that they will also be able to change here too -->
+            {% if view == "edit" %}
+                <div class="card-view" id="proView">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- If the page is loaded while there are alerts queued then they are displayed -->
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div
+                                            class="alert alert-cookbook text-center"
+                                            role="alert"
+                                        >
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                            <!-- User profile form -->
+                            <form
+                                action="{{ url_for('postuser') }}"
+                                method="POST"
+                                id="uform"
+                                class="row"
+                            >
+                                <!-- Email Input -->
+                                <div class="col-12 form-group">
+                                    <label for="uform-email">Email</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="uform-email"
+                                        placeholder="{{ email }}"
+                                />
+                                </div>
+                                <!-- Password Input -->
+                                <div class="col-12 form-group">
+                                    <label for="uform-password">Password</label>
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        name="uform-password"
+                                        placeholder="Enter a new password"
+                                />
+                                    <small
+                                        id="uformHelp"
+                                        class="form-text text-muted"
+                                    >
+                                        Your password must be over 8
+                                        characters long and can contain
+                                        letters and numbers.
+                                    </small>
+                                </div>
+                                <!-- Submit Button -->
+                                <div class="col-12 d-flex justify-content-center">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-cookbook1 btn-lg"
+                                        id="userUpdate"
+                                        form="uform"
+                                    >
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </div>
-</section>
+</div>
 
+<!-- JavaScript to run the fitImage script on all the images that load in the recipecardsmall template -->
 <script type="text/javascript">
-
+    // When the document is finished loading all the relevant images are fit
     $(document).ready(function() {
         // Fit each image correctly
         $(".iv-urecipe > img").each(function() {
             fitImage($(this));
         });
     });
-
 </script>
 
 {% endblock %}
