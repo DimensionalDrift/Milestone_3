@@ -21,17 +21,17 @@
     </div>
     <!-- Image -->
     <!-- If an image is included in the recipe entry it is rendered, of not then the default recipe image is used -->
-    {% if recipe['image']['url'] %}
-        <img
-            src="{{ recipe['image']['url'] }}"
-            class="card-img-top"
-        />
-    {% else %}
-        <img
-            src="{{ url_for('static', filename='icons/defaultdish.png') }}"
-            class="card-img-top"
-        />
-    {% endif %}
+        {% if recipe['image']['url'] %}
+            <img
+                src="{{ recipe['image']['url'] }}"
+                class="card-img-top"
+            />
+        {% else %}
+            <img
+                src="{{ url_for('static', filename='icons/defaultdish.png') }}"
+                class="card-img-top"
+            />
+        {% endif %}
     <!-- Recipe card body -->
     <div class="card-body">
         <div class="row">
@@ -160,7 +160,6 @@
                                     <div class="img-view ivc-comment mr-2">
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                                            id="profileImage"
                                             class="circle"
                                         />
                                     </div>
@@ -188,7 +187,6 @@
                                     <div class="img-view ivc-comment mr-2">
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                                            id="profileImage"
                                             class="circle"
                                         />
                                     </div>

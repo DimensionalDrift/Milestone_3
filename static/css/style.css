@@ -81,10 +81,10 @@
   }
 
   .ivc-navbar {
-    border: 1px solid #e6e6e6;
+    /*border: 1px solid #e6e6e6;*/
     border-radius: 50%;
-    height: 24px;
-    width: 24px;
+    height: 26px;
+    width: 26px;
   }
 
 /*-------------------- Button Styles --------------------*/
@@ -149,10 +149,17 @@
 
 /*-------------------- Home Page Styles --------------------*/
   .ivc-home {
+    /*border: 1px solid #e6e6e6;*/
+    border-radius: 50%;
+    height: 26px;
+    width: 26px;
+  }
+
+  .ivc-home2 {
     border: 1px solid #e6e6e6;
     border-radius: 50%;
-    height: 24px;
-    width: 24px;
+    height: 240px;
+    width: 240px;
   }
 
   #explore {
@@ -331,7 +338,7 @@
 
   .iv-recipe {
     height: 25vh;
-    width: auto;
+    width: 25vh;
   }
 
   .ivc-comment {
@@ -376,8 +383,9 @@
 
   @media only screen and (min-width: 992px) {
     .iv-recipe {
-      height: auto;
-      max-width: 300px;
+      height: 20vw;
+      max-height: 330px;
+      max-width: 330px;
       width: 20vw;
     }
   }

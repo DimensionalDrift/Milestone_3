@@ -240,6 +240,9 @@ def home(page="0"):
     )
 
 
+def search():
+    pass
+
 # Login Page
 @app.route("/login")
 def login():

@@ -14,7 +14,6 @@
                 <div class="img-view iv-uprofile">
                     <img
                         src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                        id="profileImage"
                         class="square"
                     />
                 </div>
@@ -281,16 +280,5 @@
         </div>
     </div>
 </div>
-
-<!-- JavaScript to run the fitImage script on all the images that load in the recipecardsmall template -->
-<script type="text/javascript">
-    // When the document is finished loading all the relevant images are fit
-    $(document).ready(function() {
-        // Fit each image correctly
-        $(".iv-urecipe > img").each(function() {
-            fitImage($(this));
-        });
-    });
-</script>
 
 {% endblock %}

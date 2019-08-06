@@ -118,7 +118,7 @@
         <!-- Header -->
         <section class="fixed-top" id="navsection">
             <div class="container px-0">
-                <nav class="navbar navbar-expand-md px-0">
+                <nav class="navbar navbar-expand-md px-2 px-md-0">
                     <div class="container flex-nowrap px-0">
                         <a class="navbar-brand" href="/">
                             <img
@@ -175,7 +175,6 @@
                                     <div class="img-view ivc-navbar mr-2">
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
-                                            id="profileImage"
                                             class="circle"
                                         />
                                     </div>
@@ -280,12 +279,12 @@
         <!-- X Images need a major overhaul in how they are rendered -->
         <script type="text/javascript">
             // When the document is finished loading all the relevant images are fit
-            // $(document).ready(function() {
-            //   // Fit each image correctly
-            //   $(".img-view > img").each(function() {
-            //       fitImage($(this));
-            //   });
-            // });
+            $(document).ready(function() {
+              // Fit each image correctly
+              $(".img-view > img").each(function() {
+                  fitImage($(this));
+              });
+            });
             $("#footeryear").append(new Date().getFullYear());
         </script>
     </body>
