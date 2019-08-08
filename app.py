@@ -240,8 +240,54 @@ def home(page="0"):
     )
 
 
-def search():
-    pass
+# Search Results Page
+@app.route("/search")
+@app.route("/search/<query>")
+@app.route("/search/<query>/<page>")
+def search(query="", page="0"):
+    # Number of recipes to load on homepage
+    num = 3
+
+    print (query)
+
+    # Calculate total number of recipes and maximum number of pages
+    total = mongo.db.recipes.count()
+    page = int(page)
+    pagemax = divmod(total, num)[0]
+
+    recipes = recipeget(num, page)
+
+    # Load the lists
+    categories, cuisines, ingredients, units, utensils = dblistload()
+
+    return render_template(
+        "search.html",
+        recipes=recipes,
+        page=page,
+        pagemax=pagemax,
+        categories=categories,
+        cuisines=cuisines,
+        ingredients=ingredients,
+        units=units,
+        utensils=utensils,
+        cookTime="00:00",
+        prepTime="00:00",
+    )
+
+
+@app.route("/postsearch", methods=["POST"])
+def postsearch():
+    query = request.form["query"]
+    print ("Regular")
+    return redirect(url_for("search", query=query))
+
+
+@app.route("/postadvsearch", methods=["POST"])
+def postadvsearch():
+    query = request.form["advquery"]
+    print ("Advanced")
+
+    return redirect(url_for("search", query=query))
 
 # Login Page
 @app.route("/login")

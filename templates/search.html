@@ -1,10 +1,135 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
+<!-- Level 1 Template -->
+<!-- Search Results -->
+<div class='container'>
+    <div class='row'>
+        <div class='col-12 col-lg-3 px-0'>
+            <div class="card mx-0 d-none d-md-block sticky-top" style="top:54px;">
+                <div class="card-body">
+                    <h6 class="card-title">Filter by:</h6>
+                    <div class="form-group">
+                        <label for="sform-cuisine" data-toggle="tooltip" data-placement="top">
+                            Cuisine
+                        </label>
+                        <!-- A select2 is used so that a database of existing categories can be presented to the user to select from leading to less fragmentation in the database -->
+                        <select class="form-control sform-cuisine" multiple="multiple" name="sform-cuisine">
+                            <option></option>
+                            <!-- Load all the categories from the database -->
+                            {% for cuisine in cuisines %}
+                                <option>{{ cuisine }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sform-type" data-toggle="tooltip" data-placement="top">
+                            Meal Types
+                        </label>
+                        <!-- A select2 is used so that a database of existing categories can be presented to the user to select from leading to less fragmentation in the database -->
+                        <select class="form-control sform-type" multiple="multiple" name="sform-type">
+                            <option></option>
+                            <!-- Load all the categories from the database -->
+                            {% for category in categories %}
+                                <option>{{ category }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sform-ingredient" data-toggle="tooltip" data-placement="top">
+                            Ingredients
+                        </label>
+                        <!-- A select2 is used so that a database of existing categories can be presented to the user to select from leading to less fragmentation in the database -->
+                        <select class="form-control sform-ingredient" multiple="multiple" name="sform-ingredient">
+                            <option></option>
+                            <!-- Load all the categories from the database -->
+                            {% for ingredient in ingredients %}
+                                <option>{{ ingredient }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sformTcook" data-toggle="tooltip" data-placement="top">
+                            Total Cooking Time
+                        </label>
+                        <input type="text" class="form-control datetimepicker-input" id="sformTcook" data-toggle="datetimepicker" data-target="#sformTcook" placeholder="{{ cookTime }}" name='sformTcook'/>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-cookbook2">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='col-12 col-lg-9'>
+            <div class="card sticky-top">
+                <div class='card-body'>
+                    <h2 class="card-title">Search</h2>
 
-<h1>Search Results</h1>
-    {% for dish in recipes %}
-        {{dish.name}} <br>
-        {{dish.author}} <br>
-        {{dish.description}} <br>
-    {% endfor %}
+                    <form class="mr-auto d-flex" form
+                        action="{{ url_for('postadvsearch') }}"
+                        method="POST">
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                type="search"
+                                placeholder=" Search by Ingredient, Meal..."
+                                name="advquery"
+                            />
+                            <div class="input-group-append">
+                                <button
+                                    class="btn btn-cookbook2 btn-search"
+                                    type="submit"
+                                >
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-view">
+                    <!-- If no recipes have been submitted by the user then a message is displayed in their place encouraging the user to start submitting -->
+                    {% if recipes|length < 1 %}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class='col-12 text-sm-center'>
+                                    You have not submitted any recipes yet!
+                                </div>
+                                <div class='col-12 text-lg-center'>
+                                    Click the submit button above to start adding some of your favorite dishes.
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!-- For every recipe in the users profile a recipe card is loaded with the recipe description -->
+                    <div class="recipelist">
+                        {% for recipe in recipes %}
+                            {% include 'recipecardsmall.html' %}
+                        {% endfor %}
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-9 col-lg-7 offset-md-3 offset-lg-2">
+                    <div class="text-center">
+                        <button class="load-more btn btn-cookbook2">
+                            Load More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script to pass python environment variable to JavaScript -->
+<script type="text/javascript">
+    // Either a blank date or the edited date is passed into the JavaScript
+    var pDate = Date.parse("2000-01-01T{{ prepTime }}");
+    var cDate = Date.parse("2000-01-01T{{ cookTime }}");
+    var pagemax = {{pagemax}};
+</script>
+<!-- My JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/search.js') }}"></script>
 
 {% endblock %}

@@ -2,7 +2,7 @@
 <!-- Level 2 Template -->
 <!-- Small Recipe Card - Check1 -->
 <!-- This template is used in two views, one where the recipes description is shown as in the list of the users submitted recipes and another with comments the user has made on the recipe. The different views are handled using the commentflag variable in the parent template above. -->
-<div class="card">
+<div class="card recipecardsmall">
     <!-- Recipe card title -->
     <div class="card-header">
         <!-- If the recipe was submitted by the currently logged in user then delete and edit control buttons are included  -->
@@ -121,8 +121,10 @@
     </div>
 </div>
 
-<!-- The delete modal used to be included in the user template but unfortunately the page would not load because of the delete button. It needs the recipe id for the flask route and each id is defined in each recipecard so a modal needs to be defined for each card. It would be better if only one modal was needed rather than one for each card as this means that there is a load of extra html that is not needed. I presume extra html will slow down the load times of the page but that should be tested later. If that is true then I'm not sure how to pass details from one bit of html to another, some JavaScript might need to be used but I would like to avoid it if I can. -->
-<div id="deletemodalDiv">
-    {% include 'deletemodal.html' %}
-</div>
+{% if submitflag == True %}
+    <!-- The delete modal used to be included in the user template but unfortunately the page would not load because of the delete button. It needs the recipe id for the flask route and each id is defined in each recipecard so a modal needs to be defined for each card. It would be better if only one modal was needed rather than one for each card as this means that there is a load of extra html that is not needed. I presume extra html will slow down the load times of the page but that should be tested later. If that is true then I'm not sure how to pass details from one bit of html to another, some JavaScript might need to be used but I would like to avoid it if I can. -->
+    <div id="deletemodalDiv">
+        {% include 'deletemodal.html' %}
+    </div>
+{% endif %}
 {% endblock %}
