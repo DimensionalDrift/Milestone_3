@@ -865,6 +865,15 @@ def updaterecipe(rid):
     return redirect(url_for("recipe", rid=rid))
 
 
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+@app.route("/postcontact", methods=["POST"])
+def postcontact():
+    pass
+
+
 # Junk Routes
 # @app.route('/get_users')
 # def get_users():
