@@ -25,6 +25,9 @@ https://www.bbcgoodfood.com/
 https://tastesbetterfromscratch.com
 https://www.allrecipes.com
 https://www.facebook.com/
+https://www.thingiverse.com/
+https://www.instructables.com/
+https://www.nexusmods.com/mods/
 
 
 Documentation and Tutorials
@@ -54,11 +57,13 @@ https://pythonspot.com/login-authentication-with-flask/
 https://infinidum.com/2018/08/18/making-a-simple-login-system-with-flask-login/
 https://stackoverflow.com/questions/36835615/difference-between-input-group-and-form-group
 https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog
+https://infinite-scroll.com/api.html
 
 
 Libraries
 https://github.com/ttskch/select2-bootstrap4-theme
 https://github.com/select2/select2-bootstrap-theme
+https://github.com/metafizzy/infinite-scroll
 
 
 Code Snippets
@@ -74,6 +79,13 @@ https://stackoverflow.com/questions/16310918/css-scale-and-square-center-crop-im
 https://coderwall.com/p/ijrrpa/flask-flash-messages-as-bootstrap-alert
 https://webdesign.tutsplus.com/tutorials/a-simple-javascript-technique-for-filling-star-ratings--cms-29450
 https://codepen.io/jexordexan/pen/yyYEJa
+https://github.com/philsturgeon/codeigniter-template/blob/master/user_guide/changelog.html
+https://stackoverflow.com/questions/18775074/recreate-3-column-facebook-style-parcial-scrolling-then-fixed-position-css
+https://stackoverflow.com/questions/3666953/showing-git-branch-structure
+https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
+https://git-scm.com/book/en/v1/Git-Tools-Stashing
+https://medium.com/datadriveninvestor/git-rebase-vs-merge-cc5199edd77c
+https://stackoverflow.com/questions/5340724/get-changes-from-master-into-branch-in-git
 
 Conventions and Style Guides
 https://stackoverflow.com/questions/3736553/how-to-execute-function-after-image-is-loaded-into-a-div-with-jquery
@@ -82,12 +94,20 @@ https://www.webfx.com/blog/web-design/20-html-best-practices-you-should-follow/
 https://code.tutsplus.com/tutorials/30-css-best-practices-for-beginners--net-6741
 https://code.tutsplus.com/tutorials/24-javascript-best-practices-for-beginners--net-5399
 https://gist.github.com/sloria/7001839
-
+https://keepachangelog.com/en/1.0.0/
+https://moz.com/blog/the-ultimate-guide-to-the-google-search-parameters
+https://uxdesign.cc/death-to-complexity-how-we-simplified-advanced-search-a9ab2940acf0
+https://dribbble.com/tags/advanced_search
+https://uxplanet.org/how-to-improve-advanced-search-ux-450df698004c
+https://stackoverflow.com/questions/6028211/what-is-the-standard-naming-convention-for-html-css-ids-and-classes
 
 Icon Credits
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"              title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"              title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"              title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"              title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"              title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"              title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
+
+
 
 Just to recap quickly:
 
