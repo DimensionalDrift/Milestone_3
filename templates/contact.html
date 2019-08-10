@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Level 1 Template -->
+<!-- Contact Page -->
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-9 mx-auto">
+            <div class='card'>
+                <div class='card-body'>
+                    <h3 class="card-title">
+                        Contact Us
+                    </h3>
+                    <div class='card-body'>
+                        <!-- Login Form -->
+                        <form
+                            form
+                            action="{{ url_for('postcontact') }}"
+                            method="POST"
+                        >
+                            <!-- Email Input  -->
+                            <div class="form-group ">
+                                <label for="cformEmail">Email</label>
+                                <input
+                                    type="email"
+                                    id="cformEmail"
+                                    class="form-control"
+                                    name="cformEmail"
+                                    required
+                                    autofocus
+                                />
+                            </div>
+                            <!-- Subject  -->
+                            <div class="form-group ">
+                                <label for="cformSubject">Subject</label>
+                                <input
+                                    type="text"
+                                    id="cformSubject"
+                                    class="form-control"
+                                    name="cformSubject"
+                                    required
+                                />
+                            </div>
+                            <!-- Message -->
+                            <div class="form-group">
+                                <label for="cformText">Message</label>
+                                <textarea class="form-control" id="cformText" rows="3" placeholder="Do you have a suggestion, find a bug or just want to say hey? Type your message here" name="cformText" required></textarea>
+                            </div>
+                            <!-- Submit Button -->
+                            <button
+                                class="btn btn-lg btn-cookbook1 btn-block"
+                                type="submit"
+                            >
+                                Submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Changelog</h3>
+                    <p class="card-text">
+                        <h5>Version 0.0.1 - Alpha</h5>
+                        <p>Release Date: 8/8/2019</p>
+                        This is the inital alpha release so everything you see is new but to explain what is included:
+                        <ul>
+                            <li>Home page of submitted recipes in reverse chronological order.</li>
+                            <li>User login so that you can submit your own recipes and interact with others.</li>
+                            <li>User profile listing submitted recipes, comments and liked recipes.</li>
+                            <li>Submission page so that you can submit your own recipes to the site.</li>
+                            <li>Recipe page showcasing recipes with ingredient lists, instructions and any comments other users have made.</li>
+                            <li>This page with comment form and changelog</li>
+                        </ul>
+                        There are numerous features and details that I have not included here but you can check out the sites development over on the Github page that is at the "About this project" link found in the footer below.
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
