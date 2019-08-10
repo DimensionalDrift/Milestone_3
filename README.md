@@ -54,6 +54,7 @@ https://pythonspot.com/login-authentication-with-flask/
 https://infinidum.com/2018/08/18/making-a-simple-login-system-with-flask-login/
 https://stackoverflow.com/questions/36835615/difference-between-input-group-and-form-group
 https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog
+https://flask.palletsprojects.com/en/1.1.x/security/
 
 
 Libraries

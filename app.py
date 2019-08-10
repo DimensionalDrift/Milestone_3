@@ -8,6 +8,7 @@ from flask import (
     request,
     session,
     abort,
+    escape,
 )
 from flask_pymongo import PyMongo
 import pprint
@@ -22,6 +23,7 @@ from flask_login import (
     login_required,
     UserMixin,
 )
+from flask_mail import Message, Mail
 
 import datetime
 import isotime
@@ -196,19 +198,34 @@ def activityfeed(num):
 # Setting up Flask and PyMongo
 app = Flask(__name__)
 
+# Setting up email for Flask
+# An email is sent to itself from this address then the email is forwarded on Gmails end so that I don't have to include my personal email on a public website
+mail = Mail()
+
 if "DEPLOYED" in os.environ:
-    app.config["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY")
-    app.config["GOOGLE_CX"] = os.environ.get("GOOGLE_CX")
-    app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
-    app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+    # Heroku Environment Variables
     app.config["IP"] = os.environ.get("IP")
     app.config["PORT"] = os.environ.get("PORT")
+    # Google Search API Environment Variables
+    app.config["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY")
+    app.config["GOOGLE_CX"] = os.environ.get("GOOGLE_CX")
+    # MongoDB Environment Variables
+    app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
+    app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+    # Email Environment Variables
+    app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER")
+    app.config["MAIL_PORT"] = os.environ.get("MAIL_PORT")
+    app.config["MAIL_USE_SSL"] = os.environ.get("MAIL_USE_SSL")
+    app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+    app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+    app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_DEFAULT_SENDER")
 
     debug = False
 else:
     app.config.from_envvar("COOKBOOK_CONFIG")
     debug = True
 
+mail.init_app(app)
 
 # From a defferent attempt to log in users
 # login_manager = LoginManager()
@@ -255,10 +272,10 @@ def login():
 def postlogin():
 
     # Find email in database
-    val = mongo.db.users.find_one({"email": request.form["loginEmail"]})
+    val = mongo.db.users.find_one({"email": escape(request.form["loginEmail"])})
 
     # If email and password are in database
-    if val and check_password_hash(val["pass_hash"], request.form["loginPassword"]):
+    if val and check_password_hash(val["pass_hash"], escape(request.form["loginPassword"])):
         session["logged_in"] = True
         session["username"] = val["username"]
         session["id"] = str(val["_id"])
@@ -530,7 +547,7 @@ def recipecomment(rid):
             "user_id": session["id"],
             "recipe_id": rid,
             "date": getdate(),
-            "comment": request.form["comment"],
+            "comment": escape(request.form["comment"]),
         }
         # Comment Id
         newcomment = mongo.db.comments.insert_one(comment)
@@ -563,7 +580,7 @@ def recipevote(rid):
         avg = recipe["aggregateRating"]["ratingValue"]
         num = recipe["aggregateRating"]["reviewCount"]
 
-        newavg = ((avg * num) + int(request.form["star"])) / (num + 1)
+        newavg = ((avg * num) + int(escape(request.form["star"]))) / (num + 1)
 
         mongo.db.recipes.update(
             recipe,
@@ -693,9 +710,9 @@ def postrecipe():
     utenlist = sorted(utenlist)
 
     # Convert time to ISO 8601 format
-    tprep = isotime.converttime(request.form["rformTprep"])
-    tcook = isotime.converttime(request.form["rformTcook"])
-    tadd = isotime.addtime(request.form["rformTprep"], request.form["rformTcook"])
+    tprep = isotime.converttime(escape(request.form["rformTprep"]))
+    tcook = isotime.converttime(escape(request.form["rformTcook"]))
+    tadd = isotime.addtime(escape(request.form["rformTprep"]), escape(request.form["rformTcook"]))
 
     # 'Zipping' the ingredients into a list and a list of dictionaries
     ingrdictlist = []
@@ -713,9 +730,9 @@ def postrecipe():
     # Seperating out the image url and dimensions
     # This assumes that there are no commas in the url which should be true
 
-    print(request.form["rformImageurl"])
-    if len(request.form["rformImageurl"]) > 0:
-        imglist = request.form["rformImageurl"].split(",")
+    print(escape(request.form["rformImageurl"]))
+    if len(escape(request.form["rformImageurl"])) > 0:
+        imglist = escape(request.form["rformImageurl"]).split(",")
     else:
         imglist = [None, 0, 0]
 
@@ -733,25 +750,25 @@ def postrecipe():
         "comments": [],
         "cookTime": tcook,
         "datePublished": getdate(),
-        "description": request.form["rformDescription"],
+        "description": escape(request.form["rformDescription"]),
         "image": {
             "@type": "ImageObject",
             "url": imglist[0],
             "height": int(imglist[1]),
             "width": int(imglist[2]),
         },
-        "name": request.form["rform-title"].title(),
+        "name": escape(request.form["rform-title"]).title(),
         "prepTime": tprep,
         "recipeCategory": typelist,
         "recipeCuisine": cuislist,
         "recipeIngredient": ingrfulllist,
         "recipeInstructions": steplist,
-        "recipeYield": request.form["rform-serving"],
+        "recipeYield": escape(request.form["rform-serving"]),
         "totalTime": tadd,
         # My Values
         "ingredientdict": ingrdictlist,
         "utensils": utenlist,
-        "notes": request.form["rformNotes"],
+        "notes": escape(request.form["rformNotes"]),
     }
 
     print(recipe)
@@ -794,9 +811,9 @@ def updaterecipe(rid):
     utenlist = sorted(utenlist)
 
     # Convert time to ISO 8601 format
-    tprep = isotime.converttime(request.form["rformTprep"])
-    tcook = isotime.converttime(request.form["rformTcook"])
-    tadd = isotime.addtime(request.form["rformTprep"], request.form["rformTcook"])
+    tprep = isotime.converttime(escape(request.form["rformTprep"]))
+    tcook = isotime.converttime(escape(request.form["rformTcook"]))
+    tadd = isotime.addtime(escape(request.form["rformTprep"]), escape(request.form["rformTcook"]))
 
     # 'Zipping' the ingredients into a list and a list of dictionaries
     ingrdictlist = []
@@ -814,9 +831,9 @@ def updaterecipe(rid):
     # Seperating out the image url and dimensions
     # This assumes that there are no commas in the url which should be true
 
-    # print(request.form["rformImageurl"])
-    if len(request.form["rformImageurl"]) > 0:
-        imglist = request.form["rformImageurl"].split(",")
+    # print(escape(request.form["rformImageurl"])
+    if len(escape(request.form["rformImageurl"])) > 0:
+        imglist = escape(request.form["rformImageurl"]).split(",")
     else:
         imglist = [None, 0, 0]
 
@@ -834,25 +851,25 @@ def updaterecipe(rid):
         "comments": [],
         "cookTime": tcook,
         "datePublished": oldrecipe["datePublished"],
-        "description": request.form["rformDescription"],
+        "description": escape(request.form["rformDescription"]),
         "image": {
             "@type": "ImageObject",
             "url": imglist[0],
             "height": int(imglist[1]),
             "width": int(imglist[2]),
         },
-        "name": request.form["rform-title"].title(),
+        "name": escape(request.form["rform-title"]).title(),
         "prepTime": tprep,
         "recipeCategory": typelist,
         "recipeCuisine": cuislist,
         "recipeIngredient": ingrfulllist,
         "recipeInstructions": steplist,
-        "recipeYield": request.form["rform-serving"],
+        "recipeYield": escape(request.form["rform-serving"]),
         "totalTime": tadd,
         # My Values
         "ingredientdict": ingrdictlist,
         "utensils": utenlist,
-        "notes": request.form["rformNotes"],
+        "notes": escape(request.form["rformNotes"]),
     }
 
     exemptlist = ["_id", "comments", "aggregateRating", "datePublished"]
@@ -869,10 +886,17 @@ def updaterecipe(rid):
 def contact():
     return render_template("contact.html")
 
+
 @app.route("/postcontact", methods=["POST"])
 def postcontact():
-    pass
+    print(request.form)
 
+    # This message is quite simple as of now, it could be jazzed up in the future but it's only me that sees it so don't be too worried
+    msg = Message("Cookbook Email", recipients=['ca.ciprojects@gmail.com'])
+    msg.html = " From: %s <br> Subject: %s <br><br> Message: %s" %(escape(request.form["cformEmail"]), escape(request.form["cformSubject"]), escape(request.form["cformText"]))
+    mail.send(msg)
+
+    return redirect(url_for("contact"))
 
 # Junk Routes
 # @app.route('/get_users')
