@@ -2,6 +2,15 @@
 
 <!--
 
+TODO List:
+Add - Coming soon popups to some things that are not working
+Fix - Change the mongodb to use the new fresh database and add a bunch of sample recipes to the database
+Fix - Comments on the home page all open when one button is clicked, generally having multiple recipe cards needs to be fixed on the home page
+Fix - Stop the user voting on a recipe multiple times, that's just not fair
+Add - Category exploring page where recipes are grouped by cuisine or time
+Fix - fitimage sometimes needs to be reloaded for it to work correctly, find out why it does not load the first time (probably something to do with callbacks)
+
+
 User Stories
 As a user I would like:
 
@@ -59,6 +68,13 @@ https://stackoverflow.com/questions/36835615/difference-between-input-group-and-
 https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog
 https://infinite-scroll.com/api.html
 https://flask.palletsprojects.com/en/1.1.x/security/
+https://www.idiotinside.com/2015/05/10/python-auto-generate-requirements-txt/
+https://security.openstack.org/guidelines/dg_cross-site-scripting-xss.html
+https://medium.com/@abderrahman.hamila/what-sanitize-mean-and-why-sanitize-in-code-data-5c68c9f76164
+https://medium.com/@smirnov.am/securing-flask-web-applications-f877e374b427
+https://stackoverflow.com/questions/43925397/what-is-the-best-way-to-sanitize-inputs-with-flask-and-when-using-mongodb
+https://pythonhosted.org/Flask-Mail/
+https://stackoverflow.com/questions/43728500/python-flask-e-mail-form-example
 
 
 
