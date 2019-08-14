@@ -34,8 +34,9 @@
                     <ul class="nopad-list">
                         <!-- For every ingredient in the recipe print its quantity, unit and name -->
                         {% for ing in recipe['ingredientdict'] %}
+                            <!-- XX If unit is not in approved unit list then put space between unit and value -->
                             <li>
-                                {{ ing['quantity'] }}{{ ing['unit'] }} of {{ ing['name'] }}
+                                {{ ing['quantity'] }}{{ ing['unit'] }} {{ ing['name'] }}
                             </li>
                         {% endfor %}
                     </ul>
@@ -350,7 +351,7 @@
                                 <!-- For every ingredient in the recipe print its quantity, unit and name -->
                                 {% for ing in recipe['ingredientdict'] %}
                                     <li>
-                                        {{ ing['quantity'] }}{{ ing['unit'] }} of {{ ing['name'] }}
+                                        {{ ing['quantity'] }} {{ ing['unit'] }} of {{ ing['name'] }}
                                     </li>
                                 {% endfor %}
                             </ul>

@@ -475,12 +475,15 @@ def postsignup():
         # Add todays date
         formval["datejoined"] = getdate()
         # Add blank values to user entry
-        formval["favourites"] = []
         formval["comments"] = []
+        formval["favourites"] = []
+        formval["votes"] = []
 
         mongo.db.users.insert_one(formval)
         session["logged_in"] = True
         session["username"] = formval["username"]
+        session["email"] = formval["email"]
+
         return redirect(url_for("home"))
     else:
         return redirect(url_for("signup"))
@@ -897,6 +900,11 @@ def postcontact():
     mail.send(msg)
 
     return redirect(url_for("contact"))
+
+
+@app.route('/test')
+def test():
+    return render_template("test.html")
 
 # Junk Routes
 # @app.route('/get_users')
