@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-        <!-- Adding Bootstrap 4 styling, Font Awesome fonts -->
+        <!-- Adding Bootstrap 4 Styling, Font Awesome fonts -->
         <link
             rel="stylesheet"
             href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
@@ -20,7 +20,7 @@
             href="https://use.fontawesome.com/releases/v5.9.0/css/all.css"
         />
 
-        <!-- select2 styling -->
+        <!-- Select2 Styling -->
         <link
             href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"
             rel="stylesheet"
@@ -30,13 +30,20 @@
             href="{{ url_for('static', filename='css/select2-bootstrap4.css') }}"
         />
 
-        <!-- Tempus Dominus styling -->
+        <!-- Tempus Dominus Styling -->
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"
         />
 
-        <!-- GIJGO styling -->
+        <!-- jQuery Scrollbar Styling -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollbar/0.2.11/jquery.scrollbar.css"
+            integrity="sha256-1HK5ILwcoZtNX8JzP92oHlrlnD6nsum+MyvxTrxpg18=" crossorigin="anonymous"
+        />
+
+        <!-- GIJGO Styling -->
         <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css" /> -->
 
         <!-- Favicon -->
@@ -54,7 +61,7 @@
         <title>Cookbook</title>
 
         <!-- I know normally this should be loaded at the bottom of the page but since I need to keep page specific code in the flask templates the JavaScript needs to be loaded before the template so those scripts work -->
-        <!-- jQuery Javascript -->
+        <!-- jQuery JavaScript -->
         <script
             src="https://code.jquery.com/jquery-3.4.0.min.js"
             integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
@@ -73,14 +80,14 @@
             crossorigin="anonymous"
         ></script>
 
-        <!-- select2 Javascript -->
+        <!-- Select2 JavaScript -->
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"
             integrity="sha256-L8glE3PzqSO1/nrEHYWoNyozn5i3ETucQoJGA7gp2mI="
             crossorigin="anonymous"
         ></script>
 
-        <!-- Tempus Dominus Javascript -->
+        <!-- Tempus Dominus JavaScript -->
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
             integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ="
@@ -96,6 +103,13 @@
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery-infinitescroll/3.0.6/infinite-scroll.pkgd.js"
             integrity="sha256-GY6hW4v1tMGO4lEwCSkZsh31IU9FKDZAu1+LYKpO6d8="
+            crossorigin="anonymous"
+        ></script>
+
+        <!-- jQuery Scrollbar JavaScript -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollbar/0.2.11/jquery.scrollbar.js"
+            integrity="sha256-KUUYu8vtn3j/lGoH8W7xSfFHpDLtknXEe3P0/q0V8dk="
             crossorigin="anonymous"
         ></script>
 

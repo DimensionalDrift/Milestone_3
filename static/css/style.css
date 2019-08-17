@@ -62,6 +62,7 @@
 
   #navsection {
     background-color: #4267b2;
+    z-index: 1151;
   }
 
   .vline {
@@ -225,6 +226,7 @@
 
   .select2-container--bootstrap4 .select2-dropdown {
     border-color: #4267b2;
+    border-top: 1px;
   }
 
   .select2-container--open .select2-selection {
