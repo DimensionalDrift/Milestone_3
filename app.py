@@ -491,7 +491,7 @@ def postsignup():
 def recipe(rid):
 
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-    print(recipe)
+    # print(recipe)
     comments = []
     for cid in recipe["comments"]:
         comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
@@ -613,8 +613,8 @@ def recipeedit(rid):
         else:
             prepTime = "00:00"
 
-        print(recipe["cookTime"], recipe["cookTime"])
-        print(cookTime, prepTime)
+        # print(recipe["cookTime"], recipe["cookTime"])
+        # print(cookTime, prepTime)
         return render_template(
             "recipeform.html",
             key=app.config["GOOGLE_API_KEY"],
@@ -640,9 +640,9 @@ def recipedelete(rid):
 
     # Delete the comments associated with the recipe from both the comment database and the user entries
     for comment in mongo.db.comments.find({"recipe_id": rid}):
-        print(comment["_id"])
+        # print(comment["_id"])
         for user in mongo.db.users.find({"comments": ObjectId(comment["_id"])}):
-            print(user["email"])
+            # print(user["email"])
             mongo.db.users.update(
                 user, {"$pull": {"comments": ObjectId(comment["_id"])}}
             )
@@ -652,7 +652,7 @@ def recipedelete(rid):
     # Delete the recipe from favourites
     for user in mongo.db.users.find():
         if "favourites" in user.keys() and rid in user["favourites"]:
-            print(user["email"])
+            # print(user["email"])
             mongo.db.users.update(user, {"$pull": {"favourites": rid}})
 
     # Delete the recipe entry
@@ -692,8 +692,6 @@ def submitrecipe():
 # Recipe posting route - handles the form data
 @app.route("/postrecipe", methods=["POST"])
 def postrecipe():
-    print("Im Submitting!")
-    print(request.form)
 
     # Pulling out values with multiple inputs into lists
     typelist = formlister("categories", request.form, "rform-type")
@@ -730,7 +728,6 @@ def postrecipe():
     # Seperating out the image url and dimensions
     # This assumes that there are no commas in the url which should be true
 
-    print(escape(request.form["rformImageurl"]))
     if len(escape(request.form["rformImageurl"])) > 0:
         imglist = escape(request.form["rformImageurl"]).split(",")
     else:
@@ -771,7 +768,7 @@ def postrecipe():
         "notes": escape(request.form["rformNotes"]),
     }
 
-    print(recipe)
+    # print(recipe)
     newrecipe = mongo.db["recipes"].insert_one(recipe)
     rid = newrecipe.inserted_id
 
@@ -889,7 +886,7 @@ def contact():
 
 @app.route("/postcontact", methods=["POST"])
 def postcontact():
-    print(request.form)
+    # print(request.form)
 
     # This message is quite simple as of now, it could be jazzed up in the future but it's only me that sees it so don't be too worried
     msg = Message("Cookbook Email", recipients=['ca.ciprojects@gmail.com'])
