@@ -57,6 +57,8 @@
 /*-------------------- Base Styles --------------------*/
   .my-body {
     background-color: #edf0f5;
+    /*Forces the body to expand to fill the page leaving the footer at the bottom of the page*/
+    min-height: 80vh;
     padding-bottom: 1rem;
   }
 

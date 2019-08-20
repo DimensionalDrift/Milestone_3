@@ -475,12 +475,17 @@ def postsignup():
         # Add todays date
         formval["datejoined"] = getdate()
         # Add blank values to user entry
-        formval["favourites"] = []
         formval["comments"] = []
+        formval["favourites"] = []
+        formval["votes"] = []
 
-        mongo.db.users.insert_one(formval)
+        val = mongo.db.users.insert_one(formval)
+
+        session["id"] = str(val.inserted_id)
         session["logged_in"] = True
         session["username"] = formval["username"]
+        session["email"] = formval["email"]
+
         return redirect(url_for("home"))
     else:
         return redirect(url_for("signup"))
@@ -551,12 +556,13 @@ def recipecomment(rid):
         }
         # Comment Id
         newcomment = mongo.db.comments.insert_one(comment)
+        commentid = str(newcomment.inserted_id)
         # Add the comment to the recipe
         recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-        mongo.db.recipes.update(recipe, {"$push": {"comments": newcomment.inserted_id}})
+        mongo.db.recipes.update(recipe, {"$push": {"comments": commentid}})
         # Add the comment to the user
         user = mongo.db.users.find_one({"_id": ObjectId(session["id"])})
-        mongo.db.users.update(user, {"$push": {"comments": newcomment.inserted_id}})
+        mongo.db.users.update(user, {"$push": {"comments": commentid}})
         # Add the activity to the global feed
         activitylog(
             user["username"],
@@ -770,7 +776,7 @@ def postrecipe():
 
     # print(recipe)
     newrecipe = mongo.db["recipes"].insert_one(recipe)
-    rid = newrecipe.inserted_id
+    rid = (newrecipe.inserted_id)
 
     # Add the submission to the global feed
     activitylog(
@@ -894,6 +900,11 @@ def postcontact():
     mail.send(msg)
 
     return redirect(url_for("contact"))
+
+
+@app.route('/test')
+def test():
+    return render_template("test.html")
 
 # Junk Routes
 # @app.route('/get_users')
