@@ -44,7 +44,10 @@
         </div>
         <div class="col-12 col-md-9 col-lg-7 p-0">
             <div class="recipelist">
-                {% for recipe in recipes %}
+                {% for recipepack in recipelist %}
+                    {% set recipe = recipepack[0] %}
+                    {% set comments = recipepack[1] %}
+                    <!-- <p>{{recipe}}</p> -->
                     {% include 'recipecardlarge.html' %}
                 {% endfor %}
             </div>

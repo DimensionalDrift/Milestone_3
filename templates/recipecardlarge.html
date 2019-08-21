@@ -43,17 +43,19 @@
                         {{ recipe["description"] }}
                     </div>
                     <div class="col-12 col-lg-3">
-                        <div
-                            class="stars-outer"
-                            data-toggle="tooltip"
-                            data-placement="right"
-                            title="{{ recipe['aggregateRating']['ratingValue']|round(2) }}/5, {{ recipe['aggregateRating']['reviewCount'] }} votes"
-                        >
+                        <a href="/recipe/{{ recipe['_id'] }}">
                             <div
-                                class="stars-inner"
-                                style="width: {{ (recipe['aggregateRating']['ratingValue']/5)*100 }}%;"
-                            ></div>
-                        </div>
+                                class="stars-outer"
+                                data-toggle="tooltip"
+                                data-placement="right"
+                                title="{{ recipe['aggregateRating']['ratingValue']|round(2) }}/5, {{ recipe['aggregateRating']['reviewCount'] }} votes"
+                            >
+                                <div
+                                    class="stars-inner"
+                                    style="width: {{ (recipe['aggregateRating']['ratingValue']/5)*100 }}%;"
+                                ></div>
+                            </div>
+                        </a>
                     </div>
                     <!-- Tag row - the list of tags are iterated across to be rendered -->
                     <div class="col-12 col-sm-6">
@@ -117,7 +119,7 @@
                         <button
                             class="btn btn-cookbook4 btn-block"
                             data-toggle="collapse"
-                            data-target="#collapseComments"
+                            data-target="#CC{{recipe['_id']}}"
                         >
                             <i class="far fa-lg fa-comment-alt"></i>
                             <span class="d-none d-md-inline">
@@ -144,8 +146,8 @@
             </div>
             <!-- Comments Row -->
             <!-- If the show flag is set true then the row will be reveled, this is used so that when the user makes a comment, when the page reloads with their comment the row is automatically revealed so the user does not have to click the button again  -->
-            <div class="col-12">
-                <div class="row collapse" id="collapseComments">
+            <div class="col-12 pt-3">
+                <div class="row collapse" id="CC{{recipe['_id']}}">
                     <div class="col-12">
                         <div class="row">
                             <!-- If no comments have been made about the recipe then the placeholder is displayed -->

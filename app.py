@@ -108,6 +108,16 @@ def likecheck(rid):
     return False
 
 
+# Function checks if the user has already rated this recipe
+def votecheck(rid):
+    if "logged_in" in session and session["logged_in"] is True:
+        userfav = mongo.db.users.find_one({"email": session["email"]})
+        if rid in userfav["votes"]:
+            return True
+
+    return False
+
+
 # This loads all the lists of list tables into memeory, might not be a great idea but I can't think of another way to pass these into the select2 lists... .sort({"number": -1})
 def dblistload():
 
@@ -248,12 +258,22 @@ def home(page="0"):
     page = int(page)
     pagemax = divmod(total, num)[0]
 
-    recipes = recipeget(num, page)
-
     activity = activityfeed(5)
 
+    recipes = recipeget(num, page)
+    recipelist = []
+
+    for recipe in recipes:
+        commentlist = []
+        for cid in recipe["comments"]:
+            comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
+            user = mongo.db.users.find_one({"_id": ObjectId(comment["user_id"])})
+            commentlist.append((comment, user))
+
+        recipelist.append([recipe, commentlist])
+
     return render_template(
-        "index.html", recipes=recipes, page=page, pagemax=pagemax, activity=activity
+        "index.html", recipelist=recipelist, page=page, pagemax=pagemax, activity=activity
     )
 
 
@@ -503,8 +523,9 @@ def recipe(rid):
         user = mongo.db.users.find_one({"_id": ObjectId(comment["user_id"])})
         comments.append((comment, user))
 
-    # If the user is logged in and the user has liked the recipe then the like flag is set
+    # If the user is logged in and the user has liked or rated the recipe then the flags is set
     like = likecheck(rid)
+    vote = votecheck(rid)
 
     if request.args.get("show"):
         show = request.args.get("show")
@@ -512,7 +533,7 @@ def recipe(rid):
         show = False
 
     return render_template(
-        "recipe.html", recipe=recipe, like=like, comments=comments, show=show
+        "recipe.html", recipe=recipe, like=like, vote=vote, comments=comments, show=show
     )
 
 
@@ -582,20 +603,25 @@ def recipevote(rid):
 
     if "logged_in" in session and session["logged_in"] is True:
 
-        recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-        avg = recipe["aggregateRating"]["ratingValue"]
-        num = recipe["aggregateRating"]["reviewCount"]
+        user = mongo.db.users.find_one({"_id": ObjectId(session["id"])})
 
-        newavg = ((avg * num) + int(escape(request.form["star"]))) / (num + 1)
+        if rid not in user["votes"]:
+            recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
+            avg = recipe["aggregateRating"]["ratingValue"]
+            num = recipe["aggregateRating"]["reviewCount"]
 
-        mongo.db.recipes.update(
-            recipe,
-            {
-                "$set": {
-                    "aggregateRating": {"ratingValue": newavg, "reviewCount": num + 1}
-                }
-            },
-        )
+            newavg = ((avg * num) + int(escape(request.form["star"]))) / (num + 1)
+
+            mongo.db.recipes.update(
+                recipe,
+                {
+                    "$set": {
+                        "aggregateRating": {"ratingValue": newavg, "reviewCount": num + 1}
+                    }
+                },
+            )
+
+            mongo.db.users.update(user, {"$push": {"votes": rid}})
 
     return redirect(url_for("recipe", rid=rid))
 

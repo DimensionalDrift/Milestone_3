@@ -3,14 +3,16 @@
 <!--
 
 TODO List:
-Add - Coming soon popups to some things that are not working
-Fix - Change the mongodb to use the new fresh database and add a bunch of sample recipes to the database
-Fix - Comments on the home page all open when one button is clicked, generally having multiple recipe cards needs to be fixed on the home page
 Fix - Stop the user voting on a recipe multiple times, that's just not fair
 Add - Category exploring page where recipes are grouped by cuisine or time
 Add - Link to forgotten password form
 Fix - fitimage sometimes needs to be reloaded for it to work correctly, find out why it does not load the first time (probably something to do with callbacks)
 
+
+DONE List:
+Add - Coming soon popups to some things that are not working
+Fix - Change the mongodb to use the new fresh database and add a bunch of sample recipes to the database
+Fix - Comments on the home page all open when one button is clicked, generally having multiple recipe cards needs to be fixed on the home page
 
 User Stories
 As a user I would like:

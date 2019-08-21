@@ -70,7 +70,7 @@
                                     <div
                                         data-toggle="modal"
                                         data-target="
-                                        {% if session['username'] == recipe['author'] %}
+                                        {% if session['username'] == recipe['author'] or vote == True %}
                                             #nostarModal
                                         {% elif session['username']%}
                                             #starModal
