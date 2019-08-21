@@ -3,7 +3,6 @@
 <!-- Level 1 Template -->
 <!-- Recipe Page - Check1-->
 <div class="container">
-    {{comments}}
     <div class="row d-flex justify-content-center">
         <!-- Recipe Image and Ingredients Card -->
         <div
@@ -71,7 +70,7 @@
                                     <div
                                         data-toggle="modal"
                                         data-target="
-                                        {% if session['username'] == recipe['author'] %}
+                                        {% if session['username'] == recipe['author'] or vote == True %}
                                             #nostarModal
                                         {% elif session['username']%}
                                             #starModal

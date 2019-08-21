@@ -6,16 +6,22 @@
         <div class="modal-content">
             <!-- Modal header with close button -->
             <div class="modal-header card-header">
-                <h5 class="modal-title card-title">Rate this recipe</h5>
+                <h5 class="modal-title card-title">Recipe Rating</h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body card-body text-center">
-                You can't rate your own recipe. Ask your friends to check out
-                your recipes to see what they think!
-            </div>
+            {% if vote == True %}
+                <div class="modal-body card-body text-center">
+                    You have already given this recipe a rating. The ability to change your vote is coming soon in a future update.
+                </div>
+            {% else %}
+                <div class="modal-body card-body text-center">
+                    You can't rate your own recipe. Ask your friends to check out
+                    your recipes to see what they think!
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

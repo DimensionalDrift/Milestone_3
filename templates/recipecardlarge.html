@@ -43,17 +43,19 @@
                         {{ recipe["description"] }}
                     </div>
                     <div class="col-12 col-lg-3">
-                        <div
-                            class="stars-outer"
-                            data-toggle="tooltip"
-                            data-placement="right"
-                            title="{{ recipe['aggregateRating']['ratingValue']|round(2) }}/5, {{ recipe['aggregateRating']['reviewCount'] }} votes"
-                        >
+                        <a href="/recipe/{{ recipe['_id'] }}">
                             <div
-                                class="stars-inner"
-                                style="width: {{ (recipe['aggregateRating']['ratingValue']/5)*100 }}%;"
-                            ></div>
-                        </div>
+                                class="stars-outer"
+                                data-toggle="tooltip"
+                                data-placement="right"
+                                title="{{ recipe['aggregateRating']['ratingValue']|round(2) }}/5, {{ recipe['aggregateRating']['reviewCount'] }} votes"
+                            >
+                                <div
+                                    class="stars-inner"
+                                    style="width: {{ (recipe['aggregateRating']['ratingValue']/5)*100 }}%;"
+                                ></div>
+                            </div>
+                        </a>
                     </div>
                     <!-- Tag row - the list of tags are iterated across to be rendered -->
                     <div class="col-12 col-sm-6">
