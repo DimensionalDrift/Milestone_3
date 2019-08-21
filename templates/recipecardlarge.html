@@ -117,7 +117,7 @@
                         <button
                             class="btn btn-cookbook4 btn-block"
                             data-toggle="collapse"
-                            data-target="#collapseComments"
+                            data-target="#CC{{recipe['_id']}}"
                         >
                             <i class="far fa-lg fa-comment-alt"></i>
                             <span class="d-none d-md-inline">
@@ -145,7 +145,7 @@
             <!-- Comments Row -->
             <!-- If the show flag is set true then the row will be reveled, this is used so that when the user makes a comment, when the page reloads with their comment the row is automatically revealed so the user does not have to click the button again  -->
             <div class="col-12">
-                <div class="row collapse" id="collapseComments">
+                <div class="row collapse" id="CC{{recipe['_id']}}">
                     <div class="col-12">
                         <div class="row">
                             <!-- If no comments have been made about the recipe then the placeholder is displayed -->

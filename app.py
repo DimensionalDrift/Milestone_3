@@ -248,12 +248,22 @@ def home(page="0"):
     page = int(page)
     pagemax = divmod(total, num)[0]
 
-    recipes = recipeget(num, page)
-
     activity = activityfeed(5)
 
+    recipes = recipeget(num, page)
+    recipelist = []
+
+    for recipe in recipes:
+        commentlist = []
+        for cid in recipe["comments"]:
+            comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
+            user = mongo.db.users.find_one({"_id": ObjectId(comment["user_id"])})
+            commentlist.append((comment, user))
+
+        recipelist.append([recipe, commentlist])
+
     return render_template(
-        "index.html", recipes=recipes, page=page, pagemax=pagemax, activity=activity
+        "index.html", recipelist=recipelist, page=page, pagemax=pagemax, activity=activity
     )
 
 
