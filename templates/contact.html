@@ -5,6 +5,19 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-9 mx-auto">
+            <!-- If the page is loaded while there are alerts queued then they are displayed -->
+            {% with messages = get_flashed_messages() %}
+                <div class='card alert-cookbook'>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="card-body alert text-center" role="alert ">
+                                <h2 class="card-title">404</h2>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endwith %}
             <div class='card'>
                 <div class='card-body'>
                     <h3 class="card-title">

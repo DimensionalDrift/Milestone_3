@@ -932,6 +932,11 @@ def postcontact():
 def test():
     return render_template("test.html")
 
+@app.errorhandler(404)
+def page_not_found(e):
+    flash("It appears that the page you were looking for does not exist, if you believe that this is an error please contact us using the form below.")
+    return render_template('contact.html'), 404
+
 # Junk Routes
 # @app.route('/get_users')
 # def get_users():
