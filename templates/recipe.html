@@ -34,8 +34,9 @@
                     <ul class="nopad-list">
                         <!-- For every ingredient in the recipe print its quantity, unit and name -->
                         {% for ing in recipe['ingredientdict'] %}
+                            <!-- XX If unit is not in approved unit list then put space between unit and value -->
                             <li>
-                                {{ ing['quantity'] }}{{ ing['unit'] }} of {{ ing['name'] }}
+                                {{ ing['quantity'] }}{{ ing['unit'] }} {{ ing['name'] }}
                             </li>
                         {% endfor %}
                     </ul>
@@ -69,7 +70,7 @@
                                     <div
                                         data-toggle="modal"
                                         data-target="
-                                        {% if session['username'] == recipe['author'] %}
+                                        {% if session['username'] == recipe['author'] or vote == True %}
                                             #nostarModal
                                         {% elif session['username']%}
                                             #starModal
@@ -264,7 +265,7 @@
                                         class="btn btn-cookbook4 btn-block"
                                         data-toggle="tooltip"
                                         data-placement="top"
-                                        title="Comming Soon!"
+                                        title="Coming Soon!"
                                     >
                                         <i class="fas fa-lg fa-share"></i>
                                         <span class="d-none d-md-inline">
@@ -350,7 +351,7 @@
                                 <!-- For every ingredient in the recipe print its quantity, unit and name -->
                                 {% for ing in recipe['ingredientdict'] %}
                                     <li>
-                                        {{ ing['quantity'] }}{{ ing['unit'] }} of {{ ing['name'] }}
+                                        {{ ing['quantity'] }} {{ ing['unit'] }} of {{ ing['name'] }}
                                     </li>
                                 {% endfor %}
                             </ul>

@@ -8,6 +8,7 @@ from flask import (
     request,
     session,
     abort,
+    escape,
 )
 from flask_pymongo import PyMongo
 import pprint
@@ -22,6 +23,7 @@ from flask_login import (
     login_required,
     UserMixin,
 )
+from flask_mail import Message, Mail
 
 import datetime
 import isotime
@@ -106,6 +108,16 @@ def likecheck(rid):
     return False
 
 
+# Function checks if the user has already rated this recipe
+def votecheck(rid):
+    if "logged_in" in session and session["logged_in"] is True:
+        userfav = mongo.db.users.find_one({"email": session["email"]})
+        if rid in userfav["votes"]:
+            return True
+
+    return False
+
+
 # This loads all the lists of list tables into memeory, might not be a great idea but I can't think of another way to pass these into the select2 lists... .sort({"number": -1})
 def dblistload():
 
@@ -136,6 +148,7 @@ def recipeget(num, skip=0, sort="datePublished", order=-1):
 
 
 # Function to log an activity to the list of user activities, this database is used on the home page to give the user the sense that the website is active and encourage them to interact with the site.
+# Futute feature, if the user repeats an action it will come up mulitple times in the feed, this function should check if that is the case and not let sudo duplicates into the database.
 def activitylog(uname, uid, rname, rid, rimage, act):
     if act == "comment":
         activity = "commented on"
@@ -196,19 +209,34 @@ def activityfeed(num):
 # Setting up Flask and PyMongo
 app = Flask(__name__)
 
+# Setting up email for Flask
+# An email is sent to itself from this address then the email is forwarded on Gmails end so that I don't have to include my personal email on a public website
+mail = Mail()
+
 if "DEPLOYED" in os.environ:
-    app.config["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY")
-    app.config["GOOGLE_CX"] = os.environ.get("GOOGLE_CX")
-    app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
-    app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+    # Heroku Environment Variables
     app.config["IP"] = os.environ.get("IP")
     app.config["PORT"] = os.environ.get("PORT")
+    # Google Search API Environment Variables
+    app.config["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY")
+    app.config["GOOGLE_CX"] = os.environ.get("GOOGLE_CX")
+    # MongoDB Environment Variables
+    app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
+    app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+    # Email Environment Variables
+    app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER")
+    app.config["MAIL_PORT"] = os.environ.get("MAIL_PORT")
+    app.config["MAIL_USE_SSL"] = os.environ.get("MAIL_USE_SSL")
+    app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+    app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+    app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_DEFAULT_SENDER")
 
     debug = False
 else:
     app.config.from_envvar("COOKBOOK_CONFIG")
     debug = True
 
+mail.init_app(app)
 
 # From a defferent attempt to log in users
 # login_manager = LoginManager()
@@ -231,12 +259,22 @@ def home(page="0"):
     page = int(page)
     pagemax = divmod(total, num)[0]
 
-    recipes = recipeget(num, page)
-
     activity = activityfeed(5)
 
+    recipes = recipeget(num, page)
+    recipelist = []
+
+    for recipe in recipes:
+        commentlist = []
+        for cid in recipe["comments"]:
+            comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
+            user = mongo.db.users.find_one({"_id": ObjectId(comment["user_id"])})
+            commentlist.append((comment, user))
+
+        recipelist.append([recipe, commentlist])
+
     return render_template(
-        "index.html", recipes=recipes, page=page, pagemax=pagemax, activity=activity
+        "index.html", recipelist=recipelist, page=page, pagemax=pagemax, activity=activity
     )
 
 
@@ -301,10 +339,10 @@ def login():
 def postlogin():
 
     # Find email in database
-    val = mongo.db.users.find_one({"email": request.form["loginEmail"]})
+    val = mongo.db.users.find_one({"email": escape(request.form["loginEmail"])})
 
     # If email and password are in database
-    if val and check_password_hash(val["pass_hash"], request.form["loginPassword"]):
+    if val and check_password_hash(val["pass_hash"], escape(request.form["loginPassword"])):
         session["logged_in"] = True
         session["username"] = val["username"]
         session["id"] = str(val["_id"])
@@ -504,12 +542,17 @@ def postsignup():
         # Add todays date
         formval["datejoined"] = getdate()
         # Add blank values to user entry
-        formval["favourites"] = []
         formval["comments"] = []
+        formval["favourites"] = []
+        formval["votes"] = []
 
-        mongo.db.users.insert_one(formval)
+        val = mongo.db.users.insert_one(formval)
+
+        session["id"] = str(val.inserted_id)
         session["logged_in"] = True
         session["username"] = formval["username"]
+        session["email"] = formval["email"]
+
         return redirect(url_for("home"))
     else:
         return redirect(url_for("signup"))
@@ -520,15 +563,16 @@ def postsignup():
 def recipe(rid):
 
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-    print(recipe)
+    # print(recipe)
     comments = []
     for cid in recipe["comments"]:
         comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
         user = mongo.db.users.find_one({"_id": ObjectId(comment["user_id"])})
         comments.append((comment, user))
 
-    # If the user is logged in and the user has liked the recipe then the like flag is set
+    # If the user is logged in and the user has liked or rated the recipe then the flags is set
     like = likecheck(rid)
+    vote = votecheck(rid)
 
     if request.args.get("show"):
         show = request.args.get("show")
@@ -536,7 +580,7 @@ def recipe(rid):
         show = False
 
     return render_template(
-        "recipe.html", recipe=recipe, like=like, comments=comments, show=show
+        "recipe.html", recipe=recipe, like=like, vote=vote, comments=comments, show=show
     )
 
 
@@ -576,16 +620,17 @@ def recipecomment(rid):
             "user_id": session["id"],
             "recipe_id": rid,
             "date": getdate(),
-            "comment": request.form["comment"],
+            "comment": escape(request.form["comment"]),
         }
         # Comment Id
         newcomment = mongo.db.comments.insert_one(comment)
+        commentid = str(newcomment.inserted_id)
         # Add the comment to the recipe
         recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-        mongo.db.recipes.update(recipe, {"$push": {"comments": newcomment.inserted_id}})
+        mongo.db.recipes.update(recipe, {"$push": {"comments": commentid}})
         # Add the comment to the user
         user = mongo.db.users.find_one({"_id": ObjectId(session["id"])})
-        mongo.db.users.update(user, {"$push": {"comments": newcomment.inserted_id}})
+        mongo.db.users.update(user, {"$push": {"comments": commentid}})
         # Add the activity to the global feed
         activitylog(
             user["username"],
@@ -605,20 +650,25 @@ def recipevote(rid):
 
     if "logged_in" in session and session["logged_in"] is True:
 
-        recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
-        avg = recipe["aggregateRating"]["ratingValue"]
-        num = recipe["aggregateRating"]["reviewCount"]
+        user = mongo.db.users.find_one({"_id": ObjectId(session["id"])})
 
-        newavg = ((avg * num) + int(request.form["star"])) / (num + 1)
+        if rid not in user["votes"]:
+            recipe = mongo.db.recipes.find_one({"_id": ObjectId(rid)})
+            avg = recipe["aggregateRating"]["ratingValue"]
+            num = recipe["aggregateRating"]["reviewCount"]
 
-        mongo.db.recipes.update(
-            recipe,
-            {
-                "$set": {
-                    "aggregateRating": {"ratingValue": newavg, "reviewCount": num + 1}
-                }
-            },
-        )
+            newavg = ((avg * num) + int(escape(request.form["star"]))) / (num + 1)
+
+            mongo.db.recipes.update(
+                recipe,
+                {
+                    "$set": {
+                        "aggregateRating": {"ratingValue": newavg, "reviewCount": num + 1}
+                    }
+                },
+            )
+
+            mongo.db.users.update(user, {"$push": {"votes": rid}})
 
     return redirect(url_for("recipe", rid=rid))
 
@@ -642,8 +692,8 @@ def recipeedit(rid):
         else:
             prepTime = "00:00"
 
-        print(recipe["cookTime"], recipe["cookTime"])
-        print(cookTime, prepTime)
+        # print(recipe["cookTime"], recipe["cookTime"])
+        # print(cookTime, prepTime)
         return render_template(
             "recipeform.html",
             key=app.config["GOOGLE_API_KEY"],
@@ -669,9 +719,9 @@ def recipedelete(rid):
 
     # Delete the comments associated with the recipe from both the comment database and the user entries
     for comment in mongo.db.comments.find({"recipe_id": rid}):
-        print(comment["_id"])
+        # print(comment["_id"])
         for user in mongo.db.users.find({"comments": ObjectId(comment["_id"])}):
-            print(user["email"])
+            # print(user["email"])
             mongo.db.users.update(
                 user, {"$pull": {"comments": ObjectId(comment["_id"])}}
             )
@@ -681,7 +731,7 @@ def recipedelete(rid):
     # Delete the recipe from favourites
     for user in mongo.db.users.find():
         if "favourites" in user.keys() and rid in user["favourites"]:
-            print(user["email"])
+            # print(user["email"])
             mongo.db.users.update(user, {"$pull": {"favourites": rid}})
 
     # Delete the recipe entry
@@ -721,8 +771,6 @@ def submitrecipe():
 # Recipe posting route - handles the form data
 @app.route("/postrecipe", methods=["POST"])
 def postrecipe():
-    print("Im Submitting!")
-    print(request.form)
 
     # Pulling out values with multiple inputs into lists
     typelist = formlister("categories", request.form, "rform-type")
@@ -739,9 +787,9 @@ def postrecipe():
     utenlist = sorted(utenlist)
 
     # Convert time to ISO 8601 format
-    tprep = isotime.converttime(request.form["rformTprep"])
-    tcook = isotime.converttime(request.form["rformTcook"])
-    tadd = isotime.addtime(request.form["rformTprep"], request.form["rformTcook"])
+    tprep = isotime.converttime(escape(request.form["rformTprep"]))
+    tcook = isotime.converttime(escape(request.form["rformTcook"]))
+    tadd = isotime.addtime(escape(request.form["rformTprep"]), escape(request.form["rformTcook"]))
 
     # 'Zipping' the ingredients into a list and a list of dictionaries
     ingrdictlist = []
@@ -759,9 +807,8 @@ def postrecipe():
     # Seperating out the image url and dimensions
     # This assumes that there are no commas in the url which should be true
 
-    print(request.form["rformImageurl"])
-    if len(request.form["rformImageurl"]) > 0:
-        imglist = request.form["rformImageurl"].split(",")
+    if len(escape(request.form["rformImageurl"])) > 0:
+        imglist = escape(request.form["rformImageurl"]).split(",")
     else:
         imglist = [None, 0, 0]
 
@@ -779,30 +826,30 @@ def postrecipe():
         "comments": [],
         "cookTime": tcook,
         "datePublished": getdate(),
-        "description": request.form["rformDescription"],
+        "description": escape(request.form["rformDescription"]),
         "image": {
             "@type": "ImageObject",
             "url": imglist[0],
             "height": int(imglist[1]),
             "width": int(imglist[2]),
         },
-        "name": request.form["rform-title"].title(),
+        "name": escape(request.form["rform-title"]).title(),
         "prepTime": tprep,
         "recipeCategory": typelist,
         "recipeCuisine": cuislist,
         "recipeIngredient": ingrfulllist,
         "recipeInstructions": steplist,
-        "recipeYield": request.form["rform-serving"],
+        "recipeYield": escape(request.form["rform-serving"]),
         "totalTime": tadd,
         # My Values
         "ingredientdict": ingrdictlist,
         "utensils": utenlist,
-        "notes": request.form["rformNotes"],
+        "notes": escape(request.form["rformNotes"]),
     }
 
-    print(recipe)
+    # print(recipe)
     newrecipe = mongo.db["recipes"].insert_one(recipe)
-    rid = newrecipe.inserted_id
+    rid = (newrecipe.inserted_id)
 
     # Add the submission to the global feed
     activitylog(
@@ -840,9 +887,9 @@ def updaterecipe(rid):
     utenlist = sorted(utenlist)
 
     # Convert time to ISO 8601 format
-    tprep = isotime.converttime(request.form["rformTprep"])
-    tcook = isotime.converttime(request.form["rformTcook"])
-    tadd = isotime.addtime(request.form["rformTprep"], request.form["rformTcook"])
+    tprep = isotime.converttime(escape(request.form["rformTprep"]))
+    tcook = isotime.converttime(escape(request.form["rformTcook"]))
+    tadd = isotime.addtime(escape(request.form["rformTprep"]), escape(request.form["rformTcook"]))
 
     # 'Zipping' the ingredients into a list and a list of dictionaries
     ingrdictlist = []
@@ -860,9 +907,9 @@ def updaterecipe(rid):
     # Seperating out the image url and dimensions
     # This assumes that there are no commas in the url which should be true
 
-    # print(request.form["rformImageurl"])
-    if len(request.form["rformImageurl"]) > 0:
-        imglist = request.form["rformImageurl"].split(",")
+    # print(escape(request.form["rformImageurl"])
+    if len(escape(request.form["rformImageurl"])) > 0:
+        imglist = escape(request.form["rformImageurl"]).split(",")
     else:
         imglist = [None, 0, 0]
 
@@ -880,25 +927,25 @@ def updaterecipe(rid):
         "comments": [],
         "cookTime": tcook,
         "datePublished": oldrecipe["datePublished"],
-        "description": request.form["rformDescription"],
+        "description": escape(request.form["rformDescription"]),
         "image": {
             "@type": "ImageObject",
             "url": imglist[0],
             "height": int(imglist[1]),
             "width": int(imglist[2]),
         },
-        "name": request.form["rform-title"].title(),
+        "name": escape(request.form["rform-title"]).title(),
         "prepTime": tprep,
         "recipeCategory": typelist,
         "recipeCuisine": cuislist,
         "recipeIngredient": ingrfulllist,
         "recipeInstructions": steplist,
-        "recipeYield": request.form["rform-serving"],
+        "recipeYield": escape(request.form["rform-serving"]),
         "totalTime": tadd,
         # My Values
         "ingredientdict": ingrdictlist,
         "utensils": utenlist,
-        "notes": request.form["rformNotes"],
+        "notes": escape(request.form["rformNotes"]),
     }
 
     exemptlist = ["_id", "comments", "aggregateRating", "datePublished"]
@@ -910,6 +957,32 @@ def updaterecipe(rid):
 
     return redirect(url_for("recipe", rid=rid))
 
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+
+@app.route("/postcontact", methods=["POST"])
+def postcontact():
+    # print(request.form)
+
+    # This message is quite simple as of now, it could be jazzed up in the future but it's only me that sees it so don't be too worried
+    msg = Message("Cookbook Email", recipients=['ca.ciprojects@gmail.com'])
+    msg.html = " From: %s <br> Subject: %s <br><br> Message: %s" %(escape(request.form["cformEmail"]), escape(request.form["cformSubject"]), escape(request.form["cformText"]))
+    mail.send(msg)
+
+    return redirect(url_for("contact"))
+
+
+@app.route('/test')
+def test():
+    return render_template("test.html")
+
+@app.errorhandler(404)
+def page_not_found(e):
+    flash("It appears that the page you were looking for does not exist, if you believe that this is an error please contact us using the form below.")
+    return render_template('contact.html'), 404
 
 # Junk Routes
 # @app.route('/get_users')

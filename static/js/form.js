@@ -49,8 +49,8 @@ $(document).ready(function() {
     // Set select2 defaults
     $.fn.select2.defaults.set("theme", "bootstrap4");
     $.fn.select2.defaults.set("tags", "true");
-    $.fn.select2.defaults.set("selectOnClose", "true");
-    $.fn.select2.defaults.set("allowClear", "true");
+    // $.fn.select2.defaults.set("selectOnClose", "true");
+    // $.fn.select2.defaults.set("allowClear", "true");
     $.fn.select2.defaults.set("maximumSelectionLength", 3);
     initSelect2s();
 });
@@ -73,6 +73,12 @@ $("select").on("select2:unselect", function(evt) {
     }
 
     evt.params.originalEvent.stopPropagation();
+});
+
+
+// Changes the scrollbar in the select2 to something better looking
+$('select').on('select2:open', function(e){
+  $('.select2-results__options').scrollbar().parent().addClass('scrollbar-outer');
 });
 
 // When the 'Add Ingredient' button is pressed, the first row of inputs are cloned and the clone cleared of any excising inputs. In order to clone the select2 inputs they must first be removed then reinitialized.
