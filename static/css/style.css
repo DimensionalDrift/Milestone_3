@@ -271,18 +271,22 @@
 
 /*-------------------- User Page Styles --------------------*/
   .stars-outer {
+    color: #000000;
     display: inline-block;
-    font-family: FontAwesome;
+    font-family: "Font Awesome 5 Free";
     font-size: 1.5rem;
     position: relative;
   }
 
   .stars-outer::before {
-    content: "\2606 \2606 \2606 \2606 \2606";
+    content: "\f005 \f005 \f005 \f005 \f005";
   }
 
   .stars-inner {
+    color: #869ece;
+    font-family: "Font Awesome 5 Free";
     font-size: 1.5rem;
+    font-weight: 900;
     left: 0;
     overflow: hidden;
     position: absolute;
@@ -291,8 +295,7 @@
   }
 
   .stars-inner::before {
-    color: #869ece;
-    content: "\2605 \2605 \2605 \2605 \2605";
+    content: "\f005 \f005 \f005 \f005 \f005";
   }
 
   .iv-urecipe {
@@ -314,14 +317,6 @@
     .iv-uprofile {
       height: auto;
       width: auto;
-    }
-
-    .stars-outer::before {
-      content: "\f006 \f006 \f006 \f006 \f006";
-    }
-
-    .stars-inner::before {
-      content: "\f005 \f005 \f005 \f005 \f005";
     }
 
     .btn-cookbook3 {
@@ -416,5 +411,4 @@
 
   label.star:before {
     content: "\f006";
-    font-family: FontAwesome;
   }

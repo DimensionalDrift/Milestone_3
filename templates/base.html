@@ -185,14 +185,14 @@
                     </div>
                     <!-- Navbar Menu -->
                     <div class="collapse navbar-collapse" id="navbarmenu">
-                        <ul class="navbar-nav navbar-justified ml-auto">
+                        <ul class="navbar-nav align-items-start align-items-md-start">
                             <li class="nav-item">
                                 {% if session["logged_in"] == True %}
                                 <a
                                     class="nav-link btn btn-cookbook1 d-flex justify-content-center align-content-center"
                                     href="{{ url_for('user', username=session['username'], view='submitted') }}"
                                 >
-                                    <div class="img-view ivc-navbar mr-2">
+                                    <div class="img-view ivc-navbar mr-2 d-none d-md-block">
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                             class="circle"

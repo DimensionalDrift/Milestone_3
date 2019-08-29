@@ -148,6 +148,7 @@ def recipeget(num, skip=0, sort="datePublished", order=-1):
 
 
 # Function to log an activity to the list of user activities, this database is used on the home page to give the user the sense that the website is active and encourage them to interact with the site.
+# Futute feature, if the user repeats an action it will come up mulitple times in the feed, this function should check if that is the case and not let sudo duplicates into the database.
 def activitylog(uname, uid, rname, rid, rimage, act):
     if act == "comment":
         activity = "commented on"
