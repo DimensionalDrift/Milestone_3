@@ -1,5 +1,10 @@
 # Milestone Project 3
 
+## Alpha Testing
+The site is currently live for early Alpha testing, if you would like to try it out you can find it here:
+
+http://cimp3-cookbook.herokuapp.com/
+
 <!--
 
 TODO List:
