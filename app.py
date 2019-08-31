@@ -140,8 +140,11 @@ def dblistload():
 
 # Function to retrieve a number of recipes from the database
 # The default order is by decending datePublished
-def recipeget(num, skip=0, sort="datePublished", order=-1):
-    recipes = mongo.db.recipes.find().sort(sort, order).limit(num).skip(num * skip)
+def recipeget(num, skip=0, sort="datePublished", order=-1, query=None):
+    if query:
+        recipes = mongo.db.recipes.find({"$text": {"$search": query}}).sort(sort, order).limit(num).skip(num * skip)
+    else:
+        recipes = mongo.db.recipes.find().sort(sort, order).limit(num).skip(num * skip)
     recipes = list(recipes)
 
     return recipes
@@ -286,14 +289,12 @@ def search(query="", page="0"):
     # Number of recipes to load on homepage
     num = 3
 
-    print (query)
-
     # Calculate total number of recipes and maximum number of pages
     total = mongo.db.recipes.count()
     page = int(page)
     pagemax = divmod(total, num)[0]
 
-    recipes = recipeget(num, page)
+    recipes = recipeget(num, page, query=query)
 
     # Load the lists
     categories, cuisines, ingredients, units, utensils = dblistload()
