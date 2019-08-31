@@ -283,24 +283,26 @@ def home(page="0"):
 
 # Search Results Page
 @app.route("/search")
+@app.route("/search/")
 @app.route("/search/<query>")
 @app.route("/search/<query>/<page>")
-def search(query="", page="0"):
-    # Number of recipes to load on homepage
-    num = 3
+def search(query=None, page="0"):
+    # Number of recipes to load
+    num = 5
+
+    page = int(page)
+    recipes = recipeget(num, page, query=query)
 
     # Calculate total number of recipes and maximum number of pages
-    total = mongo.db.recipes.count()
-    page = int(page)
+    total = len(recipes)
     pagemax = divmod(total, num)[0]
-
-    recipes = recipeget(num, page, query=query)
 
     # Load the lists
     categories, cuisines, ingredients, units, utensils = dblistload()
 
     return render_template(
         "search.html",
+        query=query,
         recipes=recipes,
         page=page,
         pagemax=pagemax,
@@ -317,15 +319,12 @@ def search(query="", page="0"):
 @app.route("/postsearch", methods=["POST"])
 def postsearch():
     query = request.form["query"]
-    print ("Regular")
     return redirect(url_for("search", query=query))
 
 
 @app.route("/postadvsearch", methods=["POST"])
 def postadvsearch():
     query = request.form["advquery"]
-    print ("Advanced")
-
     return redirect(url_for("search", query=query))
 
 # Login Page
@@ -979,6 +978,7 @@ def postcontact():
 @app.route('/test')
 def test():
     return render_template("test.html")
+
 
 @app.errorhandler(404)
 def page_not_found(e):
