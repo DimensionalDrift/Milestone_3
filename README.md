@@ -9,7 +9,7 @@ http://cimp3-cookbook.herokuapp.com/
 
 TODO List:
 Add - Test out mobile view
-Add - search page with results and stuff
+Add - Implement advanced search result filtering (a bunch more recipes need to be added before this can be done)
 Add - Category exploring page where recipes are grouped by cuisine or time
 Add - Link to forgotten password form
 Add - Stop sudo duplicates being added to the activity feed
@@ -19,6 +19,7 @@ Fix - Popups like coming soon or the star rating on mobile only go away when you
 
 
 DONE List:
+Add - search page with results and stuff
 Fix - Stop the user voting on a recipe multiple times, that's just not fair
 Add - Coming soon popups to some things that are not working
 Fix - Change the mongodb to use the new fresh database and add a bunch of sample recipes to the database
@@ -38,6 +39,48 @@ to sort recipes by different ingredient
 to sort recipes by different meal type
 to view recipes step by step while cooking
 to give feedback to the website to help improve the experience
+
+Mandatory Requirements
+A project violating any of these requirements will FAIL
+
+    Data handling: Build a mangoDB-backed Flask project for a web application that allows users to store and manipulate data records about a particular domain. If you are considering using a different database, please discuss that with your mentor first and inform Student Care.
+
+    Database structure: Put some effort into designing a database structure well-suited for your domain. Make sure to put some thought into the nesting relationships between records of different entities.
+
+    User functionality: Create functionality for users to create, locate, display, edit and delete records (CRUD functionality).
+
+    Use of technologies: Use HTML and custom CSS for the website's front-end.
+
+    Structure: Incorporate a main navigation menu and structured layout (you might want to use Materialize or Bootstrap to accomplish this).
+
+Documentation: Write a README.md file for your project that explains what the project does and the value that it provides to its users.
+
+    Version control: Use Git & GitHub for version control.
+
+Attribution: Maintain clear separation between code written by you and code from external sources (e.g. libraries or tutorials). Attribute any code from external sources to its source via comments above the code and (for larger dependencies) in the README.
+
+    Deployment: Deploy the final version of your code to a hosting platform such as Heroku.
+
+Project Example Idea:
+External user’s goal:
+Find and share recipes
+
+Site owner's goal:
+Promote a brand of cooking tools.
+
+Potential features to include:
+Create a web application that allows users to store and easily access cooking recipes. Recipes would include fields such as ingredients, preparation steps, required tools, cuisine, etc.
+
+Create the backend code and frontend form(s) to allow users to add new recipes to the site, edit them and delete them.
+
+Create the backend and frontend functionality for users to locate recipes based on the recipe's fields. You may choose to create a full search functionality, or just a directory of recipes.
+
+Provide results in a manner that is visually appealing and user friendly.
+
+Advanced potential feature (nice-to-have)
+Build upon the required tools field to promote your brand of kitchen tools (e.g. oven, pressure cooker, etc…).
+
+    Create a dashboard to provide some statistics about all the recipes.
 
 
 
