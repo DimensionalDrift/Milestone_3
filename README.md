@@ -15,6 +15,7 @@ Add - Link to forgotten password form
 Add - Stop sudo duplicates being added to the activity feed
 Fix - fitimage sometimes needs to be reloaded for it to work correctly, find out why it does not load the first time (probably something to do with callbacks)
 Fix - Popups like coming soon or the star rating on mobile only go away when you tap elsewhere on the screen, it mean they get in the way when voting on a recipe so they need to timeout when tapped.
+Fix - Add placeholder image if recipe image does not load
 
 
 
