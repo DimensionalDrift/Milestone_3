@@ -9,14 +9,18 @@ http://cimp3-cookbook.herokuapp.com/
 
 TODO List:
 Add - Test out mobile view
-Add - Implement advanced search result filtering (a bunch more recipes need to be added before this can be done)
-Add - Category exploring page where recipes are grouped by cuisine or time
 Add - Link to forgotten password form
-Add - Stop sudo duplicates being added to the activity feed
+Add - Unit Testing
+Add - Move functions from app.py to helper file helper.py (pass session into function)
+Fix - Stop sudo duplicates being added to the activity feed
 Fix - fitimage sometimes needs to be reloaded for it to work correctly, find out why it does not load the first time (probably something to do with callbacks)
 Fix - Popups like coming soon or the star rating on mobile only go away when you tap elsewhere on the screen, it mean they get in the way when voting on a recipe so they need to timeout when tapped.
 Fix - Add placeholder image if recipe image does not load
-
+Fix - Change size of Explore title in explore list
+Fix - Right Align Cuisine tags on recipe cards
+Fix - Make sure image and ingredient list aligns on recipe page
+Fix - Align star rating on recipe card
+Fix - Center footer the same as the navbar
 
 
 DONE List:
@@ -25,6 +29,13 @@ Fix - Stop the user voting on a recipe multiple times, that's just not fair
 Add - Coming soon popups to some things that are not working
 Fix - Change the mongodb to use the new fresh database and add a bunch of sample recipes to the database
 Fix - Comments on the home page all open when one button is clicked, generally having multiple recipe cards needs to be fixed on the home page
+
+
+Future Features:
+Add - Implement advanced search result filtering (a bunch more recipes need to be added before this can be done)
+Add - Category exploring page where recipes are grouped by cuisine or time
+Add - Developer/Site manager dashboard for background analytics
+
 
 User Stories
 As a user I would like:
