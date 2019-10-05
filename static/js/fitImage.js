@@ -1,4 +1,7 @@
-// This function is used to correctly display dynamically loaded images that can be of any size in a html 'frame'
+// Image Resize Script - Check2
+
+// This function is used to correctly display dynamically loaded images
+// that can be of any size in a html 'frame'
 fitImage = function(pic) {
   // Find the image width and height
   var h = $(pic).height(),

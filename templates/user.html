@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Level 1 Template -->
-<!-- User Page - Check1 -->
-<!-- These flags are used to tell the recipecard template which version to render, difference is quite small so it seemed a shame to make another full template just to change essentially one or two lines -->
+{# Level 1 Template #}
+<!-- User Page - Check2 -->
+{# These flags are used to tell the recipecard template which version to render, difference between the two layouts is quite small so it seemed a shame to make another full template just to change essentially one or two lines #}
 {% set submitflag = False %}
 {% set commentflag = False %}
 <div class="container py-2">
@@ -43,7 +43,7 @@
                     </tr>
                 </table>
 
-                <!-- Button to log out, I can't think of a better place to put it as it looks weird in the navbar of the base template -->
+                <!-- Logout Button -->
                 <div class="d-flex justify-content-center mb-3">
                     <a class="btn btn-cookbook2 btn-sm" href="/logout"
                         >Logout</a
@@ -135,10 +135,10 @@
                 </div>
             </div>
             <!-- Submitted Recipes View -->
-            <!-- If the 'view' part of the url is 'submitted' (which is the default) then the list of the recipes that the user has submitted is loaded, each one rendered in the recipecardsmall template -->
+            {# If the view part of the url is 'submitted' (which is the default) then the list of the recipes that the user has submitted is loaded, each one rendered in the recipecardsmall template #}
             {% if view == "submitted" %}
                 <div class="card-view" id="subView">
-                    <!-- If no recipes have been submitted by the user then a message is displayed in their place encouraging the user to start submitting -->
+                    {# If no recipes have been submitted by the user then a message is displayed in their place encouraging the user to start submitting #}
                     {% if recipes|length < 1 %}
                         <div class="card">
                             <div class="card-body">
@@ -151,7 +151,7 @@
                             </div>
                         </div>
                     {% endif %}
-                    <!-- For every recipe in the users profile a recipe card is loaded with the recipe description -->
+                    {# For every recipe in the users profile a recipe card is loaded with the recipe description #}
                     {% for recipe in recipes %}
                         {% set submitflag = True %}
                         {% include 'recipecardsmall.html' %}
@@ -159,10 +159,10 @@
                 </div>
             {% endif %}
             <!-- Favourite Recipes View -->
-            <!-- If the 'view' part of the url is 'favourites' then the list of the recipes that the user has liked is loaded, each one rendered in the recipecardsmall template -->
+            {# If the view part of the url is 'favourites' then the list of the recipes that the user has liked is loaded, each one rendered in the recipecardsmall template #}
             {% if view == "favourites" %}
                 <div class="card-view" id="favView">
-                    <!-- If no recipes have been favourited by the user then a message is displayed in their place encouraging the user to start liking recipes -->
+                    {# If no recipes have been favourited by the user then a message is displayed in their place encouraging the user to start liking recipes #}
                     {% if favourites|length < 1 %}
                         <div class="card">
                             <div class="card-body">
@@ -175,18 +175,18 @@
                             </div>
                         </div>
                     {% endif %}
-                    <!-- For every favourited recipe in the users profile a recipe card is loaded with the recipe description -->
+                    {# For every favourited recipe in the users profile a recipe card is loaded with the recipe description #}
                     {% for recipe in favourites %}
                         {% include 'recipecardsmall.html' %}
                     {% endfor %}
                 </div>
             {% endif %}
             <!-- Recipe Comments View -->
-            <!-- If the 'view' part of the url is 'comments' then the list of the recipes that the user has commented on is loaded, each one rendered in the recipecardsmall template -->
+            {# If the view part of the url is 'comments' then the list of the recipes that the user has commented on is loaded, each one rendered in the recipecardsmall template #}
             {% if view == "comments" %}
                 {% set commentflag = True %}
                 <div class="card-view" id="comView">
-                    <!-- If no comments have been made by the user then a message is displayed in their place encouraging the user to start commenting on recipes -->
+                    {# If no comments have been made by the user then a message is displayed in their place encouraging the user to start commenting on recipes #}
                     {% if commentdata|length < 1 %}
                         <div class="card">
                             <div class="card-body">
@@ -199,7 +199,7 @@
                             </div>
                         </div>
                     {% endif %}
-                    <!-- For every comment in the users profile a recipe card is loaded with the users comment -->
+                    {# For every comment in the users profile a recipe card is loaded with the users comment #}
                     {% for data in commentdata %}
                         {% with comment=data[0], recipe=data[1] %}
                             {% include 'recipecardsmall.html' %}
@@ -208,12 +208,12 @@
                 </div>
             {% endif %}
             <!-- Edit User Profile Form View -->
-            <!-- If the 'view' part of the url is 'edit' then a form is loaded allowing the user to change their email and password. A future feature would be that the user can have a non unique name rather than just their username that they will also be able to change here too -->
+            {# If the view part of the url is 'edit' then a form is loaded allowing the user to change their email and password. A future feature would be that the user can have a non unique name rather than just their username that they will also be able to change here too #}
             {% if view == "edit" %}
                 <div class="card-view" id="proView">
                     <div class="card">
                         <div class="card-body">
-                            <!-- If the page is loaded while there are alerts queued then they are displayed -->
+                            {# If the page is loaded while there are alerts queued then they are displayed #}
                             {% with messages = get_flashed_messages() %}
                                 {% if messages %}
                                     {% for message in messages %}

@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Level 1 Template -->
+{# Level 1 Template #}
 <!-- Login Page - Check1-->
-<!-- X Fix Forgot password link -->
 <div class="container">
     <div class="row">
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -14,7 +13,7 @@
                 </h3>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <!-- If the page is loaded while there are alerts queued then they are displayed -->
+                    {# If the page is loaded while there are alerts queued then they are displayed #}
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                             {% for message in messages %}
@@ -64,8 +63,6 @@
                         </button>
                     </form>
                     <div class="center text-center py-3">
-                        <!-- XX Add Forgotten password feature -->
-                        <!-- <a href="#" title="">Forgot password?</a> -->
                         <a href="#" data-toggle="tooltip" data-placement="top" title="Coming Soon so please don't forget your password!">Forgot password?</a>
                         <span class="d-none d-sm-inline">&#183;</span>
                         <br class="d-sm-none" />

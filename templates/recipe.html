@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Level 1 Template -->
+{# Level 1 Template #}
 <!-- Recipe Page - Check1-->
 <div class="container">
     <div class="row d-flex justify-content-center">
@@ -11,7 +11,7 @@
             <!-- Image Frame -->
             <div class="mt-3 img-frame">
                 <div class="img-view iv-recipe">
-                    <!-- If the recipe has an image url it is rendered, otherwise the default image is used -->
+                    {# If the recipe has an image url it is rendered, otherwise the default image is used #}
                     {% if recipe['image']['url'] %}
                         <img
                             src="{{ recipe['image']['url'] }}"
@@ -32,12 +32,18 @@
                     <h5>Ingredients:</h5>
                     <hr />
                     <ul class="nopad-list">
-                        <!-- For every ingredient in the recipe print its quantity, unit and name -->
+                        {# For every ingredient in the recipe print its quantity, unit and name #}
                         {% for ing in recipe['ingredientdict'] %}
-                            <!-- XX If unit is not in approved unit list then put space between unit and value -->
-                            <li>
-                                {{ ing['quantity'] }}{{ ing['unit'] }} {{ ing['name'] }}
-                            </li>
+                            {# If the unit is none don't display the unit #}
+                            {% if ing['unit'] == 'none' or ing['unit'] == 'None'%}
+                                <li>
+                                    {{ ing['quantity'] }} {{ ing['name'] }}
+                                </li>
+                            {% else %}
+                                <li>
+                                    {{ ing['quantity'] }}{{ ing['unit'] }} {{ ing['name'] }}
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
@@ -59,14 +65,14 @@
                                 </div>
                                 <!-- Recipe Rating and User Buttons -->
                                 <div class="col-12 col-sm-4 text-sm-right">
-                                    <!-- When the star rating is clicked it has various behaviors depending on the stat of the site. The states are:
+                                    {# When the star rating is clicked it has various behaviors depending on the stat of the site. The states are:
                                         If the user is not logged in:
                                             no modal popup
                                         If the user is logged in and wrote the recipe:
                                             modal popup saying they cannot rate their own recipe
                                         If the user is logged and and did not write the recipe:
                                             modal popup with star buttons to vote on the recipe
-                                    -->
+                                    #}
                                     <div
                                         data-toggle="modal"
                                         data-target="
@@ -90,7 +96,7 @@
                                             ></div>
                                         </div>
                                     </div>
-                                    <!-- If the user is logged in then display the delete and edit buttons -->
+                                    {# If the user is logged in then display the delete and edit buttons #}
                                     {% if recipe['author'] == session['username'] %}
                                         <a
                                             class="btn btn-cookbook2 btn-sm"
@@ -120,7 +126,7 @@
                             <!-- Details table, a single list on smaller devices then splits into two columns on larger displays  -->
                             <div class="row">
                                 <!-- Time Entries -->
-                                <!-- For both time entries if no time is in the database then a - is displayed as a placeholder instead -->
+                                {# For both time entries if no time is in the database then a - is displayed as a placeholder instead #}
                                 <div class="col-12 col-md-6">
                                     <table>
                                         <tr>
@@ -144,7 +150,7 @@
                                     </table>
                                 </div>
                                 <!-- Servings and Utensils  -->
-                                <!-- For both entries if the entry is blank in the database then a - is displayed as a placeholder instead -->
+                                {# For both entries if the entry is blank in the database then a - is displayed as a placeholder instead #}
                                 <div class="col-12 col-md-6">
                                     <table>
                                         <tr>
@@ -172,7 +178,7 @@
                                     </table>
                                 </div>
 
-                                <!-- If there is a notes entry in the database then it is displayed -->
+                                {# If there is a notes entry in the database then it is displayed #}
                                 {% if recipe['notes']|length > 0 %}
                                     <div class="col-12 my-2">
                                         <table>
@@ -194,7 +200,7 @@
                                     <u>Cuisines:</u>
                                 </div>
                                 <div class="col-6">
-                                    <!-- For each entry in the database create a link badge, there should always be at least one so there is no need to account for otherwise -->
+                                    {# For each entry in the database create a link badge, there should always be at least one so there is no need to account for otherwise #}
                                     {% for item in recipe['recipeCategory'] %}
                                         <a href="#" class="badge badge-light">
                                             {{ item }}
@@ -202,7 +208,7 @@
                                     {% endfor %}
                                 </div>
                                 <div class="col-6">
-                                    <!-- For each entry in the database create a link badge, there should always be at least one so there is no need to account for otherwise -->
+                                    {# For each entry in the database create a link badge, there should always be at least one so there is no need to account for otherwise #}
                                     {% for item in recipe['recipeCuisine'] %}
                                         <a href="#" class="badge badge-light">
                                             {{ item }}
@@ -217,7 +223,7 @@
                                 <!-- Like Button -->
                                 <!-- If the user is logged in then this will toggle between adding and removing the recipe from the users favourites list -->
                                 <div class="col-4 text-center">
-                                    <!-- If the user has liked the recipe then the like is solid and blue -->
+                                    {# If the user has liked the recipe then the like is solid and blue #}
                                     {% if like == True %}
                                         <a
                                             class="btn btn-cookbook4 btn-block"
@@ -230,7 +236,7 @@
                                                 Like
                                             </span>
                                         </a>
-                                    <!-- Otherwise the like is not solid (hollow?) -->
+                                    {# Otherwise the like is not solid (hollow?) #}
                                     {% else %}
                                         <a
                                             class="btn btn-cookbook4 btn-block"
@@ -275,7 +281,7 @@
                                 </div>
                             </div>
                             <!-- Comments Row -->
-                            <!-- If the show flag is set true then the row will be reveled, this is used so that when the user makes a comment, when the page reloads with their comment the row is automatically revealed so the user does not have to click the button again  -->
+                            {# If the show flag is set true then the row will be reveled, this is used so that when the user makes a comment, when the page reloads with their comment the row is automatically revealed so the user does not have to click the button again  #}
                             <div
                                 class="row collapse {% if show %} show {% endif %}"
                                 id="collapseComments"
@@ -283,13 +289,13 @@
                                 <div class="col-12">
                                     <hr class="hr-full" />
                                     <div class="row">
-                                        <!-- If no comments have been made about the recipe then the placeholder is displayed -->
+                                        {# If no comments have been made about the recipe then the placeholder is displayed #}
                                         {% if comments|length < 1 %}
                                             <div class="col-12 pb-2 text-center">
                                                 There are no comments
                                             </div>
                                         {% endif %}
-                                        <!-- If there are comments then they are displayed -->
+                                        {# If there are comments then they are displayed #}
                                         {% for comment in comments %}
                                             <div class="col-12 pb-2 d-flex">
                                                 <div class="img-view ivc-comment mr-2">
@@ -311,7 +317,7 @@
                                                 </div>
                                             </div>
                                         {% endfor %}
-                                        <!-- If the user is logged in then the comments form is displayed -->
+                                        {# If the user is logged in then the comments form is displayed #}
                                         {% if session["logged_in"] == True %}
                                             <form
                                                 class="col-12 d-flex"
@@ -319,12 +325,14 @@
                                                 method="POST"
                                                 id="cform"
                                             >
+                                                <!-- Profile Picture -->
                                                 <div class="img-view ivc-comment mr-2">
                                                     <img
                                                         src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                                         class="circle"
                                                     />
                                                 </div>
+                                                <!-- Comment Input -->
                                                 <div class="comment commentbox flex-fill">
                                                     <input
                                                         type="text"
@@ -348,7 +356,7 @@
                             <h5>Ingredients:</h5>
                             <hr />
                             <ul class="nopad-list">
-                                <!-- For every ingredient in the recipe print its quantity, unit and name -->
+                                {# For every ingredient in the recipe print its quantity, unit and name #}
                                 {% for ing in recipe['ingredientdict'] %}
                                     <li>
                                         {{ ing['quantity'] }} {{ ing['unit'] }} of {{ ing['name'] }}
@@ -365,7 +373,7 @@
                             <h5>Steps:</h5>
                             <hr />
                             <ol type="1">
-                                <!-- For every step in the recipe print the step -->
+                                {# For every step in the recipe print the step #}
                                 {% for step in recipe['recipeInstructions'] %}
                                     <li>{{ step['text'] }}</li>
                                 {% endfor %}

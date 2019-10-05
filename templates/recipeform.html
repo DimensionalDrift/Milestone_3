@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Level 1 Template -->
+{# Level 1 Template #}
 <!-- Recipe Form Page - Check1-->
-<!-- This form handles both when a user submits a new recipe and when a user edits an existing recipe. When being used to edit a recipe the recipe entry is supplied to the page and in most cases the details will be filled into the value/placeholders for inputs. Otherwise, to keep all the conditions happy when using the page for submitting a new recipe, a blank recipe is supplied. In a lot of cases where the use needs to be differentiated then the page will check if recipe['name'] is filled, where it is it's an edit, where it's not it's a new recipe -->
+{# This form handles both when a user submits a new recipe and when a user edits an existing recipe. When being used to edit a recipe the recipe entry is supplied to the page and in most cases the details will be filled into the value/placeholders for inputs. Otherwise, to keep all the conditions happy when using the page for submitting a new recipe, a blank recipe is supplied. In a lot of cases where the use needs to be differentiated then the page will check if recipe['name'] is filled, where it is it's an edit, where it's not it's a new recipe #}
 <div class='container'>
     <!-- Page Title -->
     <div class='row justify-content-center pt-3 pb-2'>
-        <!-- Check if editing or submitting to title the page correctly-->
+         {# Check if editing or submitting to title the page correctly #}
         {% if recipe['name'] %}
             <h1>Edit Your Recipe</h1>
         {% else %}
@@ -14,7 +14,7 @@
         {% endif %}
     </div>
     <!-- Recipe Form -->
-    <!-- Check if editing or submitting to load the correct flask route for the form -->
+    {# Check if editing or submitting to load the correct flask route for the form #}
     {% if recipe['name'] %}
         <form action="{{ url_for('updaterecipe', rid=rid) }}" method="POST" id="rform">
     {% else %}
@@ -46,10 +46,10 @@
                             <div class="m-0 text-center thumbnail">
                                 <div class="img-frame">
                                     <div class="img-view iv-rform">
-                                        <!-- If there is a url in the recipe it is displayed -->
+                                        {# If there is a url in the recipe it is displayed #}
                                         {% if recipe['image']['url'] %}
                                             <img src="{{ recipe['image']['url'] }}" alt="placeholder+image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
-                                        <!-- Otherwise the default image is rendered -->
+                                        {# Otherwise the default image is rendered #}
                                         {% else %}
                                             <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" alt="placeholder+image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
                                         {% endif %}
@@ -78,17 +78,17 @@
                             </label>
                             <!-- A select2 is used so that a database of existing categories can be presented to the user to select from leading to less fragmentation in the database -->
                             <select class="form-control rform-type" multiple="multiple" name="rform-type" required>
-                                <!-- If editing load the existing values -->
+                                {# If editing load the existing values #}
                                 {% if recipe['recipeCategory']|length > 0 %}
                                     {% for item in recipe['recipeCategory'] %}
                                         <option selected="selected">{{ item }}</option>
                                     {% endfor %}
-                                <!-- Otherwise a blank option is used to show the input placeholder -->
+                                {# Otherwise a blank option is used to show the input placeholder #}
                                 {% else %}
                                     <option></option>
                                 {% endif %}
 
-                                <!-- Load all the categories from the database -->
+                                {# Load all the categories from the database #}
                                 {% for category in categories %}
                                     <option>{{ category }}</option>
                                 {% endfor %}
@@ -103,17 +103,17 @@
                                 <i class="far fa-question-circle"></i>
                             </label>
                             <select class="form-control rform-cuisine" multiple="multiple" name="rform-cuisine" required>
-                                <!-- If editing load the existing values -->
+                                {# If editing load the existing values #}
                                 {% if recipe['recipeCuisine']|length > 0 %}
                                     {% for item in recipe['recipeCuisine'] %}
                                         <option selected="selected">{{ item }}</option>
                                     {% endfor %}
-                                <!-- Otherwise a blank option is used to show the input placeholder -->
+                                {# Otherwise a blank option is used to show the input placeholder #}
                                 {% else %}
                                     <option></option>
                                 {% endif %}
 
-                                <!-- Load all the categories from the database -->
+                                {# Load all the categories from the database #}
                                 {% for cuisine in cuisines %}
                                     <option>{{ cuisine }}</option>
                                 {% endfor %}
@@ -132,7 +132,6 @@
             <div class='card-body'>
                 <div id='ingredientdiv'>
                     <!-- Ingredient Labels -->
-                    <!-- X This is not the correct way to label inputs, each input should have it's own label, may need to experiment with hidden labels  -->
                     <div class='form-row'>
                         <div class='col-4 col-md-7 d-flex justify-content-center justify-content-md-start'>
                             <label for="rform-ingredient">Ingredient</label>
@@ -150,14 +149,14 @@
                         </div>
                     </div>
                     <!-- Ingredient Input Row -->
-                    <!-- When editing a recipe the existing ingredients are loaded back into editable ingredient input rows, at least one ingredient is required per recipe -->
+                    {# When editing a recipe the existing ingredients are loaded back into editable ingredient input rows, at least one ingredient is required per recipe #}
                     {% for ingredict in recipe['ingredientdict'] %}
                         <div class='form-row mb-2 ingredientrow' id='ingredientrow0'>
                             <!-- Ingredient Name -->
                             <div class='col-4 col-md-7 d-flex justify-content-center'>
                                 <select class="form-control rform-ingredient" name='rform-ingredient' required>
                                     <option>{{ ingredict['name'] }}</option>
-                                    <!-- Load all ingredient choices from the database -->
+                                    {# Load all ingredient choices from the database #}
                                     {% for ingredient in ingredients %}
                                         <option>{{ ingredient }}</option>
                                     {% endfor %}
@@ -172,7 +171,7 @@
                             <div class='col-3 col-md-2 d-flex justify-content-center'>
                                 <select class="form-control rform-unit" name="rform-unit" required>
                                     <option>{{ ingredict['unit'] }}</option>
-                                    <!-- Load all unit choices from the database -->
+                                    {# Load all unit choices from the database #}
                                     {% for unit in units %}
                                         <option>{{ unit }}</option>
                                     {% endfor %}
@@ -185,7 +184,7 @@
                         </div>
                     {% endfor %}
 
-                    <!-- If submitting then a single blank ingredient row is rendered -->
+                    {# If submitting then a single blank ingredient row is rendered #}
                     {% if not recipe['name'] %}
                         <!-- When the Add Ingredient button is clicked this div is cloned and appended to the parent div above -->
                         <div class='form-row mb-2 ingredientrow' id='ingredientrow0'>
@@ -193,7 +192,7 @@
                             <div class='col-4 col-md-7 d-flex justify-content-center'>
                                 <select class="form-control rform-ingredient" name='rform-ingredient' required>
                                     <option></option>
-                                    <!-- Load all ingredient choices from the database -->
+                                    {# Load all ingredient choices from the database #}
                                     {% for ingredient in ingredients %}
                                         <option>{{ ingredient }}</option>
                                     {% endfor %}
@@ -209,7 +208,7 @@
                             <div class='col-3 col-md-2 d-flex justify-content-center'>
                                 <select class="form-control rform-unit" name="rform-unit" required>
                                     <option></option>
-                                    <!-- Load all unit choices from the database -->
+                                    {# Load all unit choices from the database #}
                                     {% for unit in units %}
                                         <option>{{ unit }}</option>
                                     {% endfor %}
@@ -249,7 +248,7 @@
                         </div>
                     </div>
                     <!-- Step Input Row -->
-                    <!-- When editing a recipe the existing steps are loaded back into the inputs, at least one step is required per recipe -->
+                    {# When editing a recipe the existing steps are loaded back into the inputs, at least one step is required per recipe #}
                     {% for step in recipe['recipeInstructions'] %}
                         <div class='form-row mb-2 steprow' id='steprow0'>
                             <!-- Step Input -->
@@ -265,7 +264,7 @@
                         </div>
                     {% endfor %}
 
-                    <!-- If submitting then a single blank step row is rendered -->
+                    {# If submitting then a single blank step row is rendered #}
                     {% if not recipe['name'] %}
                         <div class='form-row mb-2 steprow' id='steprow0'>
                             <!-- Step Input -->
@@ -336,7 +335,7 @@
                                 <i class="far fa-question-circle"></i>
                             </label>
                             <select class="form-control rform-utensils" name="rform-utensils" multiple="multiple">
-                                <!-- If editing load the existing values -->
+                                {# If editing load the existing values #}
                                 {% if recipe['utensils']|length > 0 %}
                                     {% for item in recipe['utensils'] %}
                                         <option selected="selected">{{ item }}</option>
@@ -345,7 +344,7 @@
                                     <option></option>
                                 {% endif %}
 
-                                <!-- Load all utensil choices from the database -->
+                                {# Load all utensil choices from the database #}
                                 {% for utensil in utensils %}
                                     <option>{{ utensil }}</option>
                                 {% endfor %}
@@ -369,7 +368,7 @@
                 <button type="submit" class="btn btn-cookbook1 btn-lg" id="rformSubmit" form="rform">Submit</button>
 
             </div>
-            <!-- If editing then a cancel button is rendered -->
+            {# If editing then a cancel button is rendered #}
             {% if recipe['name'] %}
                 <div class='col-4 col-md-2 d-flex justify-content-center'>
                     <a class="btn btn-cookbook1 btn-lg" role="button" href="{{ url_for('recipe', rid=recipe['_id']) }}">

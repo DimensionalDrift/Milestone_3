@@ -1,11 +1,11 @@
 {% block content %}
-<!-- Level 2 Template -->
+{# Level 2 Template #}
 <!-- Small Recipe Card - Check1 -->
 <!-- This template is used in two views, one where the recipes description is shown as in the list of the users submitted recipes and another with comments the user has made on the recipe. The different views are handled using the commentflag variable in the parent template above. -->
 <div class="card recipecardsmall">
     <!-- Recipe card title -->
     <div class="card-header">
-        <!-- If the recipe was submitted by the currently logged in user then delete and edit control buttons are included  -->
+        {# If the recipe was submitted by the currently logged in user then delete and edit control buttons are included #}
         {% if submitflag == True %}
             <div class="row">
                 <div class="col-12 col-sm-8">
@@ -35,7 +35,7 @@
                     </a>
                 </div>
             </div>
-        <!-- Otherwise the title of the recipe is rendered with the authors name -->
+        {# Otherwise the title of the recipe is rendered with the authors name #}
         {% else %}
             <div class="row">
                 <div class="col-12">
@@ -59,7 +59,7 @@
             <div class="col-4 col-md-3 d-none d-md-inline pr-0">
                 <div class="img-frame">
                     <div class="img-view iv-urecipe">
-                        <!-- If an image is included in the recipe entry it is rendered, of not then the default recipe image is used -->
+                        {# If an image is included in the recipe entry it is rendered, of not then the default recipe image is used #}
                         {% if recipe['image']['url'] %}
                             <img src="{{ recipe['image']['url'] }}" />
                         {% else %}
@@ -73,7 +73,7 @@
                 <!-- Description or comment row -->
                 <div class="row" style="min-height: 40%;">
                     <div class="col-12">
-                        <!-- When the comment flag is set a comment is displayed, otherwise the recipes description is displayed -->
+                        {# When the comment flag is set a comment is displayed, otherwise the recipes description is displayed #}
                         {% if commentflag == True %}
                             {{ comment['comment'] }} - {{ comment['date'].strftime("%d %b %y") }} at {{ comment['date'].strftime("%H:%M") }}
                         {% else %}
@@ -97,10 +97,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- Tag row - the list of tags are iterated across to be rendered -->
+                <!-- Tag row -->
                 <div class="row">
                     <div class="col-6">
                         Categories:
+                        {# The list of tags are iterated across to be rendered #}
                         {% for item in recipe['recipeCategory'] %}
                             <a href="#" class="badge badge-light">
                                 {{ item }}
@@ -109,6 +110,7 @@
                     </div>
                     <div class="col-6">
                         Cuisines:
+                        {# The list of tags are iterated across to be rendered #}
                         {% for item in recipe['recipeCuisine'] %}
                             <a href="#" class="badge badge-light">
                                 {{ item }}
@@ -122,7 +124,7 @@
 </div>
 
 {% if submitflag == True %}
-    <!-- The delete modal used to be included in the user template but unfortunately the page would not load because of the delete button. It needs the recipe id for the flask route and each id is defined in each recipecard so a modal needs to be defined for each card. It would be better if only one modal was needed rather than one for each card as this means that there is a load of extra html that is not needed. I presume extra html will slow down the load times of the page but that should be tested later. If that is true then I'm not sure how to pass details from one bit of html to another, some JavaScript might need to be used but I would like to avoid it if I can. -->
+    {# The delete modal used to be included in the user template but unfortunately the page would not load because of the delete button. It needs the recipe id for the flask route and each id is defined in each recipecard so a modal needs to be defined for each card. It would be better if only one modal was needed rather than one for each card as this means that there is a load of extra html that is not needed. I presume extra html will slow down the load times of the page but that should be tested later. If that is true then I'm not sure how to pass details from one bit of html to another, some JavaScript might need to be used but I would like to avoid it if I can. #}
     <div id="deletemodalDiv">
         {% include 'deletemodal.html' %}
     </div>

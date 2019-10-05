@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Level 1 Template -->
+{# Level 1 Template #}
 <!-- Contact Page -->
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-9 mx-auto">
-            <!-- If the page is loaded while there are alerts queued then they are displayed -->
+            {# If the page is loaded while there are alerts queued then they are displayed #}
             {% with messages = get_flashed_messages() %}
                 <div class='card alert-cookbook'>
                     {% if messages %}
@@ -74,6 +74,7 @@
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">Changelog</h3>
+                    <!-- X Remove Template before submitting -->
                     <!-- <p class="card-text">
                         <h5>Version 0.0.X - Alpha</h5>
                         <p>Release Date: XX/YY/2019</p>
