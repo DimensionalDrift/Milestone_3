@@ -7,16 +7,16 @@
         <div class="col-12 col-md-9 mx-auto">
             {# If the page is loaded while there are alerts queued then they are displayed #}
             {% with messages = get_flashed_messages() %}
-                <div class='card alert-cookbook'>
-                    {% if messages %}
-                        {% for message in messages %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class='card alert-cookbook'>
                             <div class="card-body alert text-center" role="alert ">
                                 <h2 class="card-title">404</h2>
                                 {{ message }}
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             {% endwith %}
             <div class='card'>
                 <div class='card-body'>
@@ -83,6 +83,26 @@
                         </ul>
                     </p> -->
                     <p class="card-text">
+                        <h5>Version 0.0.5 - Alpha</h5>
+                        <p>Release Date: 05/10/2019</p>
+                        <ul>
+                            <li>A major cleanup of the code has been made in the background, useless bits have been removed, comments are more descriptive, Marie Kondo would be proud.</li>
+                            <li>The first draft of the report has been written, you can find it at the Github link in the footer if you're interested.</li>
+                            <li>Fixed a bug where the like button was not blue on the home page for liked recipes.</li>
+                            <li>Fixed a bug with the with the stars not rendering correctly in the rating modal.</li>
+                        </ul>
+                    </p>
+                    <p class="card-text">
+                        <h5>Version 0.0.4 - Alpha</h5>
+                        <p>Release Date: 01/09/2019</p>
+                        <ul>
+                            <li>Add 404 popup on this page in case something breaks.</li>
+                            <li>Fix a bug with the rating stars rendering on mobile devices, if you ever see boxes instead of stars please let me know.</li>
+                            <li>The search bar now works! When testing, the advanced search does nothing yet but you should be able to do simple text searches for text in recipes.</li>
+                            <li>Some minor tweaks have been made to the layout of some parts.</li>
+                        </ul>
+                    </p>
+                    <p class="card-text">
                         <h5>Version 0.0.3 - Alpha</h5>
                         <p>Release Date: 21/08/2019</p>
                         <ul>
@@ -113,7 +133,7 @@
                             <li>User profile listing submitted recipes, comments and liked recipes.</li>
                             <li>Submission page so that you can submit your own recipes to the site.</li>
                             <li>Recipe page showcasing recipes with ingredient lists, instructions and any comments other users have made.</li>
-                            <li>This page with comment form and changelog</li>
+                            <li>This page with comment form and changelog.</li>
                         </ul>
                         There are numerous features and details that I have not included here but you can check out the sites development over on the Github page that is at the "About this project" link found in the footer below.
                     </p>

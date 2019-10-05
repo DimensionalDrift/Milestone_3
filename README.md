@@ -180,9 +180,9 @@ The jQuery scrollbar library was included to make the scrollbar in the Select2 b
 
 ## Testing and Development
 
-Throughout development all code was written using Sublime and linted on the fly using the Sublimelinter package. Using the plugins, JSHint, CSSlint and HTML Tidy all code was made sure to be valid before committing to git. The Prettier package jsPrettier was used to keep the HTML, CSS and JavaScript correctly formatted and the Black package sublack was used for Python formatting.
+Throughout development all code was written using Sublime and linted on the fly using the [Sublimelinter](https://packagecontrol.io/packages/SublimeLinter) package. Using the plugins, [HTML-Tidy](https://packagecontrol.io/packages/SublimeLinter-html-tidy), [CSSLint](https://packagecontrol.io/packages/SublimeLinter-csslint), [JSHint](https://packagecontrol.io/packages/SublimeLinter-jshint), and [flake8](https://packagecontrol.io/packages/SublimeLinter-flake8), all code was validated and checked for errors before committing to Github. Some warning and errors do remain in the committed code but details of the issue can be found in the section [below](#linter-errors). The Prettier package [JsPrettier](https://packagecontrol.io/packages/JsPrettier) was used to keep the HTML, CSS and JavaScript correctly formatted and the Black package [sublack](https://packagecontrol.io/packages/sublack) was used for Python formatting.
 
-The website has been tested extensively during development in Chrome Beta on Kubuntu Linux. The website was tested for layout arrangements in different form factors and that it was fully responsive. The website was also tested on Chrome Beta for Android to make sure it rendered correctly on a mobile device. Some limited testing was also done on an iPad in iOS Safari to test a WebKit based browser but  Safari based testing has been limited as I do not own the iPad.
+The website has been tested extensively during development in Chrome Beta on Kubuntu Linux. The website was tested for layout arrangements in different form factors and that it was fully responsive. The website was also tested on Chrome Beta for Android to make sure it rendered correctly on a mobile device. Some limited testing was also done in iOS Safari to test a WebKit based browser but Safari based testing has been limited as I do not own an iOS or macOS device.
 
 ## Deployment
 
@@ -325,7 +325,67 @@ The bulk of learning and referencing for this project used either Code Institute
     </ul>
 </details>
 
+## Linter Errors
 
+Below you will find any errors that remained after running the linters [HTML-Tidy](https://packagecontrol.io/packages/SublimeLinter-html-tidy), [CSSLint](https://packagecontrol.io/packages/SublimeLinter-csslint), [JSHint](https://packagecontrol.io/packages/SublimeLinter-jshint), and [flake8](https://packagecontrol.io/packages/SublimeLinter-flake8). The errors experienced in index.html and search.html are from an issue when using a Jinja input in inline JavaScript. On those pages if you search for and replace the variable {{pagemax}} with a number there are no further errors. Any other errors or warnings found that are not included here I was unaware of or did not occur on the development machine.
+
+<details>
+    <summary>app.py</summary>
+    <ul>
+        <li>156:80  warning  flake8:E501  line too long (81 > 79 characters)</li>
+    </ul>
+</details>
+<details>
+    <summary>static/css/style.css</summary>
+    <ul>
+        <li> 65:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
+        <li>144:3  warning  csslint:Warning  Adjoining classes: .btn.focus (adjoining-classes)</li>
+        <li>160:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</li>
+        <li>160:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</li>
+        <li>166:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
+        <li>179:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</li>
+        <li>179:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</li>
+        <li>215:5  warning  csslint:Warning  Use of !important (important)</li>
+        <li>239:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
+        <li>250:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
+        <li>254:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
+        <li>266:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
+        <li>324:5  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
+        <li>325:7  warning  csslint:Warning  Use of !important (important)</li>
+        <li>342:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</li>
+        <li>342:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</li>
+    </ul>
+</details>
+<details>
+    <summary>static/js/form.js</summary>
+    <ul>
+        <li>232:33  warning  jshint:W083  Functions declared within loops referencing an outer scoped variable may lead to confusing semantics. (fitImage, $)</li>
+    </ul>
+</details>
+<details>
+    <summary>templates/index.html</summary>
+    <ul>
+        <li>105:29  error    jshint:E020  Expected '}' to match '{' from line 4 and instead saw '{'.</li>
+        <li>105:30  error    jshint:E020  Expected ')' to match '(' from line 4 and instead saw 'pagemax'.</li>
+        <li>105:37  error    jshint:E030  Expected an identifier and instead saw '}'.</li>
+        <li>105:37  warning  jshint:W030  Expected an assignment or function call and instead saw an expression.</li>
+        <li>105:38  warning  jshint:W033  Missing semicolon.</li>
+        <li>105:39  error    jshint:E020  Expected '}' to match '{' from line 1 and instead saw ')'.</li>
+        <li>105:40  error    jshint:E021  Expected ')' and instead saw '{'.</li>
+        <li>105:41  warning  jshint:W033  Missing semicolon.</li>
+        <li>106:24  error    jshint:E041  Unrecoverable syntax error. (17% scanned).</li>
+    </ul>
+</details>
+<details>
+    <summary>templates/search.html</summary>
+    <ul>
+        <li>125:20  error    jshint:E020  Expected '}' to match '{' from line 1 and instead saw '{'.</li>
+        <li>125:21  error    jshint:E058  Missing semicolon.</li>
+        <li>125:21  warning  jshint:W030  Expected an assignment or function call and instead saw an expression.</li>
+        <li>125:21  error    jshint:E041  Unrecoverable syntax error. (50% scanned).</li>
+        <li>125:28  warning  jshint:W033  Missing semicolon.</li>
+    </ul>
+</details>
 <!--
 
 TODO List:
