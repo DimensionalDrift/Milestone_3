@@ -149,7 +149,7 @@ As well as features that were not implemented some bugs also had to be left unfi
     This bug is really hard to track down as it only seems to happen some of the times when a page loads from a cold start. In order to have images scale correctly they are scaled into a sort of 'frame' and shifted so that the center of the image appears in the center of the frame. This allows the image to be scaled up or down and be shown in different shapes like the circular images in the activity feed. Sometimes though the image would not scale correctly and maybe sometimes be too small or too large. When the page is refreshed then the image scales correctly and appears fine. Screenshots of the issue have been included in the X Something Something Folder [link later]. It is unclear what might be the cause of this issue.
 
 * #### Unitless Ingredients
-    As discussed in the [Unit Conversions](#unit-conversions) section above, the user is asked to enter the name, quantity and unit for each ingredient. The ingredient is then stored as a dictionary and then when rendered on the recipe page it is reconstructed from that dictionary as '[quantity][unit] [name]' (eg. '100g Flour'). The issue with this system is that not all ingredients use a unit of measurement such as '3 Eggs' for example. A crude workaround to this problem is to have a 'none' option in the unit dropdown in the form and an exception when rendering a 'none' so you don't have things like '3none Eggs'. A more robust solution to this problem is needed but would most likely require significant changes.
+    As discussed in the [Unit Conversions](#unit-system-preference) section above, the user is asked to enter the name, quantity and unit for each ingredient. The ingredient is then stored as a dictionary and then when rendered on the recipe page it is reconstructed from that dictionary as '[quantity][unit] [name]' (eg. '100g Flour'). The issue with this system is that not all ingredients use a unit of measurement such as '3 Eggs' for example. A crude workaround to this problem is to have a 'none' option in the unit dropdown in the form and an exception when rendering a 'none' so you don't have things like '3none Eggs'. A more robust solution to this problem is needed but would most likely require significant changes.
 
 * #### Coming Soon Popups
     On mobile when tapping elements that have no function yet a popup saying 'Coming Soon' was added to let users know that the functionality is not there yet. On desktop when you hover over the element the popup appears but on mobile you have to tap the element for it to appear. This is fine but the issue is that the popup will not disappear until the user taps elsewhere on the page.
@@ -332,58 +332,58 @@ Below you will find any errors that remained after running the linters [HTML-Tid
 <details>
     <summary>app.py</summary>
     <ul>
-        <li>156:80  warning  flake8:E501  line too long (81 > 79 characters)</li>
+        <li><code>156:80  warning  flake8:E501  line too long (81 > 79 characters)</code></li>
     </ul>
 </details>
 <details>
     <summary>static/css/style.css</summary>
     <ul>
-        <li> 65:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
-        <li>144:3  warning  csslint:Warning  Adjoining classes: .btn.focus (adjoining-classes)</li>
-        <li>160:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</li>
-        <li>160:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</li>
-        <li>166:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
-        <li>179:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</li>
-        <li>179:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</li>
-        <li>215:5  warning  csslint:Warning  Use of !important (important)</li>
-        <li>239:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
-        <li>250:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
-        <li>254:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
-        <li>266:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
-        <li>324:5  warning  csslint:Warning  Don't use IDs in selectors. (ids)</li>
-        <li>325:7  warning  csslint:Warning  Use of !important (important)</li>
-        <li>342:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</li>
-        <li>342:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</li>
+        <li><code> 65:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</code></li>
+        <li><code>144:3  warning  csslint:Warning  Adjoining classes: .btn.focus (adjoining-classes)</code></li>
+        <li><code>160:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</code></li>
+        <li><code>160:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</code></li>
+        <li><code>166:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</code></li>
+        <li><code>179:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</code></li>
+        <li><code>179:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</code></li>
+        <li><code>215:5  warning  csslint:Warning  Use of !important (important)</code></li>
+        <li><code>239:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</code></li>
+        <li><code>250:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</code></li>
+        <li><code>254:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</code></li>
+        <li><code>266:3  warning  csslint:Warning  Don't use IDs in selectors. (ids)</code></li>
+        <li><code>324:5  warning  csslint:Warning  Don't use IDs in selectors. (ids)</code></li>
+        <li><code>325:7  warning  csslint:Warning  Use of !important (important)</code></li>
+        <li><code>342:5  warning  csslint:Warning  Using height with border can sometimes make elements larger than you expect. (box-model)</code></li>
+        <li><code>342:5  warning  csslint:Warning  Using width with border can sometimes make elements larger than you expect. (box-model)</code></li>
     </ul>
 </details>
 <details>
     <summary>static/js/form.js</summary>
     <ul>
-        <li>232:33  warning  jshint:W083  Functions declared within loops referencing an outer scoped variable may lead to confusing semantics. (fitImage, $)</li>
+        <li><code>232:33  warning  jshint:W083  Functions declared within loops referencing an outer scoped variable may lead to confusing semantics. (fitImage, $)</code></li>
     </ul>
 </details>
 <details>
     <summary>templates/index.html</summary>
     <ul>
-        <li>105:29  error    jshint:E020  Expected '}' to match '{' from line 4 and instead saw '{'.</li>
-        <li>105:30  error    jshint:E020  Expected ')' to match '(' from line 4 and instead saw 'pagemax'.</li>
-        <li>105:37  error    jshint:E030  Expected an identifier and instead saw '}'.</li>
-        <li>105:37  warning  jshint:W030  Expected an assignment or function call and instead saw an expression.</li>
-        <li>105:38  warning  jshint:W033  Missing semicolon.</li>
-        <li>105:39  error    jshint:E020  Expected '}' to match '{' from line 1 and instead saw ')'.</li>
-        <li>105:40  error    jshint:E021  Expected ')' and instead saw '{'.</li>
-        <li>105:41  warning  jshint:W033  Missing semicolon.</li>
-        <li>106:24  error    jshint:E041  Unrecoverable syntax error. (17% scanned).</li>
+        <li><code>105:29  error    jshint:E020  Expected '}' to match '{' from line 4 and instead saw '{'.</code></li>
+        <li><code>105:30  error    jshint:E020  Expected ')' to match '(' from line 4 and instead saw 'pagemax'.</code></li>
+        <li><code>105:37  error    jshint:E030  Expected an identifier and instead saw '}'.</code></li>
+        <li><code>105:37  warning  jshint:W030  Expected an assignment or function call and instead saw an expression.</code></li>
+        <li><code>105:38  warning  jshint:W033  Missing semicolon.</code></li>
+        <li><code>105:39  error    jshint:E020  Expected '}' to match '{' from line 1 and instead saw ')'.</code></li>
+        <li><code>105:40  error    jshint:E021  Expected ')' and instead saw '{'.</code></li>
+        <li><code>105:41  warning  jshint:W033  Missing semicolon.</code></li>
+        <li><code>106:24  error    jshint:E041  Unrecoverable syntax error. (17% scanned).</code></li>
     </ul>
 </details>
 <details>
     <summary>templates/search.html</summary>
     <ul>
-        <li>125:20  error    jshint:E020  Expected '}' to match '{' from line 1 and instead saw '{'.</li>
-        <li>125:21  error    jshint:E058  Missing semicolon.</li>
-        <li>125:21  warning  jshint:W030  Expected an assignment or function call and instead saw an expression.</li>
-        <li>125:21  error    jshint:E041  Unrecoverable syntax error. (50% scanned).</li>
-        <li>125:28  warning  jshint:W033  Missing semicolon.</li>
+        <li><code>125:20  error    jshint:E020  Expected '}' to match '{' from line 1 and instead saw '{'.</code></li>
+        <li><code>125:21  error    jshint:E058  Missing semicolon.</code></li>
+        <li><code>125:21  warning  jshint:W030  Expected an assignment or function call and instead saw an expression.</code></li>
+        <li><code>125:21  error    jshint:E041  Unrecoverable syntax error. (50% scanned).</code></li>
+        <li><code>125:28  warning  jshint:W033  Missing semicolon.</code></li>
     </ul>
 </details>
 <!--

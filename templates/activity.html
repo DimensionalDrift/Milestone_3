@@ -1,6 +1,6 @@
 {% block content %}
 {# Level 2 Template #}
-<!-- Activity Card Links - Check1 -->
+<!-- Activity Card Links -->
 <!-- This template is used to generate links to recipes from the activity log list -->
 <hr />
 <a href="/recipe/{{act['recipe_id']}}" class="btn btn-cookbook5">
@@ -12,11 +12,13 @@
                     <img
                         src="{{ act['recipe_image']['url'] }}"
                         class="landscape"
+                        alt="Recipe Image"
                     />
                 {% else %}
                     <img
                         src="{{ url_for('static', filename='icons/defaultdish.png') }}"
                         class="landscape"
+                        alt="Recipe Image"
                     />
                 {% endif %}
             </div>

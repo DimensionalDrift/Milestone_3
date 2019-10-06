@@ -1,6 +1,6 @@
 {% block content %}
 {# Level 3 Template #}
-<!-- Large Recipe Card - Check1 -->
+<!-- Large Recipe Card -->
 {# This template is used for the home page when users are browsing recipes #}
 <div class="card recipecardlarge">
     <!-- Recipe card title -->
@@ -25,11 +25,13 @@
             <img
                 src="{{ recipe['image']['url'] }}"
                 class="card-img-top"
+                alt="Recipe Image"
             />
         {% else %}
             <img
                 src="{{ url_for('static', filename='icons/defaultdish.png') }}"
                 class="card-img-top"
+                alt="Recipe Image"
             />
         {% endif %}
     <!-- Recipe card body -->
@@ -165,6 +167,7 @@
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                             class="circle"
+                                            alt="Profile Picture"
                                         />
                                     </div>
                                     <div>
@@ -193,6 +196,7 @@
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                             class="circle"
+                                            alt="Profile Picture"
                                         />
                                     </div>
                                     <!-- Comment Input -->

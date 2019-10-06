@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {# Level 1 Template #}
-<!-- Recipe Form Page - Check1-->
+<!-- Recipe Form Page -->
 {# This form handles both when a user submits a new recipe and when a user edits an existing recipe. When being used to edit a recipe the recipe entry is supplied to the page and in most cases the details will be filled into the value/placeholders for inputs. Otherwise, to keep all the conditions happy when using the page for submitting a new recipe, a blank recipe is supplied. In a lot of cases where the use needs to be differentiated then the page will check if recipe['name'] is filled, where it is it's an edit, where it's not it's a new recipe #}
 <div class='container'>
     <!-- Page Title -->
@@ -48,10 +48,10 @@
                                     <div class="img-view iv-rform">
                                         {# If there is a url in the recipe it is displayed #}
                                         {% if recipe['image']['url'] %}
-                                            <img src="{{ recipe['image']['url'] }}" alt="placeholder+image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
+                                            <img src="{{ recipe['image']['url'] }}" alt="Recipe Image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
                                         {# Otherwise the default image is rendered #}
                                         {% else %}
-                                            <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" alt="placeholder+image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
+                                            <img src="{{ url_for('static', filename='icons/defaultdish.png') }}" alt="Recipe Image" id="rformImage" data-toggle="modal" data-target="#imageModal" class='square'>
                                         {% endif %}
                                     </div>
                                 </div>

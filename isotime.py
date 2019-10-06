@@ -1,4 +1,4 @@
-# ISO Time Helper Script - Check2
+# ISO Time Helper Script
 
 
 # Takes two numbers and returns an ISO 8601 formated time

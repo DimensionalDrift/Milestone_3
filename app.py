@@ -1,4 +1,4 @@
-# Flask App - Check2
+# Flask App
 
 # -------------------- Imports --------------------
 

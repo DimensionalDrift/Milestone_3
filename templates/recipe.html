@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {# Level 1 Template #}
-<!-- Recipe Page - Check1-->
+<!-- Recipe Page -->
 <div class="container">
     <div class="row d-flex justify-content-center">
         <!-- Recipe Image and Ingredients Card -->
@@ -16,11 +16,13 @@
                         <img
                             src="{{ recipe['image']['url'] }}"
                             class="square"
+                            alt="Recipe Image"
                         />
                     {% else %}
                         <img
                             src="{{ url_for('static', filename='icons/defaultdish.png') }}"
                             class="square"
+                            alt="Recipe Image"
                         />
                     {% endif %}
                 </div>
@@ -123,7 +125,7 @@
                                 {{ recipe['description'] }}
                             </p>
                             <hr />
-                            <!-- Details table, a single list on smaller devices then splits into two columns on larger displays  -->
+                            <!-- Details table, a single list on smaller devices then splits into two columns on larger displays -->
                             <div class="row">
                                 <!-- Time Entries -->
                                 {# For both time entries if no time is in the database then a - is displayed as a placeholder instead #}
@@ -149,7 +151,7 @@
                                         </tr>
                                     </table>
                                 </div>
-                                <!-- Servings and Utensils  -->
+                                <!-- Servings and Utensils -->
                                 {# For both entries if the entry is blank in the database then a - is displayed as a placeholder instead #}
                                 <div class="col-12 col-md-6">
                                     <table>
@@ -302,6 +304,7 @@
                                                     <img
                                                         src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                                         class="circle"
+                                                        alt="Profile Picture"
                                                     />
                                                 </div>
                                                 <div>
@@ -330,6 +333,7 @@
                                                     <img
                                                         src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                                         class="circle"
+                                                        alt="Profile Picture"
                                                     />
                                                 </div>
                                                 <!-- Comment Input -->

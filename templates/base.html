@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {# Level 0 Template #}
-<!-- Base HTML - Check2-->
+<!-- Base HTML -->
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -141,7 +141,7 @@
                             />
                         </a>
 
-                        <!-- Search Form  -->
+                        <!-- Search Form -->
                         <form class="form-inline mr-auto d-flex" form
                             action="{{ url_for('postsearch') }}"
                             method="POST">
@@ -187,6 +187,7 @@
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                             class="circle"
+                                            alt="Profile Picture"
                                         />
                                     </div>
                                     {{ session["username"] }}

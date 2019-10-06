@@ -1,4 +1,4 @@
-// Image Resize Script - Check2
+// Image Resize Script
 
 // This function is used to correctly display dynamically loaded images
 // that can be of any size in a html 'frame'

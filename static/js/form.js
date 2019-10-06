@@ -1,4 +1,4 @@
-// Recipe Form Script - Check2
+// Recipe Form Script
 
 // Function used to initialize select2 on all the inputs
 function initSelect2s() {
