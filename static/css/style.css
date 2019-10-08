@@ -54,6 +54,15 @@
     text-align: center;
   }
 
+  /*Fix for modal appearing behind the "fixed-top" navbar*/
+  .modal-backdrop {
+    z-index: 100000;
+  }
+
+  .modal {
+    z-index: 100001;
+  }
+
 /*-------------------- Base Styles --------------------*/
   .my-body {
     background-color: #edf0f5;

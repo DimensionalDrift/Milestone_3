@@ -1,6 +1,6 @@
 # Milestone Project 3 - Cookbook
 
-X Add image of the home page right before submitting
+<img src="wireframe/cookbook_screenshot.png" alt="Cookbook Home Page">
 
 The aim of this project was to create a social and interactive recipe database for users to add their own recipes as well as browse other users submissions. A live version of the site can be found at the link below:
 
@@ -154,6 +154,15 @@ As well as features that were not implemented some bugs also had to be left unfi
 * #### Coming Soon Popups
     On mobile when tapping elements that have no function yet a popup saying 'Coming Soon' was added to let users know that the functionality is not there yet. On desktop when you hover over the element the popup appears but on mobile you have to tap the element for it to appear. This is fine but the issue is that the popup will not disappear until the user taps elsewhere on the page.
 
+* #### Stray Observations
+    - The ingredients could be more consistently aligned with a tab space between the measurement and the ingredient.
+    - Sometimes you have to click twice on the Select2 boxes to activate them.
+    - On the home page the image of the recipe should also be a link to the recipe.
+    - Sometimes the profile picture does not display correctly and can be squished.
+    - The timestamps on the comments are based on Heroku's clock and not the users local clock.
+    - The naviagtion is not very accessibility friendly, for example tabbing between inputs is inconsistent and does not comply with WCAG guidelines.
+    -
+
 ## Technologies Used
 
 #### Front End Technologies
@@ -282,7 +291,7 @@ The bulk of learning and referencing for this project used either Code Institute
             <li>https://medium.com/datadriveninvestor/git-rebase-vs-merge-cc5199edd77c</li>
             <li>https://stackoverflow.com/questions/5340724/get-changes-from-master-into-branch-in-git</li>
         </ul>
- </details>
+</details>
 
 <details>
     <summary>Conventions and Style Guides</summary>
@@ -300,7 +309,23 @@ The bulk of learning and referencing for this project used either Code Institute
             <li>https://uxplanet.org/how-to-improve-advanced-search-ux-450df698004c</li>
             <li>https://stackoverflow.com/questions/6028211/what-is-the-standard-naming-convention-for-html-css-ids-and-classes</li>
         </ul>
- </details>
+</details>
+
+<details>
+    <summary>Recipes</summary>
+        <ul>
+            <li>https://www.bbcgoodfood.com/recipes/2060/easy-white-bread</li>
+            <li>http://www.donalskehan.com/recipes/soda-bread/</li>
+            <li>https://www.bbcgoodfood.com/recipes/1223/bestever-brownies</li>
+            <li>https://www.jamieoliver.com/recipes/eggs-recipes/omelette/</li>
+            <li>https://www.bbcgoodfood.com/recipes/dippy-eggs-marmite-soldiers</li>
+            <li>https://www.safefood.eu/Recipes/Desserts/Fresh-fruit-salad.aspx</li>
+            <li>https://thestayathomechef.com/pot-roast/</li>
+            <li>https://www.jamieoliver.com/recipes/chicken-recipes/perfect-roast-chicken/</li>
+            <li>https://www.bbcgoodfood.com/recipes/easy-chocolate-cake</li>
+        </ul>
+</details>
+
 
 <details>
     <summary>Icon Credit</summary>

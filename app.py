@@ -122,11 +122,11 @@ def votecheck(rid):
 def dblistload():
 
     # Load the lists with the database entries
-    categories = list(mongo.db.categories.find())
-    cuisines = list(mongo.db.cuisines.find())
-    ingredients = list(mongo.db.ingredients.find())
-    units = list(mongo.db.units.find())
-    utensils = list(mongo.db.utensils.find())
+    categories = list(mongo.db.categories.find().sort("number", -1))
+    cuisines = list(mongo.db.cuisines.find().sort("number", -1))
+    ingredients = list(mongo.db.ingredients.find().sort("number", -1))
+    units = list(mongo.db.units.find().sort("number", -1))
+    utensils = list(mongo.db.utensils.find().sort("number", -1))
 
     # Load only the names from the database
     categories = [d["name"] for d in categories]
@@ -278,6 +278,10 @@ def home(page="0"):
     page = int(page)
     pagemax = divmod(total, num)[0]
 
+    print(page)
+    print(divmod(total, num))
+    print(pagemax)
+
     # Load a number of activities from the database
     activity = activityfeed(5)
 
@@ -287,10 +291,16 @@ def home(page="0"):
     recipes = recipeget(num, page)
     recipelist = []
 
+    # The recipes are duplicated on the home page so that the endless
+    # scroll can be better tested out as there are not that many recipes
+    # in the database.
+    if page >= pagemax:
+        for i in range(pagemax):
+            recipes = recipes + recipeget(num, i)
+
     # For each of the recipes to be loaded, create a list of tuples of
     # each recipe and its comments, drawn from the comments database
     for recipe in recipes:
-
         commentlist = []
         for cid in recipe["comments"]:
             comment = mongo.db.comments.find_one({"_id": ObjectId(cid)})
