@@ -278,10 +278,6 @@ def home(page="0"):
     page = int(page)
     pagemax = divmod(total, num)[0]
 
-    print(page)
-    print(divmod(total, num))
-    print(pagemax)
-
     # Load a number of activities from the database
     activity = activityfeed(5)
 

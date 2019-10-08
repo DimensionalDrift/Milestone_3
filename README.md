@@ -1,6 +1,6 @@
 # Milestone Project 3 - Cookbook
 
-<img src="wireframe/cookbook_screenshot.png" alt="Cookbook Home Page">
+<img src="/wireframe/cookbook_screenshot.png" alt="Cookbook Home Page">
 
 The aim of this project was to create a social and interactive recipe database for users to add their own recipes as well as browse other users submissions. A live version of the site can be found at the link below:
 
