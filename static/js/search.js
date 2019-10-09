@@ -69,7 +69,7 @@ $("select").on("select2:unselect", function(evt) {
 $(function() {
     $("#sformTcook").datetimepicker({
         format: "HH:mm",
-        defaultDate: cDate,
+        defaultDate: Date.parse("2000-01-01T00:00"),
         stepping: 5
     });
 });
@@ -89,10 +89,6 @@ var $scroll = $(".recipelist").infiniteScroll({
         }
     },
     append: ".recipecardsmall",
-
-    // using button, disable loading on scroll
-    // button: '.load-more',
-    // scrollThreshold: false,
     loadOnScroll: false,
 
     status: ".page-load-status",

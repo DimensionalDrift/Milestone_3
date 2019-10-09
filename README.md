@@ -1,6 +1,6 @@
 # Milestone Project 3 - Cookbook
 
-<img src="/wireframes/cookbook_screenshot.png" alt="Cookbook Home Page">
+<img src="wireframes/cookbook_screenshot.png" alt="Cookbook Home Page">
 
 The aim of this project was to create a social and interactive recipe database for users to add their own recipes as well as browse other users submissions. A live version of the site can be found at the link below:
 
@@ -24,6 +24,7 @@ As a user I would like to:
 - vote on other users recipes
 - explore recipes by different cuisine, ingredient, meal type, users etc.
 - view recipes step by step while cooking
+- change the units of the ingredients (e.g. Imperial, Metric, etc.)
 - give feedback to the website to help improve the experience
 
 Initially it was also planned to have accounts that would have superuser access to the site, these were some of privileges that superusers would have:
@@ -60,7 +61,7 @@ The basic layout of the site features a header and a footer on all pages. The he
 
 #### The Home Page
 
-The home page is the first point of contact that the user has with the website. It features a list of recipes that users have added to the database. On first load, the page loads five recipes. If the user wishes to scroll through more recipes then they can click/tap the 'Load More' button at the bottom of the page to start endlessly scrolling the rest of the recipes in the database. This interaction has been set up this way for two reasons: First is to allow the user to reach the bottom of the site to interact with the footer. Secondly, since endless scrolling can be resource intensive it is better to have the user choose when to start endless scrolling so that the site loads quicker on first contact.
+The home page is the first point of contact that the user has with the website. It features a list of recipes that users have added to the database. On first load, the page loads five recipes. If the user wishes to scroll through more recipes then they can click/tap the 'Load More' button at the bottom of the page to start endlessly scrolling the rest of the recipes in the database. This interaction has been set up this way for two reasons: First is to allow the user to reach the bottom of the site to interact with the footer. Secondly, since endless scrolling can be resource intensive it is better to have the user choose when to start endless scrolling so that the site loads quicker on first contact. Note that the recipe list will repeat itself once you reach the end the first time, this is intentional to better test the endless scrolling as there very few recipes in the database.
 
 If the user is using a screen larger than a mobile phone then the home page will also display a list of recent activity on the site. When users like, comment or add recipes to the site, that interaction is added to a list and displayed on the home page. This is to encourage users to explore recent recipes and also give the user the sense that the site is active. At the moment, when a user clicks/taps on an entry in the activity feed then they are taken to the recipe featured in the activity.
 
@@ -160,8 +161,9 @@ As well as features that were not implemented some bugs also had to be left unfi
     - On the home page the image of the recipe should also be a link to the recipe.
     - Sometimes the profile picture does not display correctly and can be squished.
     - The timestamps on the comments are based on Heroku's clock and not the users local clock.
-    - The naviagtion is not very accessibility friendly, for example tabbing between inputs is inconsistent and does not comply with WCAG guidelines.
-    -
+    - The navigation is not very accessibility friendly, for example tabbing between inputs is inconsistent and does not comply with WCAG guidelines.
+    - The 'Endless Scrolling' library will throw an error and disables itself if there are less than 5 search results, if there are more then it works fine.
+    - Sometimes when searching for an image the console throws a warning about "A cookie associated with a cross-site resource", this comes from the images themselves not the site itself.
 
 ## Technologies Used
 
@@ -290,6 +292,7 @@ The bulk of learning and referencing for this project used either Code Institute
             <li>https://git-scm.com/book/en/v1/Git-Tools-Stashing</li>
             <li>https://medium.com/datadriveninvestor/git-rebase-vs-merge-cc5199edd77c</li>
             <li>https://stackoverflow.com/questions/5340724/get-changes-from-master-into-branch-in-git</li>
+            <li>http://www.foodwise.com.au/recipe-room/our-recipe-finder/</li>
         </ul>
 </details>
 
@@ -411,85 +414,3 @@ Below you will find any errors that remained after running the linters [HTML-Tid
         <li><code>125:28  warning  jshint:W033  Missing semicolon.</code></li>
     </ul>
 </details>
-<!--
-
-TODO List:
-Add - Test out mobile view
-
-DONE List:
-Add - search page with results and stuff
-Add - Logout Button in both mobile and desktop view
-Fix - Stop the user voting on a recipe multiple times, that's just not fair
-Add - Coming soon popups to some things that are not working
-Fix - Change the mongodb to use the new fresh database and add a bunch of sample recipes to the database
-Fix - Comments on the home page all open when one button is clicked, generally having multiple recipe cards needs to be fixed on the home page
-
-NEVER List:
-Fix - Popups like coming soon or the star rating on mobile only go away when you tap elsewhere on the screen, it mean they get in the way when voting on a recipe so they need to timeout when tapped.
-Add - Implement advanced search result filtering (a bunch more recipes need to be added before this can be done)
-Add - Category exploring page where recipes are grouped by cuisine or time
-Add - Link to forgotten password form
-Add - Stop sudo duplicates being added to the activity feed
-Fix - fitimage sometimes needs to be reloaded for it to work correctly, find out why it does not load the first time (probably something to do with callbacks)
-Fix - Add placeholder image if recipe image does not load
-Fix - Handle the way that unitless ingredients are displayed
-
-Mandatory Requirements
-A project violating any of these requirements will FAIL
-
-Data handling: Build a mangoDB-backed Flask project for a web application that allows users to store and manipulate data records about a particular domain. If you are considering using a different database, please discuss that with your mentor first and inform Student Care.
-
-Database structure: Put some effort into designing a database structure well-suited for your domain. Make sure to put some thought into the nesting relationships between records of different entities.
-
-User functionality: Create functionality for users to create, locate, display, edit and delete records (CRUD functionality).
-
-Use of technologies: Use HTML and custom CSS for the website's front-end.
-
-Structure: Incorporate a main navigation menu and structured layout (you might want to use Materialize or Bootstrap to accomplish this).
-
-Documentation: Write a README.md file for your project that explains what the project does and the value that it provides to its users.
-
-Version control: Use Git & GitHub for version control.
-
-Attribution: Maintain clear separation between code written by you and code from external sources (e.g. libraries or tutorials). Attribute any code from external sources to its source via comments above the code and (for larger dependencies) in the README.
-
-Deployment: Deploy the final version of your code to a hosting platform such as Heroku.
-
-Project Example Idea:
-External user’s goal:
-Find and share recipes
-
-Site owner's goal:
-Promote a brand of cooking tools.
-
-Potential features to include:
-Create a web application that allows users to store and easily access cooking recipes. Recipes would include fields such as ingredients, preparation steps, required tools, cuisine, etc.
-
-Create the backend code and frontend form(s) to allow users to add new recipes to the site, edit them and delete them.
-
-Create the backend and frontend functionality for users to locate recipes based on the recipe's fields. You may choose to create a full search functionality, or just a directory of recipes.
-
-Provide results in a manner that is visually appealing and user friendly.
-
-Advanced potential feature (nice-to-have)
-Build upon the required tools field to promote your brand of kitchen tools (e.g. oven, pressure cooker, etc…).
-
-Create a dashboard to provide some statistics about all the recipes.
-
-Just to recap quickly:
-
-1. Finish user profile
-2. Create a template for an individual recipe
-3. Create homepage to list all recipes w/ links to individual recipe page for each
-4. On user profile page add edit/delete button for each recipe, and possibly on individual recipe page if user owns that recipe
-5. Write delete route/function -> @app.route('/delete/<recipe_id>/)
-6. Write update route/function -> @app.route('/update/<recipe_id>/')
-7. Create update recipe template w/ pre-filled form for user to update recipe, or add ability to edit inline on the user profile/recipe page and POST to the URL with javascript
-
-files=`git diff --name-only`
-for file in $files; do
-  echo "--------------------------------"
-  git diff $file > "$file.txt"
-done
-
--->
