@@ -1,4 +1,4 @@
-# Helper script to deal with string time and ISO time
+# ISO Time Helper Script
 
 
 # Takes two numbers and returns an ISO 8601 formated time
@@ -8,8 +8,8 @@ def toisostring(h, m):
 
 # Takes an ISO 8601 time and returns hours and mins
 def fromisostring(time):
-    val = time.strip('PT').replace('M', '').split('H')
-    print (val)
+    val = time.strip("PT").replace("M", "").split("H")
+    print(val)
     return "%02d:%02d" % (int(val[0]), int(val[1]))
 
 

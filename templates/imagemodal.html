@@ -1,6 +1,6 @@
 {% block content %}
-<!-- Level 2 Template -->
-<!-- Image modal - Check1 -->
+{# Level 2 Template #}
+<!-- Image modal -->
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -16,7 +16,7 @@
             <!-- Modal body -->
             <div class="modal-body card-body">
                 Search for an image that best represents your recipe
-                <!-- Image Search form  -->
+                <!-- Image Search form -->
                 <form class="form-group mr-auto" id="rmodal">
                     <div class="input-group">
                         <input
@@ -48,6 +48,7 @@
                                 <img
                                     src="{{ url_for('static', filename='icons/defaultdish.png') }}"
                                     class="rmodal-gridimg"
+                                    alt="Default Recipe Image"
                                 />
                             </div>
                         </div>

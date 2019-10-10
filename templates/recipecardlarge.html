@@ -1,7 +1,7 @@
 {% block content %}
-<!-- Level 3 Template -->
-<!-- Large Recipe Card - Check1 -->
-<!-- This template is used for the home page when users are browsing recipes -->
+{# Level 3 Template #}
+<!-- Large Recipe Card -->
+{# This template is used for the home page when users are browsing recipes #}
 <div class="card recipecardlarge">
     <!-- Recipe card title -->
     <div class="card-header">
@@ -20,16 +20,18 @@
         </div>
     </div>
     <!-- Image -->
-    <!-- If an image is included in the recipe entry it is rendered, of not then the default recipe image is used -->
+    {# If an image is included in the recipe entry it is rendered, of not then the default recipe image is used #}
         {% if recipe['image']['url'] %}
             <img
                 src="{{ recipe['image']['url'] }}"
                 class="card-img-top"
+                alt="Recipe Image"
             />
         {% else %}
             <img
                 src="{{ url_for('static', filename='icons/defaultdish.png') }}"
                 class="card-img-top"
+                alt="Recipe Image"
             />
         {% endif %}
     <!-- Recipe card body -->
@@ -57,9 +59,10 @@
                             </div>
                         </a>
                     </div>
-                    <!-- Tag row - the list of tags are iterated across to be rendered -->
+                    <!-- Tag row -->
                     <div class="col-12 col-sm-6 mt-1 mt-sm-3">
                         Categories:
+                        {# The list of tags are iterated across to be rendered #}
                         {% for item in recipe['recipeCategory'] %}
                             <a href="#" class="badge badge-light">
                                 {{ item }}
@@ -68,6 +71,7 @@
                     </div>
                     <div class="col-12 col-sm-6 mt-1 mt-sm-3">
                         Cuisines:
+                        {# The list of tags are iterated across to be rendered #}
                         {% for item in recipe['recipeCuisine'] %}
                             <a href="#" class="badge badge-light">
                                 {{ item }}
@@ -86,7 +90,7 @@
                     <!-- Like Button -->
                     <!-- If the user is logged in then this will toggle between adding and removing the recipe from the users favourites list -->
                     <div class="col-4 text-center">
-                        <!-- If the user has liked the recipe then the like is solid and blue -->
+                        {# If the user has liked the recipe then the like is solid and blue #}
                         {% if like == True %}
                             <a
                                 class="btn btn-cookbook4 btn-block"
@@ -99,7 +103,7 @@
                                     Like
                                 </span>
                             </a>
-                        <!-- Otherwise the like is not solid (hollow?) -->
+                        {# Otherwise the like is not solid (hollow?) #}
                         {% else %}
                             <a
                                 class="btn btn-cookbook4 btn-block"
@@ -145,24 +149,25 @@
                 </div>
             </div>
             <!-- Comments Row -->
-            <!-- If the show flag is set true then the row will be reveled, this is used so that when the user makes a comment, when the page reloads with their comment the row is automatically revealed so the user does not have to click the button again  -->
+            {# If the show flag is set true then the row will be reveled, this is used so that when the user makes a comment, when the page reloads with their comment the row is automatically revealed so the user does not have to click the button again  #}
             <div class="col-12">
                 <div class="row collapse" id="CC{{recipe['_id']}}">
                     <div class="col-12 my-2">
                         <div class="row">
-                            <!-- If no comments have been made about the recipe then the placeholder is displayed -->
+                            {# If no comments have been made about the recipe then the placeholder is displayed #}
                             {% if comments|length < 1 %}
                                 <div class="col-12 pb-2 text-center">
                                     There are no comments
                                 </div>
                             {% endif %}
-                            <!-- If there are comments then they are displayed -->
+                            {# If there are comments then they are displayed #}
                             {% for comment in comments %}
                                 <div class="col-12 pb-2 d-flex">
                                     <div class="img-view ivc-comment mr-2">
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                             class="circle"
+                                            alt="Profile Picture"
                                         />
                                     </div>
                                     <div>
@@ -178,7 +183,7 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                            <!-- If the user is logged in then the comments form is displayed -->
+                            {# If the user is logged in then the comments form is displayed #}
                             {% if session["logged_in"] == True %}
                                 <form
                                     class="col-12 d-flex"
@@ -186,12 +191,15 @@
                                     method="POST"
                                     id="cform"
                                 >
+                                    <!-- Profile Picture -->
                                     <div class="img-view ivc-comment mr-2">
                                         <img
                                             src="{{ url_for('static', filename='icons/defaultprofilem.png') }}"
                                             class="circle"
+                                            alt="Profile Picture"
                                         />
                                     </div>
+                                    <!-- Comment Input -->
                                     <div class="comment commentbox flex-fill">
                                         <input
                                             type="text"
@@ -209,8 +217,4 @@
     </div>
 </div>
 
-<!-- The delete modal used to be included in the user template but unfortunately the page would not load because of the delete button. It needs the recipe id for the flask route and each id is defined in each recipecard so a modal needs to be defined for each card. It would be better if only one modal was needed rather than one for each card as this means that there is a load of extra html that is not needed. I presume extra html will slow down the load times of the page but that should be tested later. If that is true then I'm not sure how to pass details from one bit of html to another, some JavaScript might need to be used but I would like to avoid it if I can. -->
-<!-- <div id="deletemodalDiv"> -->
-<!-- { include 'deletemodal.html' %} -->
-<!-- </div> -->
 {% endblock %}

@@ -1,10 +1,11 @@
-/*-------------------- General Styles --------------------*/
-  /*Body padding is needed so that the content comes down below the fixed-top navbar*/
+/* Style CSS */
+/* -------------------- General Styles -------------------- */
+  /* Body padding is needed so that the content comes down below the fixed-top navbar */
   body {
     padding-top: 58px;
   }
 
-  /*Image frame, this is used to prevent images overflowing the frame*/
+  /* Image frame, this is used to prevent images overflowing the frame */
   .img-frame {
     background-color: #ffffff;
     border: 1px solid #dddddd;
@@ -13,13 +14,13 @@
     padding: 5px;
   }
 
-  /* Base image view, the specific height and width should be declared separately*/
+  /* Base image view, the specific height and width should be declared separately */
   .img-view {
     margin: 0;
     overflow: hidden;
   }
 
-  /* Using the fitImage function, each of these styles are applied dynamically to each image depending on its orientation*/
+  /* Using the fitImage function, each of these styles are applied dynamically to each image depending on its orientation */
   .square {
     width: 100%;
   }
@@ -39,25 +40,33 @@
     width: auto;
   }
 
+
+  /* The standard link color doesn't really match the theme of the site */
   a {
     color: #385898;
   }
 
-  .affix {
-    top: 20px;
-    z-index: 9999 !important;
-  }
 
+  /* page-load-status is used for the infiniteScroll pages */
   .page-load-status {
-    display: none; /*hidden by default */
+    display: none; /* hidden by default */
     padding-top: 20px;
     text-align: center;
   }
 
-/*-------------------- Base Styles --------------------*/
+  /* Fix for modal appearing behind the "fixed-top" navbar */
+  .modal-backdrop {
+    z-index: 100000;
+  }
+
+  .modal {
+    z-index: 100001;
+  }
+
+/* -------------------- Base Styles -------------------- */
   .my-body {
     background-color: #edf0f5;
-    /*Forces the body to expand to fill the page leaving the footer at the bottom of the page*/
+    /* Forces the body to expand to fill the page leaving the footer at the bottom of the page */
     min-height: 80vh;
     padding-bottom: 1rem;
   }
@@ -84,14 +93,13 @@
   }
 
   .ivc-navbar {
-    /*border: 1px solid #e6e6e6;*/
     border-radius: 50%;
     height: 26px;
     width: 26px;
   }
 
-/*-------------------- Button Styles --------------------*/
-  /* The button styles have been taken from or override the Bootstrap css files*/
+/* -------------------- Button Styles -------------------- */
+  /* The button styles have been taken from or override the Bootstrap CSS files */
   .btn-cookbook1 {
     background-color: #4267b2;
     border-color: #4267b2;
@@ -140,7 +148,7 @@
     background-color: #e63946;
   }
 
-  /*Remove the focus shadow*/
+  /* Remove the focus shadow */
   .btn:focus,
   .btn.focus {
     box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0);
@@ -150,9 +158,8 @@
     border-width: 1px 1px 1px 0;
   }
 
-/*-------------------- Home Page Styles --------------------*/
+/* -------------------- Home Page Styles -------------------- */
   .ivc-home {
-    /*border: 1px solid #e6e6e6;*/
     border-radius: 50%;
     height: 26px;
     width: 26px;
@@ -184,7 +191,7 @@
     width: 50px;
   }
 
-/*-------------------- Recipe Form Styles --------------------*/
+/* -------------------- Recipe Form Styles -------------------- */
   .form-control {
     border: 1px solid #e0e1e4;
   }
@@ -233,11 +240,11 @@
 
   .select2-container--open .select2-selection {
     border-color: #4267b2;
-    border-width: 1px 1px 0 1px;
     border-radius: 0.25rem 0.25rem 0 0;
+    border-width: 1px 1px 0 1px;
   }
 
-/*-------------------- Recipe Modal Styles --------------------*/
+/* -------------------- Recipe Modal Styles -------------------- */
   #rmodalGrid {
     list-style-type: none;
     padding: 0;
@@ -248,7 +255,7 @@
     width: 200px;
   }
 
-  /*Overrides the bootstrap styles so that the model is always 'fullscreen'*/
+  /* Overrides the bootstrap styles so that the model is always 'fullscreen' */
   #rmodalDiv .modal {
     text-align: center;
   }
@@ -258,7 +265,7 @@
     max-width: 95%;
   }
 
-/*-------------------- Login and Signup Page Styles --------------------*/
+/* -------------------- Login and Signup Page Styles -------------------- */
   .alert-cookbook {
     background-color: #e2e3e5;
     border-color: #d6d8db;
@@ -269,7 +276,7 @@
     text-align: justify;
   }
 
-/*-------------------- User Page Styles --------------------*/
+/* -------------------- User Page Styles -------------------- */
   .stars-outer {
     color: #000000;
     display: inline-block;
@@ -328,7 +335,7 @@
     }
   }
 
-/*-------------------- Recipe Page Styles --------------------*/
+/* -------------------- Recipe Page Styles -------------------- */
   .hr-full {
     left: -50%;
     position: relative;
@@ -391,10 +398,12 @@
 
   input.star {
     display: none;
+    font-family: "Font Awesome 5 Free";
   }
 
   label.star {
     float: right;
+    font-family: "Font Awesome 5 Free";
     font-size: 36px;
     padding: 10px;
   }
@@ -402,13 +411,15 @@
   input.star:checked ~ label.star:before {
     color: #869ece;
     content: "\f005";
+    font-weight: 900;
   }
 
   input.star:hover ~ label.star:before {
     color: #869ece;
     content: "\f005";
+    font-weight: 900;
   }
 
   label.star:before {
-    content: "\f006";
+    content: "\f005";
   }

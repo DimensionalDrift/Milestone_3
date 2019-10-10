@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Level 1 Template - Check1-->
+{# Level 1 Template #}
 <!-- Signup Form -->
 <div class="container">
     <div class="row">
@@ -13,7 +13,7 @@
                 </h3>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <!-- If the page is loaded while there are alerts queued then they are displayed -->
+                    {# If the page is loaded while there are alerts queued then they are displayed #}
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                             {% for message in messages %}
@@ -35,7 +35,7 @@
                         <!-- Email Input -->
                         <div class="form-group py-1">
                             <label hidden for="signupEmail">Email</label>
-                            <!-- Usually you would let the input handle an invalid email but since I am using a flash box for other incorrect inputs I thought it would be more consistent to handle it that way -->
+                            <!-- Usually you would let the input handle an invalid email but since I am using a flask to check other incorrect inputs I thought it would be more consistent to handle it that way -->
                             <input
                                 type="text"
                                 id="signupEmail"
@@ -59,7 +59,7 @@
                             />
                         </div>
                         <!-- Password Input -->
-                        <!-- After some reading and pondering it was decided that it's better to not ask the user to enter the password twice like a lot of websites do. The thinking is that it's not great UX to ask the user to repeat themselves. Should the user enter the wrong password by mistake then when there is a method to recover their password then it's fine to not have to ask. -->
+                        <!-- After some reading and pondering it was decided that it's better to not ask the user to enter the password twice like a lot of websites do. The thinking is that it's not great UX to ask the user to repeat themselves. Should the user enter the wrong password by mistake and there is a method to recover their password then it's fine to not have to ask twice. -->
                         <div class="form-group py-1">
                             <label hidden for="signupPassword">Password</label>
                             <input

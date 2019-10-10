@@ -1,55 +1,89 @@
 {% block content %}
-<!-- Level 2 Template -->
+{# Level 2 Template #}
 <!-- Advanced Search Filters -->
 <div class="card-body">
     <h6 class="card-title">Filter by:</h6>
+    <!-- Cuisine Filter -->
     <div class="form-group">
         <label for="sform-cuisine" data-toggle="tooltip" data-placement="top">
             Cuisine
         </label>
-        <!-- A select2 is used so that a database of existing categories can be presented to the user to select from leading to less fragmentation in the database -->
-        <select class="form-control sform-cuisine" multiple="multiple" name="sform-cuisine">
+        <!-- Select2 dialog box -->
+        <select
+            class="form-control sform-cuisine"
+            multiple="multiple"
+            name="sform-cuisine"
+        >
             <option></option>
-            <!-- Load all the categories from the database -->
+            {# Load all the categories from the database #}
             {% for cuisine in cuisines %}
                 <option>{{ cuisine }}</option>
             {% endfor %}
         </select>
     </div>
+    <!-- Meal Type Filter -->
     <div class="form-group">
         <label for="sform-type" data-toggle="tooltip" data-placement="top">
             Meal Types
         </label>
-        <!-- A select2 is used so that a database of existing categories can be presented to the user to select from leading to less fragmentation in the database -->
-        <select class="form-control sform-type" multiple="multiple" name="sform-type">
+        <!-- Select2 dialog box -->
+        <select
+            class="form-control sform-type"
+            multiple="multiple"
+            name="sform-type"
+        >
             <option></option>
-            <!-- Load all the categories from the database -->
+            {# Load all the categories from the database #}
             {% for category in categories %}
                 <option>{{ category }}</option>
             {% endfor %}
         </select>
     </div>
+    <!-- Ingredients Filter -->
     <div class="form-group">
-        <label for="sform-ingredient" data-toggle="tooltip" data-placement="top">
+        <label
+            for="sform-ingredient"
+            data-toggle="tooltip"
+            data-placement="top"
+        >
             Ingredients
         </label>
-        <!-- A select2 is used so that a database of existing categories can be presented to the user to select from leading to less fragmentation in the database -->
-        <select class="form-control sform-ingredient" multiple="multiple" name="sform-ingredient">
+        <!-- Select2 dialog box -->
+        <select
+            class="form-control sform-ingredient"
+            multiple="multiple"
+            name="sform-ingredient"
+        >
             <option></option>
-            <!-- Load all the categories from the database -->
+            {# Load all the categories from the database #}
             {% for ingredient in ingredients %}
                 <option>{{ ingredient }}</option>
             {% endfor %}
         </select>
     </div>
+    <!-- Cooking Time Filter -->
     <div class="form-group">
         <label for="sformTcook" data-toggle="tooltip" data-placement="top">
             Total Cooking Time
         </label>
-        <input type="text" class="form-control datetimepicker-input" id="sformTcook" data-toggle="datetimepicker" data-target="#sformTcook" placeholder="{{ cookTime }}" name='sformTcook'/>
+        <input
+            type="text"
+            class="form-control datetimepicker-input"
+            id="sformTcook"
+            data-toggle="datetimepicker"
+            data-target="#sformTcook"
+            placeholder="{{ cookTime }}"
+            name="sformTcook"
+        />
     </div>
+    <!-- Apply Filter Button -->
     <div class="text-center">
-        <button class="btn btn-cookbook2" data-toggle="tooltip" data-placement="top" title="Coming Soon!">
+        <button
+            class="btn btn-cookbook2"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Coming Soon!"
+        >
             Apply
         </button>
     </div>

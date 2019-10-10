@@ -1,23 +1,33 @@
-{% extends 'base.html' %}
-{% block content %}
-<!-- Level 1 Template -->
+{% extends 'base.html' %} {% block content %}
+{# Level 1 Template #}
 <!-- Search Results -->
-<div class='container'>
-    <div class='row'>
-        <div class='col-12 col-lg-3 px-0'>
-            <div class="card mx-0 d-none d-lg-block sticky-top" style="top:54px;">
+<div class="container">
+    <div class="row">
+        <!-- Advanced Search Filters -->
+        <div class="col-12 col-lg-3 px-0">
+            <div
+                class="card mx-0 d-none d-lg-block sticky-top"
+                style="top:54px;"
+            >
                 {% include 'advancedsearch.html' %}
             </div>
         </div>
-        <div class='col-12 col-lg-9'>
+        <div class="col-12 col-lg-9">
+            <!-- Advanced Search Card -->
             <div class="card" id="accordion">
-                <div class='card-body'>
+                <div class="card-body">
                     <h2 class="card-title">Search</h2>
 
-                    <form class="mr-auto d-flex" form
+                    <!-- Advanced Search Form -->
+                    <form
+                        class="mr-auto d-flex"
+                        form
                         action="{{ url_for('postadvsearch') }}"
-                        method="POST">
+                        method="POST"
+                    >
+                        <!-- Search Query Input -->
                         <div class="input-group">
+                            {# If the page loads with a search query it is preloaded into the search field, otherwise the field is blank #}
                             <input
                                 class="form-control"
                                 type="search"
@@ -40,48 +50,62 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-footer text-center d-lg-none" data-toggle="collapse" data-target="#advoption">
+                <!-- Advanced search button for mobile -->
+                <div
+                    class="card-footer text-center d-lg-none"
+                    data-toggle="collapse"
+                    data-target="#advoption"
+                >
                     <span>Advanced Search Options</span>
                 </div>
                 <div id="advoption" class="collapse" data-parent="#accordion">
                     {% include 'advancedsearch.html' %}
                 </div>
             </div>
+            <!-- Results List -->
             <div class="card-view">
-                    <!-- If no recipes have been submitted by the user then a message is displayed in their place encouraging the user to start submitting -->
-                    {% if recipes|length < 1 %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class='col-12 text-sm-center'>
-                                    You have not submitted any recipes yet!
-                                </div>
-                                <div class='col-12 text-lg-center'>
-                                    Click the submit button above to start adding some of your favorite dishes.
-                                </div>
+                {# If no recipes have been submitted that match the search then a message is displayed instead #}
+                {% if recipes|length < 1 %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-12 text-sm-center">
+                                No recipes match your search!
+                            </div>
+                            <div class="col-12 text-lg-center">
+                                Try broadening your search or maybe the recipes you
+                                are looking for have not been added yet.
                             </div>
                         </div>
-                    {% endif %}
-                    <!-- For every recipe in the users profile a recipe card is loaded with the recipe description -->
-                    <div class="recipelist">
-                        {% for recipe in recipes %}
-                            {% include 'recipecardsmall.html' %}
-                        {% endfor %}
                     </div>
-                    <div class="page-load-status p-0">
-                        <p class="infinite-scroll-request">
-                            Loading...
-                        </p>
-                        <p class="infinite-scroll-last m-0">
-                            <i class="fas fa-sm fa-circle" style="color: #869ece;"></i>
-                        </p>
-                        <p class="infinite-scroll-error">
-                            There seems to be a problem, try reloading the page.
-                        </p>
-                    </div>
+                {% endif %}
+
+                <!-- At the moment the search result just returns the recipe, in the future it would be good to show the reason the recipe matched the search criteria as any part of the recipe can be searched -->
+                <div class="recipelist">
+                    {# For each recipe in the recipe list display in a small card #}
+                    {% for recipe in recipes %}
+                        {% include 'recipecardsmall.html' %}
+                    {% endfor %}
+                </div>
+                <div class="page-load-status p-0">
+                    <p class="infinite-scroll-request">
+                        Loading...
+                    </p>
+                    <p class="infinite-scroll-last m-0">
+                        <i
+                            class="fas fa-sm fa-circle"
+                            style="color: #869ece;"
+                        ></i>
+                    </p>
+                    <p class="infinite-scroll-error">
+                        There seems to be a problem, try reloading the page.
+                    </p>
+                </div>
             </div>
+            <!-- Load More Button -->
             <div class="row">
                 <div class="col-12 col-md-9 col-lg-7 offset-md-3 offset-lg-2">
                     <div class="text-center">
+                        {# If no search has been made then don't display the Load More button #}
                         {% if query == None %}
                             <span></span>
                         {% else %}
@@ -98,12 +122,12 @@
 
 <!-- Script to pass python environment variable to JavaScript -->
 <script type="text/javascript">
-    // Either a blank date or the edited date is passed into the JavaScript
-    var pDate = Date.parse("2000-01-01T{{ prepTime }}");
-    var cDate = Date.parse("2000-01-01T{{ cookTime }}");
     var pagemax = {{pagemax}};
 </script>
-<!-- My JavaScript -->
-<script type="text/javascript" src="{{ url_for('static', filename = 'js/search.js') }}"></script>
+<!-- Search JavaScript -->
+<script
+    type="text/javascript"
+    src="{{ url_for('static', filename = 'js/search.js') }}"
+></script>
 
 {% endblock %}
